@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..900&display=swap">
-<link rel="stylesheet" href="/assets/css/site.css?v=0e8f1492">
+<link rel="stylesheet" href="/assets/css/site.css?v=1f296147">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
 {
@@ -242,12 +242,38 @@
 <section class="frame page-head">
     <div class="body">
     <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span aria-current="page">About</span></nav>
-    <figure class="portrait">
-      <picture>
-        <source srcset="/assets/img/dil-bahadur-bk.webp" type="image/webp">
-        <img src="/assets/img/dil-bahadur-bk.jpg" width="480" height="480" alt="Portrait of Dil Bahadur B.K." fetchpriority="high">
-      </picture>
-    </figure>
+  <div class="orbit-wrap">
+    <div class="orbit" data-orbit>
+      <svg class="orbit-lines" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <circle class="ring" cx="50" cy="50" r="40"/>
+        <circle class="ring ring-inner" cx="50" cy="50" r="29"/>
+        <line class="orbit-edge" x1="50" y1="10" x2="50" y2="50"/>
+        <line class="orbit-edge" x1="84.6" y1="30" x2="50" y2="50"/>
+        <line class="orbit-edge" x1="84.6" y1="70" x2="50" y2="50"/>
+        <line class="orbit-edge" x1="50" y1="90" x2="50" y2="50"/>
+        <line class="orbit-edge" x1="15.4" y1="70" x2="50" y2="50"/>
+        <line class="orbit-edge" x1="15.4" y1="30" x2="50" y2="50"/>
+        <line class="orbit-pulse" pathLength="100" x1="50" y1="10" x2="50" y2="50"/>
+        <line class="orbit-pulse" pathLength="100" x1="84.6" y1="30" x2="50" y2="50" style="animation-delay:-0.6s"/>
+        <line class="orbit-pulse" pathLength="100" x1="84.6" y1="70" x2="50" y2="50" style="animation-delay:-1.2s"/>
+        <line class="orbit-pulse" pathLength="100" x1="50" y1="90" x2="50" y2="50" style="animation-delay:-1.8s"/>
+        <line class="orbit-pulse" pathLength="100" x1="15.4" y1="70" x2="50" y2="50" style="animation-delay:-2.4s"/>
+        <line class="orbit-pulse" pathLength="100" x1="15.4" y1="30" x2="50" y2="50" style="animation-delay:-3s"/>
+      </svg>
+      <figure class="orbit-photo">
+        <picture>
+          <source srcset="/assets/img/dil-bahadur-bk.webp" type="image/webp">
+          <img src="/assets/img/dil-bahadur-bk.jpg" width="480" height="480" alt="Portrait of Dil Bahadur B.K." fetchpriority="high">
+        </picture>
+      </figure>
+      <a class="orbit-node" href="/expertise/#semantic-seo" style="--x:50%;--y:10%" title="Entity-first structure, with one clear topic and intent on every page.">Semantic SEO</a>
+      <a class="orbit-node" href="/expertise/#technical-seo" style="--x:84.6%;--y:30%" title="Crawling, indexing and site architecture fixed so good content can rank.">Technical</a>
+      <a class="orbit-node" href="/expertise/#local-seo" style="--x:84.6%;--y:70%" title="Google Business Profile, citations and local pages for service businesses.">Local SEO</a>
+      <a class="orbit-node" href="/expertise/#geo-aeo" style="--x:50%;--y:90%" title="Content and entities built to be cited in ChatGPT, Gemini, Perplexity and AI Overviews.">AI search</a>
+      <a class="orbit-node" href="/expertise/#topical-maps" style="--x:15.4%;--y:70%" title="Every page a niche needs, planned before a word is written.">Topical maps</a>
+      <a class="orbit-node" href="/expertise/#off-page-seo" style="--x:15.4%;--y:30%" title="Link building, Google stacking and mentions that build authority beyond the site.">Link building</a>
+    </div>
+  </div>
     <p class="kicker"><span class="dot" aria-hidden="true"></span>About</p>
     <h1 class="page-title">An SEO specialist who starts with the entity, not the keyword</h1>
     <p class="lede">I'm Dil Bahadur B.K., a semantic SEO specialist from Kathmandu, Nepal. I plan websites around entities and topical maps, then build them on a base of technical, local, on-page and off-page SEO.</p>
@@ -462,6 +488,6 @@
     <p class="lead-alt">Prefer email? <a href="mailto:dilbdrbk2050@gmail.com">dilbdrbk2050@gmail.com</a><br>I only use your details to reply.</p>
   </div>
 </dialog>
-<script src="/assets/js/site.js?v=5666a58d" defer></script>
+<script src="/assets/js/site.js?v=71b83a68" defer></script>
 </body>
 </html>

@@ -175,6 +175,73 @@
     });
   }
 
+  // Home hero: search results simulator. A tab picks the search type; its query
+  // types into the bar and only the result blocks for that type are shown.
+  document.querySelectorAll('[data-serp]').forEach(function (serp) {
+    var tabs = Array.prototype.slice.call(serp.querySelectorAll('[role="tab"]'));
+    var query = serp.querySelector('[data-serp-query]');
+    var blocks = serp.querySelectorAll('[data-for]');
+    var swaps = serp.querySelectorAll('[data-local]');
+    var typing = null;
+    var timer = null;
+    var current = 0;
+    var show = function (i, focus) {
+      current = i;
+      var tab = tabs[i];
+      var key = tab.getAttribute('data-scenario');
+      tabs.forEach(function (t, k) {
+        t.setAttribute('aria-selected', String(k === i));
+        t.tabIndex = k === i ? 0 : -1;
+      });
+      Array.prototype.forEach.call(blocks, function (b) {
+        b.hidden = b.getAttribute('data-for').split(' ').indexOf(key) === -1;
+      });
+      Array.prototype.forEach.call(swaps, function (s) { s.textContent = s.getAttribute('data-' + key); });
+      serp.classList.remove('is-run');
+      void serp.offsetWidth;
+      serp.classList.add('is-run');
+      var text = tab.getAttribute('data-query');
+      clearInterval(typing);
+      if (stillMotion) {
+        query.textContent = text;
+      } else {
+        var n = 0;
+        query.textContent = '';
+        typing = setInterval(function () {
+          n += 1;
+          query.textContent = text.slice(0, n);
+          if (n >= text.length) clearInterval(typing);
+        }, 45);
+      }
+      if (focus) tab.focus();
+    };
+    var stop = function () { clearInterval(timer); timer = null; serp.removeAttribute('data-autoplay'); };
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { stop(); show(i); });
+      tab.addEventListener('keydown', function (e) {
+        var next = { ArrowRight: (i + 1) % tabs.length, ArrowLeft: (i - 1 + tabs.length) % tabs.length, Home: 0, End: tabs.length - 1 }[e.key];
+        if (next !== undefined) { e.preventDefault(); stop(); show(next, true); }
+      });
+    });
+    show(0);
+
+    if (stillMotion || !('IntersectionObserver' in window)) return;
+    serp.setAttribute('data-autoplay', '');
+    serp.addEventListener('mouseenter', stop);
+    serp.addEventListener('focusin', stop);
+    new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!serp.hasAttribute('data-autoplay')) return;
+        if (entry.isIntersecting && !timer) {
+          timer = setInterval(function () { show((current + 1) % tabs.length); }, 6500);
+        } else if (!entry.isIntersecting && timer) {
+          clearInterval(timer);
+          timer = null;
+        }
+      });
+    }, { threshold: 0.35 }).observe(serp);
+  });
+
   // Stats bar: numbers count up once when they scroll into view. The final
   // value is already in the HTML, so nothing changes without JS.
   var counters = document.querySelectorAll('[data-count]');
