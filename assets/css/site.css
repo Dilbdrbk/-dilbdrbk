@@ -16,13 +16,13 @@
   --topbar: 48px;
   --radius: 2px;
 
-  /* One family sitewide: Archivo. Headings use it condensed, text at normal
-     width. Free stand-in for Roc Grotesk; to switch, change these lines. */
-  --font: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+  /* One font sitewide: Archivo condensed (72% width) for headings and text alike.
+     Free stand-in for Roc Grotesk Condensed; to switch, change these lines. */
+  --font: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
   --mono: var(--font);
-  --font-display: "Archivo", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font);
   --display-stretch: 72%;
-  --text-stretch: 100%;
+  --text-stretch: 72%;
 
   color-scheme: dark;
 }
@@ -119,7 +119,7 @@ body { font-stretch: var(--text-stretch); }
 .idx, .pipe-dot, .status-pill, .cite, time { font-variant-numeric: tabular-nums; }
 h3, .ch-title {
   font-family: var(--font-display);
-  font-stretch: 82%;
+  font-stretch: var(--display-stretch);
   font-weight: 700;
   letter-spacing: -0.005em;
 }
@@ -1086,7 +1086,7 @@ html:not(.js) .stage-view + .stage-view { margin-top: 32px; }
 .q-box { display: flex; align-items: center; gap: 10px; max-width: 340px; padding: 12px 16px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--bg); }
 .q-icon { position: relative; flex: none; width: 13px; height: 13px; border: 2px solid var(--muted); border-radius: 50%; }
 .q-icon::after { content: ""; position: absolute; right: -6px; bottom: -4px; width: 6px; height: 2px; background: var(--muted); transform: rotate(45deg); }
-.q-text { overflow: hidden; width: 17ch; font-family: ui-monospace, Consolas, monospace; font-size: 0.9rem; white-space: nowrap; }
+.q-text { overflow: hidden; font-family: var(--font); font-size: 0.9rem; white-space: nowrap; }
 .q-caret { width: 2px; height: 18px; background: var(--accent); }
 .q-parse, .un-graph { display: flex; flex-wrap: wrap; gap: 8px; }
 .q-chip, .un-attr, .un-entity { padding: 7px 11px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--bg); font-size: 0.8125rem; }
@@ -1134,7 +1134,7 @@ html:not(.js) .stage-view + .stage-view { margin-top: 32px; }
   .pipe-signal { opacity: 1; animation: pipe-travel 3.2s linear infinite; }
   @keyframes pipe-travel { from { left: 0; } to { left: calc(var(--progress) * 100%); } }
   .stage-view.is-active .q-text { animation: type 1.4s steps(17) both; }
-  @keyframes type { from { width: 0; } }
+  @keyframes type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
   .stage-view.is-active .q-caret { animation: blink 0.9s steps(1) infinite; }
   @keyframes blink { 50% { opacity: 0; } }
   .stage-view.is-active :is(.q-chip, .un-attr, .un-entity, .an-block) { animation: rise 0.45s ease both; animation-delay: var(--d, 0s); }
@@ -1239,18 +1239,18 @@ body :is(h1, h2, .display, .page-title, .section-title, .web-strip-title, .lead-
   letter-spacing: -0.01em;
   word-spacing: 0.1em;
 }
-body :is(h3, .ch-title):not(.stage-copy h3) { font-family: var(--font-display); font-stretch: 82%; font-weight: 700; letter-spacing: 0; }
+body :is(h3, .ch-title):not(.stage-copy h3) { font-family: var(--font-display); font-stretch: var(--display-stretch); font-weight: 700; letter-spacing: 0; }
 .web-strip-title { font-size: clamp(2rem, 1rem + 2.6vw, 3.6rem); }
 .label, .kicker, .stage-step, .art-label, .tools-label, .stat-row dt, .stats dt, .hero-facts dt,
 .lead-kicker, .an-label, .tree-attr, .fan-label, .markets-label {
   font-family: var(--font);
-  font-stretch: 100%;
+  font-stretch: var(--text-stretch);
   font-size: 0.6875rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
-.list-title { font-family: var(--font); font-stretch: 100%; font-size: 0.875rem; font-weight: 600; letter-spacing: 0; color: var(--muted); }
+.list-title { font-family: var(--font); font-stretch: var(--text-stretch); font-size: 0.875rem; font-weight: 600; letter-spacing: 0; color: var(--muted); }
 
 /* ------------------------------------------------------------ centered container
    Content sits in one centered column (max 1240px); section borders and
