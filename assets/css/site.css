@@ -1385,3 +1385,40 @@ body :is(h3, .ch-title):not(.stage-copy h3) { font-family: var(--font-display); 
   .sr-tag { position: static; display: inline-block; margin-bottom: 6px; }
   .sr-organic { padding-top: 11px; }
 }
+
+/* SERP simulator: drawn map pack, numbered places, location-page result.
+   min-height fits the tallest tab, so switching tabs never shifts the page. */
+.serp-results { min-height: 470px; }
+.sr-mapview { display: block; width: 100%; height: auto; margin-bottom: 10px; }
+.map-ground { fill: rgba(255, 255, 255, 0.035); }
+.map-park { fill: rgba(201, 242, 93, 0.08); }
+.map-water { fill: none; stroke: rgba(120, 170, 255, 0.18); stroke-width: 6; stroke-linecap: round; }
+.map-road { fill: none; stroke: rgba(255, 255, 255, 0.14); stroke-width: 3; stroke-linecap: round; }
+.map-main { stroke: rgba(255, 255, 255, 0.2); stroke-width: 6; }
+.map-radius { fill: rgba(201, 242, 93, 0.06); stroke: var(--accent); stroke-width: 1; stroke-dasharray: 3 3; }
+.map-pin path { fill: #6d6b6b; }
+.map-pin text { fill: var(--bg); font-size: 9px; font-weight: 700; text-anchor: middle; dominant-baseline: middle; }
+.pin-you path { fill: var(--accent); }
+.pin-you text { fill: var(--accent-ink); }
+.sr-places li b { display: grid; place-items: center; flex: none; width: 18px; height: 18px; border-radius: 50%; background: var(--line-strong); color: var(--bg); font-size: 0.625rem; }
+.sr-places .is-you b { background: var(--accent); color: var(--accent-ink); }
+.sr-loc-head { display: flex; align-items: center; gap: 10px; }
+.sr-loc-head .sr-rank { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+.sr-loc-head .sr-url { color: var(--accent); font-weight: 700; }
+.sr-loc-title { margin: 6px 0 0 32px; font-size: 0.9375rem; font-weight: 700; }
+.sr-areas-label { margin: 10px 0 6px 32px; color: var(--muted); font-size: 0.6875rem; }
+.sr-areas { display: flex; flex-wrap: wrap; gap: 6px; margin-left: 32px; }
+.sr-areas span { padding: 3px 9px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink-2); font-size: 0.75rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .map-pin, .map-radius { transform-box: fill-box; }
+  .map-pin { transform-origin: 50% 100%; }
+  .map-radius { transform-origin: center; }
+  .serp.is-run .sr-map:not([hidden]) .map-pin { animation: pin-drop 0.5s cubic-bezier(0.3, 1.5, 0.6, 1) both; animation-delay: var(--d, 0s); }
+  @keyframes pin-drop { from { opacity: 0; transform: translateY(-14px); } }
+  .serp.is-run .sr-map:not([hidden]) .map-radius { animation: radius-in 0.6s ease both; animation-delay: 1.3s; }
+  @keyframes radius-in { from { opacity: 0; transform: scale(0.4); } }
+}
+@media (max-width: 560px) {
+  .serp-results { min-height: 0; }
+  .sr-loc-title, .sr-areas-label, .sr-areas { margin-left: 0; }
+}

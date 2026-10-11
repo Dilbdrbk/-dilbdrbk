@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..900&display=swap">
-<link rel="stylesheet" href="/assets/css/site.css?v=35af0338">
+<link rel="stylesheet" href="/assets/css/site.css?v=cb87ebcf">
 <script>document.documentElement.classList.add('js')</script>
 <script type="application/ld+json">
 {
@@ -289,6 +289,7 @@
       <div class="serp" data-serp>
         <div class="serp-tabs" role="tablist" aria-label="Search types">
           <button class="serp-tab" type="button" role="tab" id="serp-tab-local" aria-controls="serp-window" aria-selected="true" tabindex="0" data-scenario="local" data-query="ac repair near me">Local</button>
+          <button class="serp-tab" type="button" role="tab" id="serp-tab-service" aria-controls="serp-window" aria-selected="false" tabindex="-1" data-scenario="service" data-query="ac repair in springfield">Service + location</button>
           <button class="serp-tab" type="button" role="tab" id="serp-tab-shop" aria-controls="serp-window" aria-selected="false" tabindex="-1" data-scenario="shop" data-query="custom closet systems">E-commerce</button>
           <button class="serp-tab" type="button" role="tab" id="serp-tab-learn" aria-controls="serp-window" aria-selected="false" tabindex="-1" data-scenario="learn" data-query="what is topical authority">Informational</button>
         </div>
@@ -296,20 +297,39 @@
           <div class="serp-chrome" aria-hidden="true"><i></i><i></i><i></i></div>
           <div class="serp-bar"><span class="serp-icon" aria-hidden="true"></span><span class="serp-query" data-serp-query>ac repair near me</span><span class="serp-caret" aria-hidden="true"></span></div>
           <div class="serp-results">
-            <div class="sr sr-ai" data-for="local learn" style="--d:.9s">
+            <div class="sr sr-ai" data-for="learn" style="--d:.9s">
               <span class="sr-tag">GEO &amp; AEO</span>
               <p class="sr-label">AI answer</p>
               <span class="sr-line"></span><span class="sr-line sr-short"></span>
               <span class="sr-cite">Source: yoursite.com</span>
             </div>
-            <div class="sr sr-map" data-for="local" style="--d:1.2s">
+            <div class="sr sr-map" data-for="local service" style="--d:.9s">
               <span class="sr-tag">Local SEO</span>
               <p class="sr-label">Map pack</p>
+              <svg class="sr-mapview" viewBox="0 0 300 104" aria-hidden="true" focusable="false">
+                <rect class="map-ground" x="0" y="0" width="300" height="104" rx="8"/>
+                <rect class="map-park" x="196" y="10" width="60" height="34" rx="4"/>
+                <path class="map-water" d="M0 84 C60 70 110 96 170 82 S260 66 300 76"/>
+                <path class="map-road map-main" d="M-4 38 L304 58"/>
+                <path class="map-road" d="M70 -4 L84 108 M150 -4 L140 108 M232 -4 L246 108 M-4 16 L120 22"/>
+                <circle class="map-radius" cx="118" cy="46" r="30"/>
+                <g class="map-pin pin-you" style="--d:1.2s"><path d="M118 46 c-7 -9 -11 -13 -11 -18 a11 11 0 0 1 22 0 c0 5 -4 9 -11 18z"/><text x="118" y="32">1</text></g>
+                <g class="map-pin" style="--d:1.4s"><path d="M206 66 c-6 -8 -9 -11 -9 -15 a9 9 0 0 1 18 0 c0 4 -3 7 -9 15z"/><text x="206" y="54">2</text></g>
+                <g class="map-pin" style="--d:1.6s"><path d="M46 70 c-6 -8 -9 -11 -9 -15 a9 9 0 0 1 18 0 c0 4 -3 7 -9 15z"/><text x="46" y="58">3</text></g>
+              </svg>
               <ul class="sr-places">
-                <li class="is-you"><i></i>Your business<span>Open now</span></li>
-                <li><i></i>Competitor<span>Open now</span></li>
-                <li><i></i>Directory listing<span>Closed</span></li>
+                <li class="is-you"><b>1</b>Your business<span>Open now &middot; 0.8 mi</span></li>
+                <li><b>2</b>Competitor<span>Open now &middot; 2.4 mi</span></li>
+                <li><b>3</b>Directory listing<span>Closed &middot; 3.1 mi</span></li>
               </ul>
+            </div>
+            <div class="sr sr-location" data-for="service" style="--d:1.5s">
+              <span class="sr-tag">Location pages</span>
+              <p class="sr-label">Top result</p>
+              <div class="sr-loc-head"><span class="sr-rank">1</span><span class="sr-url">yoursite.com &rsaquo; springfield &rsaquo; ac-repair</span><span class="sr-move">Up from #9</span></div>
+              <p class="sr-loc-title">AC Repair in Springfield</p>
+              <p class="sr-areas-label">Also serving</p>
+              <div class="sr-areas"><span>Riverside</span><span>Lakeview</span><span>Oak Park</span><span>Hillcrest</span></div>
             </div>
             <div class="sr sr-products" data-for="shop" style="--d:.9s">
               <span class="sr-tag">E-commerce SEO</span>
@@ -323,7 +343,7 @@
               <span class="sr-line"></span><span class="sr-line sr-short"></span>
             </div>
             <ol class="sr sr-organic" data-for="local shop learn" style="--d:1.5s">
-              <li class="is-you"><span class="sr-rank">1</span><span class="sr-url" data-local="yoursite.com &rsaquo; ac-repair" data-shop="yoursite.com &rsaquo; closet-systems" data-learn="yoursite.com &rsaquo; topical-authority">yoursite.com &rsaquo; ac-repair</span><span class="sr-move">Up from #7</span></li>
+              <li class="is-you"><span class="sr-rank">1</span><span class="sr-url" data-local="yoursite.com &rsaquo; ac-repair" data-shop="yoursite.com &rsaquo; closet-systems" data-learn="yoursite.com &rsaquo; topical-authority" data-service="yoursite.com &rsaquo; springfield &rsaquo; ac-repair">yoursite.com &rsaquo; ac-repair</span><span class="sr-move">Up from #7</span></li>
               <li><span class="sr-rank">2</span><span class="sr-url">competitor.com</span></li>
               <li><span class="sr-rank">3</span><span class="sr-url">directory.com</span></li>
               <span class="sr-tag">Topical authority</span>
