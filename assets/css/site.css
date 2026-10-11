@@ -1422,3 +1422,7 @@ body :is(h3, .ch-title):not(.stage-copy h3) { font-family: var(--font-display); 
   .serp-results { min-height: 0; }
   .sr-loc-title, .sr-areas-label, .sr-areas { margin-left: 0; }
 }
+@media (max-width: 400px) {
+  .serp-tabs { gap: 4px; }
+  .serp-tab { padding: 5px 9px; font-size: 0.75rem; }
+}
