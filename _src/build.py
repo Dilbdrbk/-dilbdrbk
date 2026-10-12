@@ -140,6 +140,7 @@ def person_node() -> dict:
         ],
         "knowsAbout": SITE["knowsAbout"],
         "sameAs": [p["url"] for p in SITE["profiles"] if not p.get("listing")],
+        "knows": [{"@type": "Person", "name": m["name"], "url": m["url"]} for m in SITE.get("mentors", [])],
     }
     return node
 

@@ -1330,6 +1330,19 @@ body :is(h3, .ch-title):not(.stage-copy h3) { font-family: var(--font-display); 
 .footer-cta { text-align: center; }
 .footer-base { justify-content: center; gap: 28px; }
 
+/* About: mentor credit statement, centered and large, no box. */
+.mentor-quote {
+  max-width: 34ch;
+  margin: 0 auto 30px;
+  font-family: var(--font-display);
+  font-stretch: var(--display-stretch);
+  font-size: clamp(1.6rem, 1rem + 1.8vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.12;
+  text-align: center;
+}
+.mentor-quote::before { content: "\201C"; display: block; margin-bottom: 4px; color: var(--accent); font-size: 3.5rem; line-height: 0.7; }
+
 /* About header: the entity orbit sits above the title. */
 .page-head .orbit-wrap { width: min(100%, 420px); margin: 0 auto 26px; }
 

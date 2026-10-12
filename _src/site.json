@@ -123,5 +123,11 @@
       "name": "Topical Authority",
       "issuer": "Koray Tugberk Gubur"
     }
+  ],
+  "mentors": [
+    {
+      "name": "Anup Luintel",
+      "url": "https://anupluintel.com/"
+    }
   ]
 }
