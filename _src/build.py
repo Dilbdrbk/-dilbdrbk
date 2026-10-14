@@ -38,7 +38,6 @@ RESUME = json.loads((SRC / "resume.json").read_text(encoding="utf-8"))
 RESUME_PDF = "/assets/dil-bahadur-bk-resume.pdf"  # made by _src/make_resume_pdf.py
 BASE = SITE["url"].rstrip("/")
 PERSON_ID = f"{BASE}/#person"
-WEBSITE_ID = f"{BASE}/#website"
 PORTRAIT = "/assets/img/dil-bahadur-bk.jpg"
 OG_IMAGE = "/assets/img/og-dil-bahadur-bk.jpg"
 KEYWORDS = "Dil Bahadur B.K., Semantic SEO Specialist, SEO Specialist, Semantic SEO, Entity SEO, Topical Authority, Technical SEO, Local SEO, Nepal"
@@ -135,7 +134,7 @@ def person_node() -> dict:
             "occupationLocation": {"@type": "Country", "name": SITE["countryName"]},
             "skills": ", ".join(SITE["knowsAbout"]),
         },
-        "alumniOf": [{"@type": "EducationalOrganization", "name": e["name"]} for e in SITE["education"]],
+        "alumniOf": [{"@type": e.get("type", "EducationalOrganization"), "name": e["name"]} for e in SITE["education"]],
         "hasCredential": [
             {
                 "@type": "EducationalOccupationalCredential",
@@ -149,28 +148,19 @@ def person_node() -> dict:
                 "@type": "EducationalOccupationalCredential",
                 "name": e["credential"],
                 "credentialCategory": "diploma" if "Diploma" in e["credential"] else "certificate",
-                "recognizedBy": {"@type": "EducationalOrganization", "name": e["name"]},
+                "recognizedBy": {"@type": e.get("type", "EducationalOrganization"), "name": e["name"]},
             }
             for e in SITE["education"]
         ],
         "knowsAbout": SITE["knowsAbout"],
         "sameAs": [p["url"] for p in SITE["profiles"] if not p.get("listing")],
-        "knows": [{"@type": "Person", "name": m["name"], "url": m["url"]} for m in SITE.get("mentors", [])],
     }
     return node
 
 
-def website_node() -> dict:
-    return {
-        "@type": "WebSite",
-        "@id": WEBSITE_ID,
-        "url": BASE + "/",
-        "name": SITE["name"],
-        "alternateName": "dilbdrbk.com.np",
-        "inLanguage": "en",
-        "publisher": {"@id": PERSON_ID},
-        "author": {"@id": PERSON_ID},
-    }
+def person_ref() -> dict:
+    """Short Person for author, publisher and founder fields; the @id ties it to the full Person block."""
+    return {"@type": "Person", "@id": PERSON_ID, "name": SITE["name"], "url": BASE + "/"}
 
 
 def breadcrumb_node(page: dict, trail: list[tuple[str, str]]) -> dict:
@@ -185,49 +175,49 @@ def breadcrumb_node(page: dict, trail: list[tuple[str, str]]) -> dict:
     }
 
 
-def page_type(kind: str) -> str:
+# The service cards on the home page are the list of offers, so the schema always matches them.
+SERVICE_CARD = re.compile(r'<li class="card"><a href="(/expertise/#[^"]+)"><span class="idx">\d+</span><h3>(.*?)</h3>')
+SERVICE_DESCRIPTION = ("Semantic SEO services that earn rankings in Google and a place in AI answers through "
+                       "entity-based SEO, topical maps and technical, on-page, local and off-page SEO.")
+
+
+def service_node(home_body: str) -> dict:
+    """Home page ProfessionalService: what is offered, by whom and where."""
+    offers = [(href, html.unescape(name)) for href, name in SERVICE_CARD.findall(home_body)]
+    if not offers:
+        raise ValueError("no service cards found on the home page for the ProfessionalService offers")
     return {
-        "home": "WebPage",
-        "profile": "ProfilePage",
-        "contact": "ContactPage",
-        "blog": "CollectionPage",
-        "post": "WebPage",
-    }.get(kind, "WebPage")
-
-
-def page_graph(page: dict, trail: list[tuple[str, str]], extra: list[dict]) -> dict:
-    url = absolute(page["path"])
-    webpage = {
-        "@type": page_type(page["kind"]),
-        "@id": url + "#webpage",
-        "url": url,
-        "name": page["title"],
-        "description": page["description"],
-        "inLanguage": "en",
-        "isPartOf": {"@id": WEBSITE_ID},
-        "about": {"@id": PERSON_ID},
-        "primaryImageOfPage": {"@type": "ImageObject", "url": absolute(page.get("og_image", OG_IMAGE))},
-        "dateModified": page["updated"],
-    }
-    if page["kind"] == "profile":
-        webpage["mainEntity"] = {"@id": PERSON_ID}
-    graph = [website_node(), person_node(), webpage]
-    if trail:
-        webpage["breadcrumb"] = {"@id": url + "#breadcrumb"}
-        graph.append(breadcrumb_node(page, trail))
-    graph.extend(extra)
-    return {"@context": "https://schema.org", "@graph": graph}
-
-
-def faq_node() -> dict:
-    return {
-        "@type": "FAQPage",
-        "@id": BASE + "/#faq",
-        "mainEntity": [
-            {"@type": "Question", "name": q["q"], "acceptedAnswer": {"@type": "Answer", "text": q["a"]}}
-            for q in FAQ
+        "@type": "ProfessionalService",
+        "@id": BASE + "/#service",
+        "name": f'{SITE["name"]}, {SITE["jobTitle"]}',
+        "url": BASE + "/",
+        "image": absolute(OG_IMAGE),
+        "description": SERVICE_DESCRIPTION,
+        "founder": person_ref(),
+        "address": {"@type": "PostalAddress", "addressCountry": SITE["country"]},
+        "telephone": SITE["phoneHref"],
+        "areaServed": SITE["areaServed"],
+        "makesOffer": [
+            {"@type": "Offer", "itemOffered": {"@type": "Service", "name": name, "url": absolute(href)}}
+            for href, name in offers
         ],
     }
+
+
+def schema_blocks(page: dict, body: str = "", graph: list[dict] | None = None) -> list[dict]:
+    """One JSON-LD block per job, the same pattern on every page: the Person everywhere,
+    the ProfessionalService on the home page, and a post's BlogPosting with its breadcrumb."""
+    context = {"@context": "https://schema.org"}
+    blocks = [{**context, **person_node()}]
+    if page["kind"] == "home":
+        blocks.append({**context, **service_node(body)})
+    if graph:
+        blocks.append({**context, "@graph": graph})
+    return blocks
+
+
+def ld_scripts(blocks: list[dict]) -> str:
+    return "\n".join(f'<script type="application/ld+json">\n{json_ld(block)}\n</script>' for block in blocks)
 
 
 def json_ld(data: dict) -> str:
@@ -237,7 +227,7 @@ def json_ld(data: dict) -> str:
 
 # ---------------------------------------------------------------- layout
 
-def head(page: dict, schema: dict, noindex: bool = False) -> str:
+def head(page: dict, schema: list[dict], noindex: bool = False) -> str:
     url = absolute(page["path"])
     og_type = {"home": "profile", "profile": "profile", "post": "article", "guide": "article"}.get(page["kind"], "website")
     robots = "noindex, follow" if noindex else "index, follow, max-image-preview:large, max-snippet:-1"
@@ -299,9 +289,7 @@ def head(page: dict, schema: dict, noindex: bool = False) -> str:
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..900&display=swap">
 <link rel="stylesheet" href="{asset("/assets/css/site.css")}">
 <script>document.documentElement.classList.add('js')</script>
-<script type="application/ld+json">
-{json_ld(schema)}
-</script>
+{ld_scripts(schema)}
 </head>"""
 
 
@@ -574,45 +562,6 @@ def glossary_html() -> str:
     )
 
 
-def glossary_node() -> dict:
-    url = absolute("/expertise/")
-    return {
-        "@type": "DefinedTermSet",
-        "@id": url + "#glossary",
-        "name": "SEO glossary",
-        "url": url + "#glossary",
-        "hasDefinedTerm": [
-            {
-                "@type": "DefinedTerm",
-                "@id": url + "#term-" + slug(g["term"]),
-                "name": g["term"],
-                "description": g["definition"],
-                "inDefinedTermSet": {"@id": url + "#glossary"},
-            }
-            for g in GLOSSARY
-        ],
-    }
-
-
-def guide_node(page: dict) -> dict:
-    url = absolute(page["path"])
-    return {
-        "@type": "TechArticle",
-        "@id": url + "#article",
-        "headline": page["title"].split(" | ")[0],
-        "description": page["description"],
-        "url": url,
-        "datePublished": page["updated"],
-        "dateModified": page["updated"],
-        "author": {"@id": PERSON_ID},
-        "publisher": {"@id": PERSON_ID},
-        "mainEntityOfPage": {"@id": url + "#webpage"},
-        "image": absolute(OG_IMAGE),
-        "inLanguage": "en",
-        "about": ["Search engine optimization", "Semantic SEO", "Generative Engine Optimization", "Topical map"],
-    }
-
-
 def profiles_html(detailed: bool) -> str:
     """Profile tiles: platform + arrow; the Profiles page also shows each handle."""
     rows = []
@@ -839,15 +788,14 @@ def post_node(post: dict) -> dict:
     image = absolute(post.get("og_image", OG_IMAGE))
     node = {
         "@type": "BlogPosting",
-        "@id": url + "#post",
+        "@id": url + "#article",
         "headline": post["title"],
         "description": post["description"],
         "datePublished": post["date"],
         "dateModified": post["updated"],
-        "author": {"@id": PERSON_ID},
-        "publisher": {"@id": PERSON_ID},
-        "mainEntityOfPage": {"@id": url + "#webpage"},
-        "isPartOf": {"@id": absolute("/blog/") + "#blog"},
+        "author": person_ref(),
+        "publisher": person_ref(),
+        "mainEntityOfPage": url,
         "image": {"@type": "ImageObject", "url": image, "width": 1200, "height": 630},
         "inLanguage": "en",
         "wordCount": post["words"],
@@ -904,38 +852,22 @@ def build() -> None:
 
     for page in PAGES:
         body = fill((SRC / "pages" / page["body"]).read_text(encoding="utf-8"), tokens)
-        trail = [] if page["path"] == "/" else [(page["crumb"], page["path"])]
-        extra = []
-        if page["kind"] == "home":
-            extra.append(faq_node())
-        if page["path"] == "/expertise/":
-            extra.append(glossary_node())
-        if page["kind"] == "guide":
-            extra.append(guide_node(page))
-        if page["kind"] == "blog" and posts:
-            extra.append({
-                "@type": "Blog",
-                "@id": absolute("/blog/") + "#blog",
-                "name": f'{SITE["name"]} SEO Blog',
-                "author": {"@id": PERSON_ID},
-                "blogPost": [{"@id": absolute(p["path"]) + "#post"} for p in posts],
-            })
         noindex = page["kind"] == "blog" and not posts
-        write(page["path"], head(page, page_graph(page, trail, extra), noindex) + "\n" + header(page["path"]) + "\n" + body + "\n" + footer())
+        write(page["path"], head(page, schema_blocks(page, body), noindex) + "\n" + header(page["path"]) + "\n" + body + "\n" + footer())
         if not noindex:
             indexed.append((page["path"], page["updated"]))
 
     for post in posts:
         page = dict(post, title=post["title_tag"])
         trail = [("Blog", "/blog/"), (post["title"], post["path"])]
-        write(post["path"], head(page, page_graph(page, trail, [post_node(post)])) + "\n" + header("/blog/") + "\n" + post_body(post) + "\n" + footer())
+        write(post["path"], head(page, schema_blocks(page, graph=[post_node(post), breadcrumb_node(page, trail)])) + "\n" + header("/blog/") + "\n" + post_body(post) + "\n" + footer())
         indexed.append((post["path"], post["updated"]))
 
     not_found = dict(path="/404", kind="page", updated="2026-10-10",
                      title=f'Page Not Found | {SITE["name"]}',
                      description="This page does not exist. Head back to the home page of Dil Bahadur B.K.")
     body404 = (SRC / "pages" / "404.html").read_text(encoding="utf-8")
-    write("/404", head(not_found, page_graph(not_found, [], []), noindex=True) + "\n" + header("") + "\n" + body404 + "\n" + footer())
+    write("/404", head(not_found, schema_blocks(not_found), noindex=True) + "\n" + header("") + "\n" + body404 + "\n" + footer())
 
     for old, new in REDIRECTS.items():
         write(old, redirect_html(new))

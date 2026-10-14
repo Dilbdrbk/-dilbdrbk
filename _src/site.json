@@ -111,11 +111,13 @@
   "education": [
     {
       "name": "Nepal Banepa Polytechnic Institute",
-      "credential": "Diploma in Information Technology"
+      "credential": "Diploma in Information Technology",
+      "type": "CollegeOrUniversity"
     },
     {
       "name": "Broadway Infosys",
-      "credential": "React & Django Framework Training"
+      "credential": "React & Django Framework Training",
+      "type": "EducationalOrganization"
     }
   ],
   "certifications": [
@@ -124,10 +126,8 @@
       "issuer": "Koray Tugberk Gubur"
     }
   ],
-  "mentors": [
-    {
-      "name": "Anup Luintel",
-      "url": "https://anupluintel.com/"
-    }
+  "areaServed": [
+    "United States",
+    "Worldwide"
   ]
 }

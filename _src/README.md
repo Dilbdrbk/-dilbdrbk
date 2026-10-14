@@ -5,7 +5,7 @@ Everything that makes dilbdrbk.com.np lives in this folder. GitHub Pages does no
 | File | What it holds |
 | --- | --- |
 | `site.json` | Name, role, contact details, profiles, skills, education. Change your details here and they update on every page and in the schema. |
-| `faq.json` | The FAQ on the home page and its FAQPage schema. |
+| `faq.json` | The FAQ on the home page. |
 | `resume.json` | The Resume page (/resume/): summary, roles with start and end months, expertise, knowledge areas, tools and industries. Durations and the career path are worked out by the build. |
 | `make_resume_pdf.py` | Saves the Resume page as `assets/dil-bahadur-bk-resume.pdf` with Microsoft Edge. Run it after changing `resume.json`, then run `build.py` again. |
 | `pages/*.html` | The body of each page. `{{email}}`, `{{faq}}` and similar tokens are filled in by the build. |
@@ -15,6 +15,10 @@ Everything that makes dilbdrbk.com.np lives in this folder. GitHub Pages does no
 | `mdpost.py` | Turns a Markdown post into HTML. `python _src/mdpost.py clean post.md` writes the copy used for linting and the .docx export. |
 | `build.py` | Builds every page, `404.html`, `sitemap.xml`, `robots.txt` and `llms.txt`. Each page's title and meta description are set in its `PAGES` list. |
 | `make_images.py` | Rebuilds the portrait, the social share card and the favicons from `photo-source.png`. `--blog` draws only the blog feature images into `assets/img/blog/`. |
+
+## Schema
+
+Every page carries one `Person` block built from `site.json`. The home page adds a `ProfessionalService` block whose offers are the twelve service cards on the page, so the two always match. A blog post adds a `BlogPosting` and its `BreadcrumbList`. Every other page carries the `Person` only.
 
 ## Files outside the build
 
