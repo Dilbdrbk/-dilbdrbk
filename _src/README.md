@@ -30,7 +30,7 @@ Run it from the repo root, then commit the changed files.
 
 The blog page stays `noindex` and out of the sitemap until the first post exists. After you add a post and rebuild, the blog page becomes indexable, the post gets `BlogPosting` schema, and both are added to `sitemap.xml` and `llms.txt` automatically.
 
-A Markdown post (`posts/<slug>.md`, published at `/blog/<slug>/`) starts with a JSON header in an HTML comment: `date`, and optionally `updated`, `image` (the file stem in `assets/img/blog/`), `imageAlt`, `section`, `keywords`, `about` and `mentions` (things with Wikidata `sameAs` links for the schema). The `# H1` is the title and the `Meta Description:` line is the description.
+A Markdown post (`posts/<slug>.md`, published at `/blog/<slug>/`) starts with a JSON header in an HTML comment: `date`, and optionally `updated`, `image` (the file stem in `assets/img/blog/`), `imageAlt`, `section`, `tags`, `keywords`, `about`, `mentions` and `citations` (things with Wikidata `sameAs` links for the schema). The `# H1` is the title and the `Meta Description:` line is the description.
 
 Lines in double brackets insert blocks:
 
@@ -42,4 +42,4 @@ Lines in double brackets insert blocks:
 | `[[chart:name]]`, `[[tool:name]]` | `blocks/chart-name.html`, `blocks/tool-name.html` |
 | `[[cta:inline]]`, `[[cta:services]]` | A call-to-action box, or the Hire Me and Expertise buttons |
 
-Every post gets the byline, reading time, cover image, author box and further-reading links from `build.py`. Sources are linked inline in the text, with no separate Sources section; every external link in the article becomes a schema `citation`.
+Every post gets the byline, reading time, cover image, author box and further-reading links from `build.py`. Sources are named in the text without links (for example, "According to Google Search Central, ..."), with no separate Sources section. List their URLs in the header as `citations`; they go into the schema only.

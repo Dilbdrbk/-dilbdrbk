@@ -720,9 +720,11 @@ def post_node(post: dict) -> dict:
     for key in ("about", "mentions"):
         if post.get(key):
             node[key] = [dict({"@type": "Thing"}, **thing) for thing in post[key]]
-    # Sources are linked inline in the text; each one is a citation.
-    if post.get("links"):
-        node["citation"] = post["links"]
+    # Sources are named in the text without links; their URLs live in the
+    # post header as `citations`. Older posts fall back to their inline links.
+    citations = post.get("citations") or post.get("links")
+    if citations:
+        node["citation"] = citations
     if post.get("linkedin"):
         node["isBasedOn"] = post["linkedin"]
     return node
