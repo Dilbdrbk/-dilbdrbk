@@ -355,37 +355,57 @@ def lead_dialog() -> str:
 </dialog>"""
 
 
+# Footer contact icons: simple 24px line drawings, stroked in CSS.
+FOOTER_ICONS = {
+    "email": '<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7.5 8 6 8-6"/>',
+    "phone": '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
+    "message": '<path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3.5 20.5l1.4-4.9A8.5 8.5 0 1 1 21 11.5Z"/>',
+    "location": '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/>',
+}
+FOOTER_BIO = "Dil plans websites around entities and topical maps, so brands earn rankings in Google and a place in AI answers."
+
+
 def footer() -> str:
+    """Three columns: who (photo, role, bio, profile chips), site links, and contact rows."""
     nav = "\n".join(f'        <li><a href="{h}">{l}</a></li>' for h, l in [("/", "Home")] + NAV + [("/profiles/", "Profiles"), ("/contact/", "Contact")])
-    profiles = "\n".join(
-        f'        <li><a href="{esc(p["url"])}" rel="me noopener" target="_blank">{esc(p["platform"])}</a></li>'
+    chips = "\n".join(
+        f'        <li><a href="{esc(p["url"])}" rel="{"noopener" if p.get("listing") else "me noopener"}" target="_blank">{esc(p["platform"])}</a></li>'
         for p in SITE["profiles"][:4]
-    ) + '\n        <li><a href="/profiles/">All profiles</a></li>'
+    ) + '\n        <li><a class="footer-chip-all" href="/profiles/">All profiles</a></li>'
+
+    def row(icon: str, key: str, value: str) -> str:
+        return (f'        <li><span class="footer-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">{FOOTER_ICONS[icon]}</svg></span>'
+                f'<span><span class="footer-k">{key}</span>{value}</span></li>')
+
+    rows = "\n".join([
+        row("email", "Email", f'<a class="footer-v" href="mailto:{SITE["email"]}">{SITE["email"]}</a>'),
+        row("phone", "Phone", f'<a class="footer-v" href="tel:{SITE["phoneHref"]}">{SITE["phone"]}</a>'),
+        row("message", "Message", f'<a class="footer-v" href="{esc(SITE["linkedin"])}" rel="me noopener" target="_blank">Message on LinkedIn</a>'),
+        row("location", "Based in", f'<span class="footer-v">{SITE["countryName"]}</span>'),
+    ])
     return f"""</main>
 <footer class="footer">
-  <div class="footer-cta">
-    <p class="label">Get in touch</p>
-    <p class="footer-big"><a href="mailto:{SITE["email"]}">{SITE["email"]}</a></p>
-  </div>
-  <div class="footer-cols">
-    <div>
-      <p class="label">Navigate</p>
-      <ul>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="footer-id" href="/about/">
+        <img class="footer-avatar" src="{asset("/assets/img/dil-bahadur-bk.webp")}" width="56" height="56" alt="" loading="lazy">
+        <span><span class="footer-name">{esc(SITE["name"])}</span><span class="footer-role">{esc(SITE["jobTitle"])}</span></span>
+      </a>
+      <p class="footer-bio">{FOOTER_BIO}</p>
+      <ul class="footer-chips" aria-label="Profiles">
+{chips}
+      </ul>
+    </div>
+    <nav class="footer-col" aria-label="Footer">
+      <p class="footer-head">Navigate</p>
+      <ul class="footer-links">
 {nav}
       </ul>
-    </div>
-    <div>
-      <p class="label">Profiles</p>
-      <ul>
-{profiles}
-      </ul>
-    </div>
-    <div>
-      <p class="label">Contact</p>
-      <ul>
-        <li><a href="mailto:{SITE["email"]}">Email</a></li>
-        <li><a href="tel:{SITE["phoneHref"]}">{SITE["phone"]}</a></li>
-        <li>{SITE["countryName"]}</li>
+    </nav>
+    <div class="footer-col">
+      <p class="footer-head">Get in touch</p>
+      <ul class="footer-contact">
+{rows}
       </ul>
     </div>
   </div>
