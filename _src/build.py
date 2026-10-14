@@ -116,7 +116,8 @@ def person_node() -> dict:
         "@type": "Person",
         "@id": PERSON_ID,
         "name": SITE["name"],
-        "alternateName": SITE["alternateNames"],
+        # Name spellings first, then role titles that the site's own content backs.
+        "alternateName": SITE["alternateNames"] + SITE["alternateTitles"],
         "givenName": SITE["givenName"],
         "familyName": SITE["familyName"],
         "jobTitle": SITE["jobTitle"],

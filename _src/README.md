@@ -18,7 +18,7 @@ Everything that makes dilbdrbk.com.np lives in this folder. GitHub Pages does no
 
 ## Schema
 
-Every page carries one `Person` block built from `site.json`. The home page adds a `ProfessionalService` block whose offers are the twelve service cards on the page, so the two always match. A blog post adds a `BlogPosting` and its `BreadcrumbList`. Every other page carries the `Person` only.
+Every page carries one `Person` block built from `site.json`. Its `alternateName` lists the name spellings (`alternateNames`) and then the role titles (`alternateTitles`); add a title only when a page on the site backs it. The home page adds a `ProfessionalService` block whose offers are the twelve service cards on the page, so the two always match. A blog post adds a `BlogPosting` and its `BreadcrumbList`. Every other page carries the `Person` only.
 
 ## Files outside the build
 
