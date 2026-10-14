@@ -6,6 +6,8 @@ Everything that makes dilbdrbk.com.np lives in this folder. GitHub Pages does no
 | --- | --- |
 | `site.json` | Name, role, contact details, profiles, skills, education. Change your details here and they update on every page and in the schema. |
 | `faq.json` | The FAQ on the home page and its FAQPage schema. |
+| `resume.json` | The Resume page (/resume/): summary, roles with start and end months, expertise, knowledge areas, tools and industries. Durations and the career path are worked out by the build. |
+| `make_resume_pdf.py` | Saves the Resume page as `assets/dil-bahadur-bk-resume.pdf` with Microsoft Edge. Run it after changing `resume.json`, then run `build.py` again. |
 | `pages/*.html` | The body of each page. `{{email}}`, `{{faq}}` and similar tokens are filled in by the build. |
 | `posts/*.md` | Blog posts in Markdown, converted by `mdpost.py`. See "Blog" below. |
 | `posts/*.html` | Older-style posts in plain HTML. Copy `_TEMPLATE.html`, fill in the header, and write the post. |

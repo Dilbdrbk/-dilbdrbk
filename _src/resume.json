@@ -1,0 +1,187 @@
+{
+  "summary": "I build topical authority for websites with semantic SEO, backed by technical, local, on-page and off-page SEO. I grow organic traffic, leads and rankings with data-driven strategy and well-planned content.",
+  "roles": [
+    {
+      "id": "semantic-seo-specialist",
+      "title": "Semantic SEO Specialist",
+      "path": "Semantic SEO",
+      "company": "One Percent Digital",
+      "start": "2026-07",
+      "end": null,
+      "type": "Full time",
+      "location": "Remote",
+      "bullets": []
+    },
+    {
+      "id": "seo-team-lead",
+      "title": "SEO Team Lead",
+      "path": "Team lead",
+      "company": "RankMeTop",
+      "start": "2026-01",
+      "end": "2026-07",
+      "type": "Full time",
+      "bullets": [
+        "Led the SEO team and set data-driven strategy for local service and e-commerce projects.",
+        "Planned project workflows and delivered SEO initiatives on schedule.",
+        "Mentored team members and partnered with developers and content teams on implementation.",
+        "Owned SEO projects end to end, from strategy and execution to performance analysis."
+      ]
+    },
+    {
+      "id": "seo-specialist",
+      "title": "SEO Specialist",
+      "path": "Specialist",
+      "company": "RankMeTop",
+      "start": "2024-11",
+      "end": "2025-12",
+      "type": "Full time",
+      "bullets": [
+        "Developed and executed technical, on-page and local SEO strategies to grow organic traffic.",
+        "Optimized e-commerce category and product pages and improved site information architecture.",
+        "Built topical authority with content strategy and semantic optimization."
+      ]
+    },
+    {
+      "id": "seo-executive",
+      "title": "SEO Executive",
+      "path": "Executive",
+      "company": "RankMeTop",
+      "start": "2024-05",
+      "end": "2024-10",
+      "type": "Full time",
+      "bullets": [
+        "Executed keyword research, on-page optimization and technical SEO fixes.",
+        "Managed Google Business Profiles and local SEO for service businesses.",
+        "Tracked rankings and reported performance to stakeholders."
+      ]
+    },
+    {
+      "id": "seo-intern",
+      "title": "SEO Intern",
+      "path": "Intern",
+      "company": "RankMeTop",
+      "start": "2024-02",
+      "end": "2024-04",
+      "type": "Full time",
+      "bullets": [
+        "Learned core SEO fundamentals and supported on-page and technical tasks.",
+        "Supported keyword research, SEO audits and content optimization."
+      ]
+    },
+    {
+      "id": "link-building",
+      "title": "Data Entry, GStacking & Link Building",
+      "path": "Link building",
+      "company": "RankMeTop",
+      "start": "2023-12",
+      "end": "2024-01",
+      "type": "Full time",
+      "bullets": [
+        "Performed Google stacking and off-page link building.",
+        "Built citations and managed data entry for local SEO campaigns."
+      ]
+    }
+  ],
+  "expertise": [
+    "Semantic SEO",
+    "Technical SEO",
+    "Local SEO",
+    "On-page & off-page SEO",
+    "Content strategy",
+    "Link building",
+    "Keyword research",
+    "Programmatic SEO",
+    "GEO & AEO",
+    "Reddit SEO"
+  ],
+  "knowledge": [
+    {
+      "title": "Entity-focused semantic SEO",
+      "text": "I apply an entity-first, holistic approach that positions each website as an authority in its niche. Koray Tugberk Gubur's topical authority methodology shapes this approach."
+    },
+    {
+      "title": "Content and topical authority",
+      "text": "I build topical maps and content architectures that cover a niche in depth. Structured briefs pair entity-based optimization with search intent and semantic relevance."
+    },
+    {
+      "title": "SEO patents and whitepapers",
+      "text": "I study Google's patents and whitepapers on ranking signals and semantic search. I turn the findings into practical SEO strategy."
+    },
+    {
+      "title": "Programmatic SEO, GEO and AI search",
+      "text": "I build programmatic SEO systems for large keyword sets. I structure content and entities so brands appear in AI answers on ChatGPT, Gemini, Perplexity and Google's AI Overviews."
+    },
+    {
+      "title": "SEO hypothesis testing",
+      "text": "I test SEO ideas with experiments on AI-generated content, exact match domains and technical variables. The results show which changes move rankings."
+    },
+    {
+      "title": "Reddit SEO",
+      "text": "I build topical relevance, referral traffic and visibility in Google and AI search through Reddit participation, discussion-led content and brand mentions."
+    }
+  ],
+  "tools": [
+    {
+      "group": "Search & analytics",
+      "items": [
+        "Google Search Console",
+        "Google Analytics",
+        "Google Tag Manager",
+        "Looker Studio"
+      ]
+    },
+    {
+      "group": "Research & monitoring",
+      "items": [
+        "Semrush",
+        "Ahrefs",
+        "AccuRanker Grump"
+      ]
+    },
+    {
+      "group": "Data & automation",
+      "items": [
+        "Google Colab"
+      ]
+    },
+    {
+      "group": "Platforms",
+      "items": [
+        "WordPress",
+        "Shopify"
+      ]
+    }
+  ],
+  "industries": [
+    {
+      "group": "Local SEO niches",
+      "items": [
+        "Plumbing",
+        "Automotive",
+        "Flooring",
+        "Fencing",
+        "Logistics",
+        "HVAC",
+        "Cannabis",
+        "Home improvement",
+        "Pest control",
+        "Hair solutions",
+        "Auction",
+        "Skin care"
+      ]
+    },
+    {
+      "group": "Nationwide SEO niches",
+      "items": [
+        "IT",
+        "Finance",
+        "Real estate",
+        "Human resources",
+        "SaaS",
+        "Keynote speaker",
+        "Online coaching & test prep",
+        "Chat business"
+      ]
+    }
+  ]
+}

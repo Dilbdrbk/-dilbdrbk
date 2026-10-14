@@ -34,6 +34,8 @@ BLOG_IMG = "/assets/img/blog"
 SITE = json.loads((SRC / "site.json").read_text(encoding="utf-8"))
 FAQ = json.loads((SRC / "faq.json").read_text(encoding="utf-8"))
 GLOSSARY = json.loads((SRC / "glossary.json").read_text(encoding="utf-8"))
+RESUME = json.loads((SRC / "resume.json").read_text(encoding="utf-8"))
+RESUME_PDF = "/assets/dil-bahadur-bk-resume.pdf"  # made by _src/make_resume_pdf.py
 BASE = SITE["url"].rstrip("/")
 PERSON_ID = f"{BASE}/#person"
 WEBSITE_ID = f"{BASE}/#website"
@@ -44,7 +46,7 @@ KEYWORDS = "Dil Bahadur B.K., Semantic SEO Specialist, SEO Specialist, Semantic 
 NAV = [
     ("/expertise/", "Expertise"),
     ("/how-search-works/", "How Search Works"),
-    ("/experience/", "Experience"),
+    ("/resume/", "Resume"),
     ("/industries/", "Industries"),
     ("/about/", "About"),
     ("/blog/", "Blog"),
@@ -65,11 +67,12 @@ PAGES = [
     dict(path="/how-search-works/", body="how-search-works.html", crumb="How Search Works", updated="2026-10-10", kind="guide",
          title="How Search Works: 5 Diagrams on Ranking & AI Answers | Dil B.K.",
          description="How a page is crawled, understood and ranked, how AI search builds an answer, how an entity becomes a topical map, and how I test SEO ideas."),
-    dict(path="/experience/", body="experience.html", crumb="Experience", updated="2026-10-10", kind="page",
-         title="SEO Experience at One Percent Digital & RankMeTop | Dil B.K.",
-         description="Semantic SEO Specialist at One Percent Digital since July 2026, after five roles at RankMeTop from link building to SEO team lead. Plus education.",
-         # Site-wide files (llms.txt) name no employers; only the Experience page itself does.
-         summary="SEO career since December 2023, from link building to semantic SEO specialist, plus education."),
+    # Employer names appear only in the body of the Resume page, never in its
+    # title, description, schema or llms.txt summary.
+    dict(path="/resume/", body="resume.html", crumb="Resume", updated="2026-10-14", kind="page",
+         title="Resume: Dil Bahadur B.K., Semantic SEO Specialist in Nepal",
+         description="Resume of Dil Bahadur B.K., semantic SEO specialist in Nepal: six roles since 2023, skills, tools, 25+ industries and education. Download the PDF.",
+         summary="Resume: SEO career since December 2023, from link building to semantic SEO specialist; skills, tools, industries and education, with a PDF to download."),
     dict(path="/industries/", body="industries.html", crumb="Industries", updated="2026-10-10", kind="page",
          title="Industries: Local, Nationwide & E-commerce SEO | Dil Bahadur B.K.",
          description="SEO across 25+ industries: current e-commerce and B2B projects, local services such as plumbing and HVAC, and nationwide niches such as SaaS and finance."),
@@ -416,6 +419,128 @@ def fill(text: str, tokens: dict) -> str:
     return TOKEN.sub(sub, text)
 
 
+# Old URLs that moved: each gets a small page that sends visitors and crawlers on.
+REDIRECTS = {"/experience/": "/resume/"}
+
+
+def redirect_html(target: str) -> str:
+    url = absolute(target)
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moved to {esc(target)} | {esc(SITE["name"])}</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="{url}">
+<meta http-equiv="refresh" content="0; url={target}">
+<script>location.replace("{target}" + location.hash)</script>
+</head>
+<body>
+<p>This page has moved to <a href="{target}">{url}</a>.</p>
+</body>
+</html>
+"""
+
+
+# ---------------------------------------------------------------- resume
+
+def month_label(ym: str) -> str:
+    d = datetime.date.fromisoformat(ym + "-01")
+    return f"{d.strftime('%b')} {d.year}"
+
+
+def duration_label(start: str, end: str) -> str:
+    """Months counted the way LinkedIn does: both the first and the last month count."""
+    s, e = datetime.date.fromisoformat(start + "-01"), datetime.date.fromisoformat(end + "-01")
+    months = (e.year - s.year) * 12 + (e.month - s.month) + 1
+    years, rest = divmod(months, 12)
+    parts = ([f"{years} year" + ("s" if years > 1 else "")] if years else []) + \
+            ([f"{rest} month" + ("s" if rest > 1 else "")] if rest else [])
+    return " ".join(parts)
+
+
+def career_path_html() -> str:
+    """Oldest to newest: each step links to its role below. Works without JavaScript."""
+    steps = []
+    for role in reversed(RESUME["roles"]):
+        current = ' class="is-current"' if not role["end"] else ""
+        steps.append(
+            f'      <li{current}><a href="#role-{role["id"]}"><span class="cp-dot" aria-hidden="true"></span>'
+            f'<span class="cp-date">{month_label(role["start"])}</span><span class="cp-role">{esc(role["path"])}</span></a></li>'
+        )
+    return '    <ol class="career-path" role="list">\n' + "\n".join(steps) + "\n    </ol>"
+
+
+def resume_stats_html() -> str:
+    first = RESUME["roles"][-1]["start"][:4]
+    tools = sum(len(g["items"]) for g in RESUME["tools"])
+    stats = [
+        ("In SEO since", first, ""),
+        ("Roles, from data entry to team lead", str(len(RESUME["roles"])), str(len(RESUME["roles"]))),
+        ("Industries worked in", "25+", "25"),
+        ("Tools in daily use", str(tools), str(tools)),
+    ]
+    rows = []
+    for label, value, count in stats:
+        attrs = f' data-count="{count}"' + (' data-suffix="+"' if value.endswith("+") else "") if count else ""
+        rows.append(f"      <div><dt>{esc(label)}</dt><dd{attrs}>{value}</dd></div>")
+    return '    <dl class="stats stats-4">\n' + "\n".join(rows) + "\n    </dl>"
+
+
+def roles_html() -> str:
+    items = []
+    for role in RESUME["roles"]:
+        if role["end"]:
+            dates = f'{month_label(role["start"])} to {month_label(role["end"])}'
+            meta = [esc(role["company"]), dates, duration_label(role["start"], role["end"]), role["type"]]
+        else:
+            meta = [esc(role["company"]), f'{month_label(role["start"])} to present', role["type"]]
+        if role.get("location"):
+            meta.append(role["location"])
+        badge = '<span class="role-badge">Current role</span>' if not role["end"] else ""
+        bullets = "".join(f"<li>{esc(b)}</li>" for b in role["bullets"])
+        items.append(
+            f'      <li class="role" id="role-{role["id"]}">\n'
+            f'        <div class="role-head">{badge}<h3>{esc(role["title"])}</h3>'
+            f'<p class="role-meta">{" <span>&middot;</span> ".join(meta)}</p></div>\n'
+            + (f"        <ul>{bullets}</ul>\n" if bullets else "")
+            + "      </li>"
+        )
+    return '    <ol class="timeline resume-roles">\n' + "\n".join(items) + "\n    </ol>"
+
+
+def resume_tokens() -> dict:
+    pdf = asset(RESUME_PDF) if (ROOT / RESUME_PDF.lstrip("/")).exists() else RESUME_PDF
+    groups = lambda key: "\n".join(  # noqa: E731
+        f'      <div><h3 class="list-title">{esc(g["group"])}</h3><ul class="tags tags-sm" role="list">'
+        + "".join(f"<li>{esc(i)}</li>" for i in g["items"]) + "</ul></div>"
+        for g in RESUME[key]
+    )
+    credentials = [("Certification", c["name"], c["issuer"]) for c in SITE["certifications"]] + [
+        ("Diploma" if "Diploma" in e["credential"] else "Training",
+         e["credential"].replace("Diploma in ", "").replace(" Training", ""), e["name"])
+        for e in SITE["education"]
+    ]
+    return {
+        "resumeSummary": esc(RESUME["summary"]),
+        "resumePdf": pdf,
+        "careerPath": career_path_html(),
+        "resumeStats": resume_stats_html(),
+        "roles": roles_html(),
+        "expertiseTags": "\n".join(f"      <li>{esc(t)}</li>" for t in RESUME["expertise"]),
+        "knowledgeCards": "\n".join(
+            f'      <li class="card card-static"><h3>{esc(k["title"])}</h3><p>{esc(k["text"])}</p></li>'
+            for k in RESUME["knowledge"]
+        ),
+        "toolGroups": groups("tools"),
+        "industryGroups": groups("industries"),
+        "credentialCards": "\n".join(
+            f'      <li class="card card-static"><span class="idx">{kind}</span><h3>{esc(name)}</h3><p>{esc(org)}</p></li>'
+            for kind, name, org in credentials
+        ),
+    }
+
+
 def faq_html() -> str:
     return "\n".join(
         f'<details class="faq-item"><summary><span>{esc(q["q"])}</span></summary><p>{esc(q["a"])}</p></details>'
@@ -758,6 +883,7 @@ def build() -> None:
         "linkedin": SITE["linkedin"],
         "linkedinActivity": SITE["linkedinActivity"],
         "profileCount": str(len(SITE["profiles"])),
+        **resume_tokens(),
     }
     indexed = []
 
@@ -795,6 +921,9 @@ def build() -> None:
                      description="This page does not exist. Head back to the home page of Dil Bahadur B.K.")
     body404 = (SRC / "pages" / "404.html").read_text(encoding="utf-8")
     write("/404", head(not_found, page_graph(not_found, [], []), noindex=True) + "\n" + header("") + "\n" + body404 + "\n" + footer())
+
+    for old, new in REDIRECTS.items():
+        write(old, redirect_html(new))
 
     urls = "\n".join(
         f"  <url><loc>{absolute(p)}</loc><lastmod>{d}</lastmod></url>" for p, d in indexed
