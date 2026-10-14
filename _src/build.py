@@ -56,8 +56,8 @@ NAV = [
 # `updated` feeds sitemap lastmod; bump it when a page's content changes.
 PAGES = [
     dict(path="/", body="home.html", crumb="Home", updated="2026-10-10", kind="home",
-         title="Dil Bahadur B.K. | Semantic SEO Specialist in Kathmandu, Nepal",
-         description="Semantic SEO specialist in Kathmandu, Nepal. I build topical authority with entity-first, technical and local SEO for local service and e-commerce websites."),
+         title="Semantic SEO Specialist in Nepal | Dil Bahadur B.K.",
+         description="Dil Bahadur B.K., a semantic SEO specialist in Nepal, drives organic traffic and leads with topical authority and entity-based, technical and local SEO."),
     dict(path="/about/", body="about.html", crumb="About", updated="2026-10-10", kind="profile",
          title="About Dil Bahadur B.K. | Semantic SEO Specialist From Nepal",
          description="Who Dil Bahadur B.K. is: a semantic SEO specialist from Kathmandu who grew from link building into entity-based SEO, topical authority and AI search."),
@@ -66,7 +66,7 @@ PAGES = [
          description="Twelve areas of SEO expertise: semantic and entity SEO, topical maps, technical, on-page, local and off-page SEO, programmatic SEO, GEO, AEO and Reddit SEO."),
     dict(path="/how-search-works/", body="how-search-works.html", crumb="How Search Works", updated="2026-10-10", kind="guide",
          title="How Search Works: 5 Diagrams on Ranking & AI Answers | Dil B.K.",
-         description="How a page is crawled, understood and ranked, how AI search builds an answer, how an entity becomes a topical map, and how I test SEO ideas."),
+         description="How a page is crawled, understood and ranked, how AI search composes an answer, how an entity becomes a topical map, and how I test SEO ideas."),
     # Employer names appear only in the body of the Resume page, never in its
     # title, description, schema or llms.txt summary.
     dict(path="/resume/", body="resume.html", crumb="Resume", updated="2026-10-14", kind="page",
@@ -121,23 +121,18 @@ def person_node() -> dict:
         "givenName": SITE["givenName"],
         "familyName": SITE["familyName"],
         "jobTitle": SITE["jobTitle"],
-        "description": PAGES[0]["description"],
+        "description": "Semantic SEO specialist in Nepal who drives organic traffic and leads through topical authority and entity-based, technical and local SEO.",
         "url": BASE + "/",
         "mainEntityOfPage": absolute("/about/"),
         "image": {"@type": "ImageObject", "url": absolute(PORTRAIT), "width": 480, "height": 480},
         "email": "mailto:" + SITE["email"],
         "telephone": SITE["phoneHref"],
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": SITE["locality"],
-            "addressRegion": SITE["region"],
-            "addressCountry": SITE["country"],
-        },
+        "address": {"@type": "PostalAddress", "addressCountry": SITE["country"]},
         "nationality": {"@type": "Country", "name": SITE["countryName"]},
         "hasOccupation": {
             "@type": "Occupation",
             "name": SITE["jobTitle"],
-            "occupationLocation": {"@type": "City", "name": SITE["locality"]},
+            "occupationLocation": {"@type": "Country", "name": SITE["countryName"]},
             "skills": ", ".join(SITE["knowsAbout"]),
         },
         "alumniOf": [{"@type": "EducationalOrganization", "name": e["name"]} for e in SITE["education"]],
@@ -342,7 +337,7 @@ def lead_dialog() -> str:
   <div class="lead-inner">
     <button class="lead-close" type="button" data-close-form aria-label="Close">&times;</button>
     <p class="lead-kicker">Request a review</p>
-    <h2 class="lead-title" id="lead-title">Tell me about your site</h2>
+    <h2 class="lead-title" id="lead-title">Start your semantic SEO project</h2>
     <p class="lead-sub">Share where your site is now and what you want from search. I read every message and reply myself.</p>
     <form class="lead-form" data-endpoint="{endpoint}" data-email="{SITE["email"]}">{key_input}
       <input class="lead-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -390,13 +385,13 @@ def footer() -> str:
       <ul>
         <li><a href="mailto:{SITE["email"]}">Email</a></li>
         <li><a href="tel:{SITE["phoneHref"]}">{SITE["phone"]}</a></li>
-        <li>{SITE["locality"]}, {SITE["countryName"]}</li>
+        <li>{SITE["countryName"]}</li>
       </ul>
     </div>
   </div>
   <div class="footer-base">
     <span>&copy; <span data-year>2026</span> {esc(SITE["name"])}</span>
-    <span>{SITE["locality"]} <time data-clock>--:--</time> NPT</span>
+    <span>{SITE["countryName"]} <time data-clock>--:--</time> NPT</span>
   </div>
 </footer>
 {lead_dialog()}
@@ -759,8 +754,8 @@ def author_box() -> str:
       <div>
         <p class="author-kicker">Written by</p>
         <p class="author-name" id="author-name"><a href="/about/" rel="author">{esc(SITE["name"])}</a></p>
-        <p class="author-role">{esc(SITE["jobTitle"])}, {SITE["locality"]}, {SITE["countryName"]}</p>
-        <p class="author-bio">I'm {esc(SITE["name"])}, a semantic SEO specialist from Kathmandu, Nepal. I plan websites around entities and topical maps, then build them on a base of technical, local, on-page and off-page SEO. My SEO career started in December 2023, and I hold the {esc(cert["name"])} certification from {esc(cert["issuer"])}.</p>
+        <p class="author-role">{esc(SITE["jobTitle"])}, {SITE["countryName"]}</p>
+        <p class="author-bio">I'm {esc(SITE["name"])}, a semantic SEO specialist from Nepal. I plan websites around entities and topical maps, then strengthen them with technical, local, on-page and off-page SEO. My SEO career started in December 2023, and I hold the {esc(cert["name"])} certification from {esc(cert["issuer"])}.</p>
         <p class="author-links"><a href="/about/">About me</a><a href="{esc(SITE["linkedin"])}" rel="me noopener" target="_blank">LinkedIn</a><a href="/profiles/">All profiles</a><a href="/contact/" data-open-form>Hire Me</a></p>
       </div>
     </aside>"""
@@ -943,7 +938,7 @@ def build() -> None:
     llms = [
         f"# {SITE['name']}",
         "",
-        f"> {SITE['jobTitle']} in {SITE['locality']}, {SITE['countryName']}. "
+        f"> {SITE['jobTitle']} in {SITE['countryName']}. "
         "Specializes in semantic and entity-based SEO, topical authority, technical SEO, local SEO, "
         "programmatic SEO and optimization for AI search (GEO and AEO).",
         "",

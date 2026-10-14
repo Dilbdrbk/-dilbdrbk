@@ -153,7 +153,7 @@ def og_card(face):
 
     small = font("arial.ttf", 22)
     mono = font("consola.ttf", 22)
-    d.text((W - 60, 22), "Kathmandu, Nepal", font=small, fill=MUTED, anchor="ra")
+    d.text((W - 60, 22), "Nepal", font=small, fill=MUTED, anchor="ra")
     d.ellipse((60, 420, 74, 434), fill=ACCENT)
     d.text((86, 416), "Semantic SEO Specialist", font=small, fill=INK)
     d.text((60, 452), "In SEO since 2023", font=small, fill=MUTED)
