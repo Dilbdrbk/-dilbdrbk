@@ -1642,3 +1642,40 @@ html:not(.js) .js-only { display: none !important; }
 .post-row-meta { display: flex; flex-wrap: wrap; color: var(--muted); font-size: 0.8125rem; }
 .post-row-meta span::before { content: "\00B7"; margin: 0 9px; }
 @media (max-width: 760px) { .post-row a { grid-template-columns: minmax(0, 1fr); } }
+
+/* ------------------------------------------------------------ home: resources
+   Blog posts and the FAQ as two tabs. Without JavaScript the tab buttons stay
+   hidden and both panels show, each under its own small label. */
+.res-tabs { max-width: 940px; margin-inline: auto; }
+.res-tablist { display: flex; justify-content: center; gap: 8px; margin-bottom: 28px; }
+.res-tab { min-width: 96px; padding: 9px 20px; border: 1px solid var(--line-strong); border-radius: 999px; background: transparent; color: var(--muted); font: inherit; font-size: 0.9375rem; font-weight: 600; cursor: pointer; transition: background-color 0.2s, border-color 0.2s, color 0.2s; }
+.res-tab:hover { border-color: var(--ink); color: var(--ink); }
+.res-tab[aria-selected="true"] { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+.res-panel[hidden] { display: none; }
+.res-panel .faq { margin-inline: auto; }
+.res-panel .section-link { margin: 26px 0 0; }
+.res-nojs { margin: 34px 0 14px; text-align: center; }
+.js .res-nojs { display: none; }
+
+.feature-posts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; list-style: none; }
+.feature-card:first-child { grid-column: 1 / -1; }
+.feature-card a { display: grid; align-content: start; gap: 18px; height: 100%; padding: 16px; border: 1px solid var(--line); border-radius: 20px; background: var(--bg-raise); text-decoration: none; transition: border-color 0.2s; }
+.feature-card:first-child a { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; gap: 28px; }
+.feature-card a:hover { border-color: var(--accent); color: inherit; }
+.feature-card img { width: 100%; border: 1px solid var(--line); border-radius: 12px; }
+.feature-text { display: grid; gap: 10px; padding: 4px 6px 4px 0; text-align: left; }
+.feature-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.feature-tags span { padding: 3px 10px; border: 1px solid var(--line-strong); border-radius: 999px; color: var(--ink-2); font-size: 0.75rem; }
+.feature-tags span:first-child { border-color: var(--accent); color: var(--accent); }
+.feature-meta { display: flex; flex-wrap: wrap; color: var(--muted); font-size: 0.8125rem; }
+.feature-meta span::before { content: "\00B7"; margin: 0 9px; }
+.feature-title { font-family: var(--font-display); font-stretch: var(--display-stretch); font-size: clamp(1.5rem, 1rem + 1.4vw, 2.2rem); font-weight: 800; line-height: 1; letter-spacing: -0.01em; }
+.feature-card:not(:first-child) .feature-title { font-size: clamp(1.3rem, 1rem + 0.8vw, 1.6rem); }
+.feature-desc { color: var(--ink-2); font-size: 0.9375rem; line-height: 1.55; }
+.feature-more { color: var(--accent); font-size: 0.875rem; font-weight: 600; }
+.feature-more::after { content: "\2192"; display: inline-block; margin-left: 8px; transition: transform 0.2s; }
+.feature-card a:hover .feature-more::after { transform: translateX(3px); }
+@media (max-width: 760px) {
+  .feature-posts { grid-template-columns: minmax(0, 1fr); }
+  .feature-card:first-child a { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+}

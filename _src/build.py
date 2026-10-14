@@ -588,6 +588,29 @@ def posts_list_html(posts: list[dict]) -> str:
     return '<ul class="post-list">' + "\n".join(items) + "</ul>"
 
 
+def featured_posts_html(posts: list[dict], limit: int = 3) -> str:
+    """Home page Resources tab: the newest post as a wide card, the next ones as smaller cards."""
+    if not posts:
+        return '<p class="section-note">The first guides are on their way.</p>'
+    cards = []
+    for p in posts[:limit]:
+        image = ""
+        if p.get("image"):
+            src = asset(f'{BLOG_IMG}/{p["image"]}.webp')
+            image = f'<img src="{src}" width="1600" height="840" alt="" loading="lazy" decoding="async">'
+        tags = "".join(f"<span>{esc(t)}</span>" for t in p.get("tags", [p["section"]] if p.get("section") else []))
+        cards.append(
+            f'<li class="feature-card"><a href="{p["path"]}">{image}<span class="feature-text">'
+            f'<span class="feature-tags">{tags}</span>'
+            f'<span class="feature-meta"><time datetime="{p["date"]}">{human_date(p["date"])}</time>'
+            f'<span>{p["minutes"]} min read</span></span>'
+            f'<span class="feature-title">{esc(p["title"])}</span>'
+            f'<span class="feature-desc">{esc(p["description"])}</span>'
+            f'<span class="feature-more">Read the guide</span></span></a></li>'
+        )
+    return '<ul class="feature-posts">\n' + "\n".join(cards) + "\n</ul>"
+
+
 def byline(post: dict) -> str:
     photo = asset("/assets/img/dil-bahadur-bk.webp")
     updated = ""
@@ -725,6 +748,7 @@ def build() -> None:
         "profiles": profiles_html(True),
         "profileTiles": profiles_html(False),
         "posts": posts_list_html(posts),
+        "featuredPosts": featured_posts_html(posts),
         "email": SITE["email"],
         "phone": SITE["phone"],
         "phoneHref": SITE["phoneHref"],

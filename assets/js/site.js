@@ -284,6 +284,41 @@
     });
   }
 
+  // Home: Resources tabs (Blog, FAQ). Without JS the tab buttons stay hidden and
+  // both panels show. A link to a panel's id, such as /#faq, opens that tab.
+  document.querySelectorAll('[data-tabs]').forEach(function (box) {
+    var tabs = Array.prototype.slice.call(box.querySelectorAll('[role="tab"]'));
+    var panels = tabs.map(function (t) { return document.getElementById(t.getAttribute('aria-controls')); });
+    var select = function (i, focus) {
+      tabs.forEach(function (t, k) {
+        var on = k === i;
+        t.setAttribute('aria-selected', String(on));
+        t.tabIndex = on ? 0 : -1;
+        panels[k].hidden = !on;
+      });
+      if (focus) tabs[i].focus();
+    };
+    tabs.forEach(function (tab, i) {
+      tab.addEventListener('click', function () { select(i); });
+      tab.addEventListener('keydown', function (e) {
+        var next = { ArrowRight: (i + 1) % tabs.length, ArrowLeft: (i - 1 + tabs.length) % tabs.length, Home: 0, End: tabs.length - 1 }[e.key];
+        if (next !== undefined) { e.preventDefault(); select(next, true); }
+      });
+    });
+    var fromHash = function () {
+      for (var k = 0; k < panels.length; k++) {
+        if (location.hash === '#' + panels[k].id) {
+          select(k);
+          panels[k].scrollIntoView();
+          return true;
+        }
+      }
+      return false;
+    };
+    if (!fromHash()) select(0);
+    window.addEventListener('hashchange', fromHash);
+  });
+
   // Blog tools. Each one starts from a static example in the HTML, so the page
   // still reads correctly without JavaScript.
   var escapeXml = function (s) {

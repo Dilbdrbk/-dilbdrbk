@@ -4,6 +4,7 @@
   "image": "what-is-entity-seo",
   "imageAlt": "What is entity SEO? Optimizing a website so search engines identify its entities, their attributes and their relations.",
   "section": "Entity SEO",
+  "tags": ["Entity SEO", "Knowledge Graph", "Structured data"],
   "keywords": ["entity SEO", "what is entity SEO", "entity-based SEO", "knowledge graph", "entity schema", "semantic SEO"],
   "about": [
     {"name": "Entity SEO"},

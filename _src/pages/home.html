@@ -357,14 +357,30 @@
   <p class="web-strip-note">These are my official profiles. If an account isn't listed here, it isn't mine. <a href="/profiles/">See all profiles</a></p>
 </section>
 
-<section class="frame" aria-labelledby="faq-title">
+<section class="frame" id="resources" aria-labelledby="resources-title">
   <div class="rail">
-    <p class="label"><span class="idx">07</span> FAQ</p>
+    <p class="label"><span class="idx">07</span> Resources</p>
   </div>
   <div class="body">
-    <h2 id="faq-title" class="section-title">Frequently asked</h2>
-    <div class="faq">
+    <h2 id="resources-title" class="section-title">Resources on semantic SEO</h2>
+    <p class="section-note">Guides from the blog, and answers to the questions people ask me most.</p>
+    <div class="res-tabs" data-tabs>
+      <div class="res-tablist js-only" role="tablist" aria-label="Resources">
+        <button class="res-tab" type="button" role="tab" id="res-tab-blog" aria-controls="blog-posts" aria-selected="true">Blog</button>
+        <button class="res-tab" type="button" role="tab" id="res-tab-faq" aria-controls="faq" aria-selected="false" tabindex="-1">FAQ</button>
+      </div>
+      <div class="res-panel" id="blog-posts" role="tabpanel" aria-labelledby="res-tab-blog">
+        <p class="label res-nojs">Blog</p>
+{{featuredPosts}}
+        <p class="section-link"><a class="arrow-link" href="/blog/">All posts on the blog</a></p>
+      </div>
+      <div class="res-panel" id="faq" role="tabpanel" aria-labelledby="res-tab-faq">
+        <p class="label res-nojs">FAQ</p>
+        <div class="faq">
 {{faq}}
+        </div>
+        <p class="section-link"><a class="arrow-link" href="/contact/" data-open-form>Ask me a question</a></p>
+      </div>
     </div>
   </div>
 </section>
