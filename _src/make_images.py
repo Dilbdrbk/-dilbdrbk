@@ -3,10 +3,16 @@
 
     python _src/make_images.py                 # portrait, logo, favicons, social card
     python _src/make_images.py --kit <dir>     # also export the logo kit to <dir>
+    python _src/make_images.py --blog          # only the blog feature images
 
 The logo is the "dbk." wordmark: lowercase dbk in Segoe UI Black with a lime
 dot. Only needs re-running when the photo, logo or headline changes.
+
+Blog feature images pair a question and its short answer with a small diagram
+and the logo, in Bahnschrift Condensed (the closest installed match to the
+site's condensed Archivo). They go to assets/img/blog/.
 """
+import math
 import pathlib
 import random
 import sys
@@ -26,6 +32,9 @@ LINE = (66, 66, 66)
 ACCENT = (201, 242, 93)
 ACCENT_DARK = (95, 140, 0)   # lime reads poorly on light backgrounds
 LIGHT_BG = (244, 243, 239)
+INK_2 = (214, 212, 211)
+LINE_STRONG = (98, 98, 98)
+RAISE = (46, 46, 46)
 SS = 3                       # supersampling for the vector-like drawing
 
 
@@ -190,8 +199,172 @@ def kit(out):
             print(f"  {f.name:42} {im.width}x{im.height}")
 
 
+# ---------------------------------------------------------------- blog feature images
+
+BLOG = IMG / "blog"
+R = 2                        # blog images are drawn at 2x, then scaled down
+
+
+def px(v):
+    return int(round(v * R))
+
+
+def bahn(size, style):
+    return font("bahnschrift.ttf", px(size), style)
+
+
+def tracked(d, xy, text, f, fill, tracking, anchor="lm"):
+    """Letter-spaced text, for the small uppercase labels."""
+    width = sum(f.getlength(ch) for ch in text) + tracking * (len(text) - 1)
+    x, y = xy
+    if anchor[0] == "r":
+        x -= width
+    elif anchor[0] == "m":
+        x -= width / 2
+    for ch in text:
+        d.text((x, y), ch, font=f, fill=fill, anchor="l" + anchor[1])
+        x += f.getlength(ch) + tracking
+
+
+def wrap(text, f, width):
+    lines, cur = [], ""
+    for word in text.split():
+        trial = (cur + " " + word).strip()
+        if f.getlength(trial) <= width:
+            cur = trial
+        else:
+            lines.append(cur)
+            cur = word
+    return lines + [cur] if cur else lines
+
+
+def pill(d, cx, cy, text, f, fill=BG, outline=LINE_STRONG, ink=INK, h=46):
+    w = f.getlength(text) + px(36)
+    d.rounded_rectangle([cx - w / 2, cy - px(h) / 2, cx + w / 2, cy + px(h) / 2], radius=px(h) / 2,
+                        fill=fill, outline=outline, width=R)
+    d.text((cx, cy), text, font=f, fill=ink, anchor="mm")
+
+
+def feature_canvas(W, H, split, question, answer, note=None):
+    """Shared layout: logo and label on top, question and answer on the left, footer below.
+    `question` is two lines; the second one is lime."""
+    im = Image.new("RGB", (px(W), px(H)), BG)
+    d = ImageDraw.Draw(im)
+    for y in (64, H - 64):
+        d.line([(0, px(y)), (px(W), px(y))], fill=LINE, width=R)
+    d.line([(px(split), px(64)), (px(split), px(H - 64))], fill=LINE, width=R)
+    logo = to_height(wordmark(), px(30))
+    im.paste(logo, (px(60), px(17)), logo)
+    tracked(d, (px(W - 60), px(32)), "ENTITY SEO GUIDE", bahn(15, "SemiBold"), MUTED, px(3), anchor="rm")
+
+    qf = bahn(100, "Bold Condensed")
+    d.text((px(60), px(100)), question[0], font=qf, fill=INK, anchor="la")
+    d.text((px(60), px(196)), question[1], font=qf, fill=ACCENT, anchor="la")
+    y = px(346)
+    d.line([(px(60), y), (px(106), y)], fill=ACCENT, width=px(3))
+    y += px(24)
+    af = bahn(30, "SemiCondensed")
+    for line in wrap(answer, af, px(split - 120)):
+        d.text((px(60), y), line, font=af, fill=INK_2, anchor="la")
+        y += px(40)
+    if note:
+        d.text((px(60), y + px(10)), note, font=bahn(18, "SemiCondensed"), fill=MUTED, anchor="la")
+
+    small = bahn(19, "SemiCondensed")
+    d.text((px(60), px(H - 32)), "Dil Bahadur B.K.  /  Semantic SEO Specialist", font=small, fill=MUTED, anchor="lm")
+    d.text((px(W - 60), px(H - 32)), "dilbdrbk.com.np/blog", font=small, fill=INK, anchor="rm")
+    return im, d
+
+
+def entity_graph(d, cx, cy):
+    """An entity in the middle with the five things entity SEO defines around it."""
+    labels = ["Type", "Attributes", "Relations", "Wikidata ID", "sameAs"]
+    rx, ry = 165, 170
+    nodes = []
+    for k, label in enumerate(labels):
+        a = math.radians(-90 + k * 72)
+        nodes.append((px(cx + rx * math.cos(a)), px(cy + ry * math.sin(a)), label))
+    d.ellipse([px(cx - 118), px(cy - 118), px(cx + 118), px(cy + 118)], outline=LINE, width=R)
+    for x, y, label in nodes:
+        d.line([(px(cx), px(cy)), (x, y)], fill=ACCENT if label == "Attributes" else LINE_STRONG, width=px(2))
+    f = bahn(21, "SemiBold SemiCondensed")
+    for x, y, label in nodes:
+        lime = label == "Attributes"
+        pill(d, x, y, label, f, outline=ACCENT if lime else LINE_STRONG, ink=ACCENT if lime else INK)
+    d.ellipse([px(cx - 64), px(cy - 64), px(cx + 64), px(cy + 64)], fill=ACCENT)
+    d.text((px(cx), px(cy)), "Entity", font=bahn(34, "Bold Condensed"), fill=INK_DARK, anchor="mm")
+
+
+def record(d, box, qid, name, lines, lime):
+    x0, y0, x1, y1 = (px(v) for v in box)
+    d.rounded_rectangle([x0, y0, x1, y1], radius=px(18), fill=RAISE, outline=ACCENT if lime else LINE_STRONG, width=R)
+    chip_f = bahn(18, "SemiBold SemiCondensed")
+    w = chip_f.getlength(qid) + px(24)
+    d.rounded_rectangle([x0 + px(24), y0 + px(24), x0 + px(24) + w, y0 + px(56)], radius=px(16),
+                        fill=ACCENT if lime else LINE_STRONG)
+    d.text((x0 + px(24) + w / 2, y0 + px(40)), qid, font=chip_f, fill=INK_DARK if lime else INK, anchor="mm")
+    d.text((x0 + px(24), y0 + px(72)), name, font=bahn(40, "Bold Condensed"), fill=INK, anchor="la")
+    y = y0 + px(126)
+    for text, color in lines:
+        d.text((x0 + px(24), y), text, font=bahn(20, "SemiCondensed"), fill=color, anchor="la")
+        y += px(28)
+
+
+def steps_list(d, x, top, labels):
+    f = bahn(26, "SemiBold SemiCondensed")
+    nf = bahn(17, "Bold Condensed")
+    step = 76
+    d.line([(px(x), px(top)), (px(x), px(top + step * (len(labels) - 1)))], fill=LINE_STRONG, width=R)
+    for k, label in enumerate(labels):
+        y = top + k * step
+        box = [px(x - 21), px(y - 21), px(x + 21), px(y + 21)]
+        if k == 0:
+            d.ellipse(box, fill=ACCENT)
+        else:
+            d.ellipse(box, fill=BG, outline=LINE_STRONG, width=R)
+        d.text((px(x), px(y)), f"{k + 1:02d}", font=nf, fill=INK_DARK if k == 0 else INK, anchor="mm")
+        d.text((px(x + 40), px(y)), label, font=f, fill=INK, anchor="lm")
+
+
+def save_scaled(im, name, size, fmt, **opts):
+    out = im.resize(size, Image.LANCZOS)
+    out = grain(out)
+    out.save(BLOG / name, fmt, **opts)
+    print(f"  {name:36} {size[0]}x{size[1]}  {(BLOG / name).stat().st_size // 1024} KB")
+
+
+def blog_images():
+    BLOG.mkdir(parents=True, exist_ok=True)
+
+    cover, d = feature_canvas(1200, 630, 690, ("What is", "entity SEO?"),
+                              "Optimizing a website so search engines identify its entities, their attributes and their relations.")
+    entity_graph(d, 945, 315)
+    save_scaled(cover, "what-is-entity-seo.jpg", (1200, 630), "JPEG", quality=88, optimize=True, progressive=True)
+    save_scaled(cover, "what-is-entity-seo.webp", (1600, 840), "WEBP", quality=82, method=6)
+    save_scaled(cover, "what-is-entity-seo-thumb.webp", (640, 336), "WEBP", quality=80, method=6)
+
+    card, d = feature_canvas(1200, 675, 640, ("What is", "an entity?"),
+                             "A thing or concept that is singular, unique, well-defined and distinguishable.",
+                             note="Definition from Google patent US10339190B2")
+    record(d, (680, 104, 1140, 300), "Q42", "Douglas Adams",
+           [("British science fiction writer and humorist", INK_2), ("1952 to 2001", MUTED)], lime=True)
+    tracked(d, (px(910), px(338)), "SAME NAME, DIFFERENT ENTITY", bahn(14, "SemiBold"), MUTED, px(2.5), anchor="mm")
+    record(d, (680, 376, 1140, 572), "Q28421831", "Douglas Adams",
+           [("American environmental engineer", INK_2), ("A separate Wikidata item", MUTED)], lime=False)
+    save_scaled(card, "what-is-an-entity.webp", (1200, 675), "WEBP", quality=84, method=6)
+
+    card, d = feature_canvas(1200, 675, 640, ("How to do", "entity SEO?"),
+                             "Six steps, from mapping the entity to building its identity across the web.")
+    steps_list(d, 712, 148, ["Map the central entity", "Plan the topical map", "Write for entity clarity",
+                             "Link entities", "Add structured data", "Build the entity identity"])
+    save_scaled(card, "entity-seo-steps.webp", (1200, 675), "WEBP", quality=84, method=6)
+
+
 if __name__ == "__main__":
     IMG.mkdir(parents=True, exist_ok=True)
+    if "--blog" in sys.argv:
+        blog_images()
+        sys.exit()
     face = portrait()
     print("header logo", header_logo())
     favicons()

@@ -1,0 +1,20 @@
+<div class="post-tool" data-tool="check">
+  <div class="tool-head">
+    <p class="tool-kicker">Free tool</p>
+    <p class="tool-title">Entity recognition checker</p>
+    <p class="tool-note">Enter an entity name and the URL of its entity home. Each link opens one of the free checks in a new tab, filled in where the tool allows it.</p>
+  </div>
+  <form class="tool-form tool-grid-2 js-only" autocomplete="off">
+    <label>Entity name<input name="name" type="text" value="Dil Bahadur B.K."></label>
+    <label>Entity home URL<input name="url" type="url" value="https://dilbdrbk.com.np/about/"></label>
+  </form>
+  <ol class="check-list">
+    <li><a data-check="google" href="https://www.google.com/search?q=Dil%20Bahadur%20B.K." target="_blank" rel="noopener">Knowledge panel search</a><span>Does a panel appear for the name, and which facts does it show?</span></li>
+    <li><a data-check="wikidata" href="https://www.wikidata.org/w/index.php?search=Dil%20Bahadur%20B.K." target="_blank" rel="noopener">Wikidata search</a><span>Does the entity have a Q-ID, and which facts does the item hold?</span></li>
+    <li><a data-check="kgapi" href="https://developers.google.com/knowledge-graph" target="_blank" rel="noopener">Knowledge Graph Search API</a><span>Needs a free API key; returns the ID, type, description and result score.</span></li>
+    <li><a data-check="nl" href="https://cloud.google.com/natural-language" target="_blank" rel="noopener">Natural Language API demo</a><span>Paste a paragraph from the page to see its entities and salience scores.</span></li>
+    <li><a data-check="rich" href="https://search.google.com/test/rich-results?url=https%3A%2F%2Fdilbdrbk.com.np%2Fabout%2F" target="_blank" rel="noopener">Rich Results Test</a><span>Reads the structured data on the entity home and lists errors.</span></li>
+    <li><a data-check="schema" href="https://validator.schema.org/#url=https%3A%2F%2Fdilbdrbk.com.np%2Fabout%2F" target="_blank" rel="noopener">Schema Markup Validator</a><span>Shows every schema.org type and property on the page.</span></li>
+    <li><a data-check="gsc" href="https://search.google.com/search-console" target="_blank" rel="noopener">Search Console</a><span>Filter the Performance report by the brand name to see entity queries.</span></li>
+  </ol>
+</div>

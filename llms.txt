@@ -10,8 +10,13 @@
 - [How Search Works](https://dilbdrbk.com.np/how-search-works/): How a page is crawled, understood and ranked, how AI search builds an answer, how an entity becomes a topical map, and how I test SEO ideas.
 - [Experience](https://dilbdrbk.com.np/experience/): SEO career since December 2023, from link building to semantic SEO specialist, plus education.
 - [Industries](https://dilbdrbk.com.np/industries/): SEO across 25+ industries: current e-commerce and B2B projects, local services such as plumbing and HVAC, and nationwide niches such as SaaS and finance.
+- [Blog](https://dilbdrbk.com.np/blog/): Notes on semantic SEO, topical authority, local SEO and AI search by Dil Bahadur B.K., semantic SEO specialist from Kathmandu, Nepal.
 - [Profiles](https://dilbdrbk.com.np/profiles/): Every official profile of Dil Bahadur B.K., semantic SEO specialist from Kathmandu, Nepal, in one place: LinkedIn, GitHub and more.
 - [Contact](https://dilbdrbk.com.np/contact/): Reach Dil Bahadur B.K. by email, phone or LinkedIn. Based in Kathmandu, Nepal (NPT, UTC+5:45).
+
+## Blog posts
+
+- [What Is Entity SEO? A Practical Guide](https://dilbdrbk.com.np/blog/what-is-entity-seo/): Entity SEO helps search engines identify the people, places, products and concepts on your site. Learn how it works and how to do it in 6 steps.
 
 ## Profiles
 

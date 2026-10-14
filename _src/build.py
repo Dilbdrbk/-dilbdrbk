@@ -4,21 +4,33 @@
     python _src/build.py
 
 Reads _src/site.json (identity, contact, profiles), _src/faq.json,
-_src/pages/*.html (page bodies) and _src/posts/*.html (blog posts), then writes
-the static site into the repo root: one index.html per page, 404.html,
-sitemap.xml, robots.txt and llms.txt. GitHub Pages ignores _src/ because the
-folder name starts with an underscore.
+_src/pages/*.html (page bodies) and _src/posts/*.md or *.html (blog posts),
+then writes the static site into the repo root: one index.html per page,
+404.html, sitemap.xml, robots.txt and llms.txt. GitHub Pages ignores _src/
+because the folder name starts with an underscore.
+
+Markdown posts are converted by _src/mdpost.py. Their [[tool:x]] and
+[[chart:x]] lines insert _src/blocks/tool-x.html and chart-x.html; post images
+live in assets/img/blog/ and are made by `python _src/make_images.py --blog`.
 """
 from __future__ import annotations
 
+import datetime
 import hashlib
 import html
 import json
 import pathlib
 import re
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "_src"
+sys.path.insert(0, str(SRC))
+sys.dont_write_bytecode = True  # keep _src/ free of __pycache__
+import mdpost  # noqa: E402  (lives next to this file)
+
+BLOCKS = SRC / "blocks"
+BLOG_IMG = "/assets/img/blog"
 SITE = json.loads((SRC / "site.json").read_text(encoding="utf-8"))
 FAQ = json.loads((SRC / "faq.json").read_text(encoding="utf-8"))
 GLOSSARY = json.loads((SRC / "glossary.json").read_text(encoding="utf-8"))
@@ -61,7 +73,7 @@ PAGES = [
     dict(path="/industries/", body="industries.html", crumb="Industries", updated="2026-10-10", kind="page",
          title="Industries: Local, Nationwide & E-commerce SEO | Dil Bahadur B.K.",
          description="SEO across 25+ industries: current e-commerce and B2B projects, local services such as plumbing and HVAC, and nationwide niches such as SaaS and finance."),
-    dict(path="/blog/", body="blog.html", crumb="Blog", updated="2026-10-10", kind="blog",
+    dict(path="/blog/", body="blog.html", crumb="Blog", updated="2026-10-14", kind="blog",
          title="SEO Blog | Dil Bahadur B.K.",
          description="Notes on semantic SEO, topical authority, local SEO and AI search by Dil Bahadur B.K., semantic SEO specialist from Kathmandu, Nepal."),
     dict(path="/profiles/", body="profiles.html", crumb="Profiles", updated="2026-10-10", kind="page",
@@ -88,6 +100,11 @@ def esc(text: str) -> str:
 
 def absolute(path: str) -> str:
     return BASE + path
+
+
+def human_date(iso: str) -> str:
+    d = datetime.date.fromisoformat(iso)
+    return f"{d.day} {d.strftime('%B')} {d.year}"
 
 
 # ---------------------------------------------------------------- schema.org
@@ -191,7 +208,7 @@ def page_graph(page: dict, trail: list[tuple[str, str]], extra: list[dict]) -> d
         "inLanguage": "en",
         "isPartOf": {"@id": WEBSITE_ID},
         "about": {"@id": PERSON_ID},
-        "primaryImageOfPage": {"@type": "ImageObject", "url": absolute(OG_IMAGE)},
+        "primaryImageOfPage": {"@type": "ImageObject", "url": absolute(page.get("og_image", OG_IMAGE))},
         "dateModified": page["updated"],
     }
     if page["kind"] == "profile":
@@ -231,12 +248,19 @@ def head(page: dict, schema: dict, noindex: bool = False) -> str:
         f'\n<meta name="google-site-verification" content="{esc(SITE["googleSiteVerification"])}">'
         if SITE.get("googleSiteVerification") else ""
     )
+    image = absolute(page.get("og_image", OG_IMAGE))
+    image_alt = esc(page.get("og_image_alt", f'{SITE["name"]}, {SITE["jobTitle"]}'))
+    keywords = ", ".join(page["keywords"]) if page.get("keywords") else KEYWORDS
     article = ""
     if page["kind"] == "post":
         article = (
             f'\n<meta property="article:published_time" content="{page["date"]}">'
+            f'\n<meta property="article:modified_time" content="{page["updated"]}">'
             f'\n<meta property="article:author" content="{absolute("/about/")}">'
         )
+        if page.get("section"):
+            article += f'\n<meta property="article:section" content="{esc(page["section"])}">'
+        article += "".join(f'\n<meta property="article:tag" content="{esc(k)}">' for k in page.get("keywords", []))
     if og_type == "profile":
         article = (
             f'\n<meta property="profile:first_name" content="{esc(SITE["givenName"])}">'
@@ -251,7 +275,7 @@ def head(page: dict, schema: dict, noindex: bool = False) -> str:
 <meta name="description" content="{esc(page["description"])}">
 <link rel="author" href="{absolute("/about/")}">
 <meta name="author" content="{esc(SITE["name"])}">
-<meta name="keywords" content="{esc(KEYWORDS)}">
+<meta name="keywords" content="{esc(keywords)}">
 <meta name="robots" content="{robots}">{canonical}{verification}
 <meta property="og:type" content="{og_type}">
 <meta property="og:site_name" content="{esc(SITE["name"])}">
@@ -259,15 +283,15 @@ def head(page: dict, schema: dict, noindex: bool = False) -> str:
 <meta property="og:title" content="{esc(page["title"])}">
 <meta property="og:description" content="{esc(page["description"])}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{absolute(OG_IMAGE)}">
+<meta property="og:image" content="{image}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="{esc(SITE["name"])}, {esc(SITE["jobTitle"])}">{article}
+<meta property="og:image:alt" content="{image_alt}">{article}
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(page["title"])}">
 <meta name="twitter:description" content="{esc(page["description"])}">
-<meta name="twitter:image" content="{absolute(OG_IMAGE)}">
-<meta name="twitter:image:alt" content="{esc(SITE["name"])}, {esc(SITE["jobTitle"])}">
+<meta name="twitter:image" content="{image}">
+<meta name="twitter:image:alt" content="{image_alt}">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" href="/icon.png" type="image/png" sizes="96x96">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
@@ -466,17 +490,60 @@ def profiles_html(detailed: bool) -> str:
 POST_META = re.compile(r"\A\s*<!--(.*?)-->", re.S)
 
 
+def cta_html(kind: str) -> str:
+    if kind == "inline":
+        return (
+            '<aside class="post-cta" aria-label="Entity SEO service">\n'
+            '  <p class="post-cta-kicker">Need this for your site?</p>\n'
+            '  <p class="post-cta-title">Get an entity map and a topical map</p>\n'
+            '  <p class="post-cta-text">I map your central entity, its attributes and related entities, '
+            'then turn them into a page plan with structured data.</p>\n'
+            '  <div class="actions"><a class="btn btn-arrow" href="/contact/" data-open-form>Request an entity review</a></div>\n'
+            '</aside>'
+        )
+    if kind == "services":
+        return (
+            '<div class="actions post-actions"><a class="btn btn-arrow" href="/contact/" data-open-form>Hire Me</a>'
+            '<a class="btn btn-ghost" href="/expertise/#semantic-seo">See my expertise</a></div>'
+        )
+    raise ValueError(f"unknown [[cta:{kind}]]")
+
+
+def post_block(name: str, args: list[str]) -> str:
+    """HTML for a [[name:args]] line in a Markdown post."""
+    if name == "cta":
+        return cta_html(args[0])
+    if name == "figure":
+        stem, size, alt, caption = args
+        width, height = size.split("x")
+        src = asset(f"{BLOG_IMG}/{stem}.webp")
+        return (
+            f'<figure class="post-figure"><img src="{src}" width="{width}" height="{height}" alt="{esc(alt)}" '
+            f'loading="lazy" decoding="async"><figcaption>{esc(caption)}</figcaption></figure>'
+        )
+    if name in ("tool", "chart"):
+        return (BLOCKS / f"{name}-{args[0]}.html").read_text(encoding="utf-8").strip()
+    raise ValueError(f"unknown block [[{name}]]")
+
+
 def load_posts() -> list[dict]:
     posts = []
-    for f in sorted((SRC / "posts").glob("*.html")):
-        if f.name.startswith("_"):
+    for f in sorted((SRC / "posts").iterdir()):
+        if f.name.startswith("_") or f.suffix not in (".md", ".html"):
             continue
         raw = f.read_text(encoding="utf-8")
-        m = POST_META.match(raw)
-        if not m:
-            raise ValueError(f"{f.name}: missing the JSON header comment")
-        meta = json.loads(m.group(1))
-        posts.append(dict(
+        if f.suffix == ".md":
+            doc = mdpost.convert(raw, post_block)
+            meta = dict(doc["meta"], title=doc["title"], description=doc["description"])
+            body_html, words = doc["html"], doc["words"]
+        else:
+            m = POST_META.match(raw)
+            if not m:
+                raise ValueError(f"{f.name}: missing the JSON header comment")
+            meta = json.loads(m.group(1))
+            body_html = raw[m.end():].strip()
+            words = len(re.sub(r"<[^>]+>", " ", body_html).split())
+        post = dict(
             meta,
             slug=f.stem,
             path=f"/blog/{f.stem}/",
@@ -484,8 +551,14 @@ def load_posts() -> list[dict]:
             kind="post",
             updated=meta.get("updated", meta["date"]),
             title_tag=f'{meta["title"]} | {SITE["name"]}',
-            body_html=raw[m.end():].strip(),
-        ))
+            body_html=body_html,
+            words=words,
+            minutes=max(1, round(words / 230)),
+        )
+        if meta.get("image"):
+            post["og_image"] = f'{BLOG_IMG}/{meta["image"]}.jpg'
+            post["og_image_alt"] = meta.get("imageAlt", meta["title"])
+        posts.append(post)
     return sorted(posts, key=lambda p: p["date"], reverse=True)
 
 
@@ -501,13 +574,57 @@ def posts_list_html(posts: list[dict]) -> str:
         )
     items = []
     for p in posts:
+        thumb = ""
+        if p.get("image"):
+            src = asset(f'{BLOG_IMG}/{p["image"]}-thumb.webp')
+            thumb = f'<img class="post-thumb" src="{src}" width="640" height="336" alt="" loading="lazy" decoding="async">'
         items.append(
-            f'<li class="post-row"><a href="{p["path"]}">'
-            f'<time datetime="{p["date"]}">{p["date"]}</time>'
+            f'<li class="post-row"><a href="{p["path"]}">{thumb}<span class="post-row-text">'
+            f'<span class="post-row-meta"><time datetime="{p["date"]}">{human_date(p["date"])}</time>'
+            f'<span>{p["minutes"]} min read</span></span>'
             f'<span class="post-title">{esc(p["title"])}</span>'
-            f'<span class="post-desc">{esc(p["description"])}</span></a></li>'
+            f'<span class="post-desc">{esc(p["description"])}</span></span></a></li>'
         )
     return '<ul class="post-list">' + "\n".join(items) + "</ul>"
+
+
+def byline(post: dict) -> str:
+    photo = asset("/assets/img/dil-bahadur-bk.webp")
+    updated = ""
+    if post["updated"] != post["date"]:
+        updated = f'<span>Updated <time datetime="{post["updated"]}">{human_date(post["updated"])}</time></span>'
+    return f"""<div class="byline">
+      <img class="byline-photo" src="{photo}" width="48" height="48" alt="">
+      <p class="byline-who"><a href="/about/" rel="author">{esc(SITE["name"])}</a><span>{esc(SITE["jobTitle"])}</span></p>
+      <p class="byline-meta"><span>Published <time datetime="{post["date"]}">{human_date(post["date"])}</time></span>{updated}<span>{post["minutes"]} min read</span></p>
+    </div>"""
+
+
+def author_box() -> str:
+    """Written-by box under every post: who wrote it, why they know the topic, where to find them."""
+    photo = asset("/assets/img/dil-bahadur-bk.webp")
+    cert = SITE["certifications"][0]
+    return f"""<aside class="author-box" aria-labelledby="author-name">
+      <img class="author-photo" src="{photo}" width="112" height="112" alt="Portrait of {esc(SITE["name"])}" loading="lazy">
+      <div>
+        <p class="author-kicker">Written by</p>
+        <p class="author-name" id="author-name"><a href="/about/" rel="author">{esc(SITE["name"])}</a></p>
+        <p class="author-role">{esc(SITE["jobTitle"])}, {SITE["locality"]}, {SITE["countryName"]}</p>
+        <p class="author-bio">I'm {esc(SITE["name"])}, a semantic SEO specialist from Kathmandu, Nepal. I plan websites around entities and topical maps, then build them on a base of technical, local, on-page and off-page SEO. My SEO career started in December 2023, and I hold the {esc(cert["name"])} certification from {esc(cert["issuer"])}.</p>
+        <p class="author-links"><a href="/about/">About me</a><a href="{esc(SITE["linkedin"])}" rel="me noopener" target="_blank">LinkedIn</a><a href="/profiles/">All profiles</a><a href="/contact/" data-open-form>Hire Me</a></p>
+      </div>
+    </aside>"""
+
+
+def related_links() -> str:
+    return """<nav class="post-related" aria-label="Keep reading">
+      <p class="label">Keep reading</p>
+      <ul>
+        <li><a href="/how-search-works/"><span>Guide</span>How search works, from a query to an AI answer</a></li>
+        <li><a href="/expertise/#semantic-seo"><span>Expertise</span>Semantic and entity SEO</a></li>
+        <li><a href="/expertise/#glossary"><span>Glossary</span>SEO terms in plain words</a></li>
+      </ul>
+    </nav>"""
 
 
 def post_body(post: dict) -> str:
@@ -517,24 +634,74 @@ def post_body(post: dict) -> str:
             f'<p class="post-source">First published on '
             f'<a href="{esc(post["linkedin"])}" rel="noopener" target="_blank">LinkedIn</a>.</p>'
         )
-    return f"""<section class="frame page-head">
-  <div class="rail">
-    <p class="label">Published</p>
-    <p class="value"><time datetime="{post["date"]}">{post["date"]}</time></p>
-  </div>
+    kicker = ""
+    if post.get("section"):
+        kicker = f'\n    <p class="kicker"><span class="dot" aria-hidden="true"></span>{esc(post["section"])} guide</p>'
+    cover = ""
+    if post.get("image"):
+        webp = asset(f'{BLOG_IMG}/{post["image"]}.webp')
+        jpg = asset(f'{BLOG_IMG}/{post["image"]}.jpg')
+        cover = f"""
+<section class="frame post-cover-frame">
   <div class="body">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a></nav>
-    <h1 class="page-title">{esc(post["title"])}</h1>
-    <p class="lede">{esc(post["description"])}</p>
-  </div>
-</section>
-<section class="frame">
-  <div class="rail"><p class="label">By {esc(SITE["name"])}</p></div>
-  <div class="body prose">
-{post["body_html"]}
-{source}
+    <figure class="post-cover"><picture><source type="image/webp" srcset="{webp}"><img src="{jpg}" width="1200" height="630" alt="{esc(post.get("imageAlt", post["title"]))}" fetchpriority="high"></picture></figure>
   </div>
 </section>"""
+    return f"""<article class="post">
+<section class="frame page-head post-head">
+  <div class="body">
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><a href="/blog/">Blog</a><span>/</span><span aria-current="page">{esc(post["title"])}</span></nav>{kicker}
+    <h1 class="page-title">{esc(post["title"])}</h1>
+    <p class="lede">{esc(post["description"])}</p>
+    {byline(post)}
+  </div>
+</section>{cover}
+<section class="frame post-main">
+  <div class="body">
+    <div class="prose post-body">
+{post["body_html"]}
+{source}
+    </div>
+    {author_box()}
+    {related_links()}
+  </div>
+</section>
+</article>"""
+
+
+def post_node(post: dict) -> dict:
+    url = absolute(post["path"])
+    image = absolute(post.get("og_image", OG_IMAGE))
+    node = {
+        "@type": "BlogPosting",
+        "@id": url + "#post",
+        "headline": post["title"],
+        "description": post["description"],
+        "datePublished": post["date"],
+        "dateModified": post["updated"],
+        "author": {"@id": PERSON_ID},
+        "publisher": {"@id": PERSON_ID},
+        "mainEntityOfPage": {"@id": url + "#webpage"},
+        "isPartOf": {"@id": absolute("/blog/") + "#blog"},
+        "image": {"@type": "ImageObject", "url": image, "width": 1200, "height": 630},
+        "inLanguage": "en",
+        "wordCount": post["words"],
+        "timeRequired": f'PT{post["minutes"]}M',
+    }
+    if post.get("section"):
+        node["articleSection"] = post["section"]
+    if post.get("keywords"):
+        node["keywords"] = post["keywords"]
+    for key in ("about", "mentions"):
+        if post.get(key):
+            node[key] = [dict({"@type": "Thing"}, **thing) for thing in post[key]]
+    # Every link in the Sources section is a citation.
+    sources = post["body_html"].split('id="sources"', 1)
+    if len(sources) == 2:
+        node["citation"] = list(dict.fromkeys(re.findall(r'href="(https?://[^"]+)"', html.unescape(sources[1]))))
+    if post.get("linkedin"):
+        node["isBasedOn"] = post["linkedin"]
+    return node
 
 
 # ---------------------------------------------------------------- build
@@ -593,22 +760,7 @@ def build() -> None:
     for post in posts:
         page = dict(post, title=post["title_tag"])
         trail = [("Blog", "/blog/"), (post["title"], post["path"])]
-        article = {
-            "@type": "BlogPosting",
-            "@id": absolute(post["path"]) + "#post",
-            "headline": post["title"],
-            "description": post["description"],
-            "datePublished": post["date"],
-            "dateModified": post["updated"],
-            "author": {"@id": PERSON_ID},
-            "publisher": {"@id": PERSON_ID},
-            "mainEntityOfPage": {"@id": absolute(post["path"]) + "#webpage"},
-            "image": absolute(OG_IMAGE),
-            "inLanguage": "en",
-        }
-        if post.get("linkedin"):
-            article["isBasedOn"] = post["linkedin"]
-        write(post["path"], head(page, page_graph(page, trail, [article])) + "\n" + header("/blog/") + "\n" + post_body(post) + "\n" + footer())
+        write(post["path"], head(page, page_graph(page, trail, [post_node(post)])) + "\n" + header("/blog/") + "\n" + post_body(post) + "\n" + footer())
         indexed.append((post["path"], post["updated"]))
 
     not_found = dict(path="/404", kind="page", updated="2026-10-10",

@@ -1,0 +1,34 @@
+<div class="post-tool" data-tool="triple">
+  <div class="tool-head">
+    <p class="tool-kicker">Free tool</p>
+    <p class="tool-title">Entity triple builder</p>
+    <p class="tool-note">Add facts about one entity. Each fact becomes a triple (entity, attribute, value), a plain sentence and a branch of the graph.</p>
+  </div>
+  <form class="tool-form tool-grid-3 js-only" autocomplete="off">
+    <label>Entity<input name="entity" type="text" value="Nepal" required></label>
+    <label>Attribute<input name="attribute" type="text" placeholder="official language" required></label>
+    <label>Value<input name="val" type="text" placeholder="Nepali" required></label>
+    <div class="tool-actions">
+      <button class="btn" type="submit">Add fact</button>
+      <button class="btn btn-ghost" type="button" data-reset>Clear facts</button>
+    </div>
+  </form>
+  <svg class="triple-graph" viewBox="0 0 640 280" role="img" aria-label="Graph of Nepal: capital Kathmandu; highest point Mount Everest; currency Nepalese rupee">
+    <line class="tg-edge" x1="320" y1="140" x2="320" y2="40"/>
+    <line class="tg-edge" x1="320" y1="140" x2="506.2" y2="190"/>
+    <line class="tg-edge" x1="320" y1="140" x2="133.8" y2="190"/>
+    <g class="tg-node"><rect x="274.6" y="25" width="90.8" height="30" rx="15"/><text x="320" y="40">Kathmandu</text></g>
+    <text class="tg-label" x="320" y="67">capital</text>
+    <g class="tg-node"><rect x="446.4" y="175" width="119.6" height="30" rx="15"/><text x="506.2" y="190">Mount Everest</text></g>
+    <text class="tg-label" x="435.3" y="171">highest point</text>
+    <g class="tg-node"><rect x="70.4" y="175" width="126.8" height="30" rx="15"/><text x="133.8" y="190">Nepalese rupee</text></g>
+    <text class="tg-label" x="204.7" y="171">currency</text>
+    <g class="tg-center"><circle cx="320" cy="140" r="46"/><text x="320" y="140">Nepal</text></g>
+  </svg>
+  <p class="triple-sentence" aria-live="polite">The currency of Nepal is Nepalese rupee.</p>
+  <ol class="triple-list">
+    <li><span class="t-e">Nepal</span><span class="t-a">capital</span><span class="t-v">Kathmandu</span></li>
+    <li><span class="t-e">Nepal</span><span class="t-a">highest point</span><span class="t-v">Mount Everest</span></li>
+    <li><span class="t-e">Nepal</span><span class="t-a">currency</span><span class="t-v">Nepalese rupee</span></li>
+  </ol>
+</div>

@@ -283,4 +283,145 @@
       io.observe(el);
     });
   }
+
+  // Blog tools. Each one starts from a static example in the HTML, so the page
+  // still reads correctly without JavaScript.
+  var escapeXml = function (s) {
+    return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; });
+  };
+  var field = function (form, name) {
+    var el = form.elements.namedItem(name);
+    return el ? el.value.trim() : '';
+  };
+
+  // Entity triple builder: each fact becomes a list row, a sentence and a branch of the graph.
+  document.querySelectorAll('[data-tool="triple"]').forEach(function (tool) {
+    var form = tool.querySelector('form');
+    var svg = tool.querySelector('.triple-graph');
+    var list = tool.querySelector('.triple-list');
+    var sentence = tool.querySelector('.triple-sentence');
+    var entity = 'Nepal';
+    var facts = [['capital', 'Kathmandu'], ['highest point', 'Mount Everest'], ['currency', 'Nepalese rupee']];
+    var clip = function (s, n) { return s.length > n ? s.slice(0, n - 1) + '…' : s; };
+    var render = function () {
+      var cx = 320, cy = 140, rx = 215, ry = 100, n = facts.length, out = '';
+      var nodes = facts.map(function (f, k) {
+        var a = (-90 + k * 360 / n) * Math.PI / 180;
+        var x = cx + rx * Math.cos(a), y = cy + ry * Math.sin(a);
+        // Edge label halfway between the circle's edge and the value, not on the circle.
+        return { x: x, y: y, t: 0.5 + 23 / Math.hypot(x - cx, y - cy), attr: clip(f[0], 22), val: clip(f[1], 20) };
+      });
+      nodes.forEach(function (p) {
+        out += '<line class="tg-edge" x1="' + cx + '" y1="' + cy + '" x2="' + p.x.toFixed(1) + '" y2="' + p.y.toFixed(1) + '"/>';
+      });
+      nodes.forEach(function (p) {
+        var w = p.val.length * 7.2 + 26;
+        out += '<g class="tg-node"><rect x="' + (p.x - w / 2).toFixed(1) + '" y="' + (p.y - 15).toFixed(1) + '" width="' + w.toFixed(1) +
+          '" height="30" rx="15"/><text x="' + p.x.toFixed(1) + '" y="' + p.y.toFixed(1) + '">' + escapeXml(p.val) + '</text></g>' +
+          '<text class="tg-label" x="' + (cx + (p.x - cx) * p.t).toFixed(1) + '" y="' + (cy + (p.y - cy) * p.t).toFixed(1) + '">' + escapeXml(p.attr) + '</text>';
+      });
+      out += '<g class="tg-center"><circle cx="' + cx + '" cy="' + cy + '" r="46"/><text x="' + cx + '" y="' + cy + '">' + escapeXml(clip(entity, 14)) + '</text></g>';
+      svg.innerHTML = out;
+      svg.setAttribute('aria-label', 'Graph of ' + entity + (facts.length ? ': ' + facts.map(function (f) { return f[0] + ' ' + f[1]; }).join('; ') : ''));
+      list.innerHTML = facts.map(function (f) {
+        return '<li><span class="t-e">' + escapeXml(entity) + '</span><span class="t-a">' + escapeXml(f[0]) + '</span><span class="t-v">' + escapeXml(f[1]) + '</span></li>';
+      }).join('');
+      var last = facts[facts.length - 1];
+      sentence.textContent = last ? 'The ' + last[0] + ' of ' + entity + ' is ' + last[1] + '.' : 'Add a fact to start the graph.';
+    };
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = field(form, 'entity'), attr = field(form, 'attribute'), val = field(form, 'val');
+      if (!name || !attr || !val) return;
+      if (name !== entity) { entity = name; facts = []; }
+      facts.push([attr, val]);
+      if (facts.length > 6) facts.shift();
+      render();
+      form.elements.namedItem('attribute').value = '';
+      form.elements.namedItem('val').value = '';
+      form.elements.namedItem('attribute').focus();
+    });
+    form.querySelector('[data-reset]').addEventListener('click', function () {
+      facts = [];
+      entity = field(form, 'entity') || entity;
+      render();
+    });
+  });
+
+  // Entity schema generator: the form becomes JSON-LD for the entity home.
+  document.querySelectorAll('[data-tool="schema"]').forEach(function (tool) {
+    var form = tool.querySelector('form');
+    var out = tool.querySelector('[data-schema-out]');
+    var copy = tool.querySelector('[data-copy]');
+    var build = function () {
+      var type = field(form, 'type');
+      var url = field(form, 'url');
+      var data = { '@context': 'https://schema.org', '@type': type };
+      if (url) data['@id'] = url.replace(/#.*$/, '') + '#' + type.toLowerCase();
+      if (field(form, 'name')) data.name = field(form, 'name');
+      if (url) data.url = url;
+      if (type === 'Person') {
+        if (field(form, 'jobTitle')) data.jobTitle = field(form, 'jobTitle');
+        if (field(form, 'image')) data.image = field(form, 'image');
+      } else if (field(form, 'logo')) {
+        data.logo = field(form, 'logo');
+      }
+      if (type === 'LocalBusiness') {
+        if (field(form, 'telephone')) data.telephone = field(form, 'telephone');
+        var address = { '@type': 'PostalAddress' };
+        if (field(form, 'street')) address.streetAddress = field(form, 'street');
+        if (field(form, 'city')) address.addressLocality = field(form, 'city');
+        if (field(form, 'country')) address.addressCountry = field(form, 'country').toUpperCase();
+        if (Object.keys(address).length > 1) data.address = address;
+      }
+      if (field(form, 'description')) data.description = field(form, 'description');
+      var same = field(form, 'sameAs').split(/\s+/).filter(function (s) { return /^https?:\/\/\S+$/.test(s); });
+      if (same.length) data.sameAs = same;
+      out.textContent = '<script type="application/ld+json">\n' + JSON.stringify(data, null, 2).replace(/<\//g, '<\\/') + '\n</' + 'script>';
+      tool.querySelectorAll('[data-for]').forEach(function (el) { el.hidden = el.getAttribute('data-for').split(' ').indexOf(type) === -1; });
+    };
+    form.addEventListener('input', build);
+    form.addEventListener('change', build);
+    form.addEventListener('submit', function (e) { e.preventDefault(); });
+    copy.addEventListener('click', function () {
+      var done = function () {
+        copy.textContent = 'Copied';
+        setTimeout(function () { copy.textContent = 'Copy code'; }, 1600);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(out.textContent).then(done, function () {});
+      } else {
+        var range = document.createRange();
+        range.selectNodeContents(out);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        try { if (document.execCommand('copy')) done(); } catch (err) { /* the code stays selected for manual copy */ }
+      }
+    });
+    build();
+  });
+
+  // Entity recognition checker: one name and one URL fill in the check links.
+  document.querySelectorAll('[data-tool="check"]').forEach(function (tool) {
+    var form = tool.querySelector('form');
+    var links = tool.querySelectorAll('[data-check]');
+    var update = function () {
+      var q = encodeURIComponent(field(form, 'name'));
+      var u = encodeURIComponent(field(form, 'url'));
+      var urls = {
+        google: q && 'https://www.google.com/search?q=' + q,
+        wikidata: q && 'https://www.wikidata.org/w/index.php?search=' + q,
+        rich: u && 'https://search.google.com/test/rich-results?url=' + u,
+        schema: u && 'https://validator.schema.org/#url=' + u
+      };
+      Array.prototype.forEach.call(links, function (a) {
+        var href = urls[a.getAttribute('data-check')];
+        if (href) a.href = href;
+      });
+    };
+    form.addEventListener('input', update);
+    form.addEventListener('submit', function (e) { e.preventDefault(); });
+    update();
+  });
 })();

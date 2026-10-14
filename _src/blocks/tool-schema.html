@@ -1,0 +1,48 @@
+<div class="post-tool" data-tool="schema">
+  <div class="tool-head">
+    <p class="tool-kicker">Free tool</p>
+    <p class="tool-title">Entity schema generator</p>
+    <p class="tool-note">Describe the entity behind a website and copy the JSON-LD for its entity home. The example shows the Person markup of this site.</p>
+  </div>
+  <form class="tool-form tool-grid-2 js-only" autocomplete="off">
+    <label>Entity type
+      <select name="type">
+        <option value="Person" selected>Person</option>
+        <option value="Organization">Organization</option>
+        <option value="LocalBusiness">LocalBusiness</option>
+      </select>
+    </label>
+    <label>Name<input name="name" type="text" value="Dil Bahadur B.K."></label>
+    <label>Website URL<input name="url" type="url" value="https://dilbdrbk.com.np/"></label>
+    <label data-for="Person">Job title<input name="jobTitle" type="text" value="Semantic SEO Specialist"></label>
+    <label data-for="Person">Photo URL<input name="image" type="url" value="https://dilbdrbk.com.np/assets/img/dil-bahadur-bk.jpg"></label>
+    <label data-for="Organization LocalBusiness" hidden>Logo URL<input name="logo" type="url" placeholder="https://example.com/logo.png"></label>
+    <label data-for="LocalBusiness" hidden>Phone<input name="telephone" type="tel" placeholder="+977 1 5550000"></label>
+    <label data-for="LocalBusiness" hidden>Street address<input name="street" type="text" placeholder="Durbar Marg"></label>
+    <label data-for="LocalBusiness" hidden>City<input name="city" type="text" placeholder="Kathmandu"></label>
+    <label data-for="LocalBusiness" hidden>Country code<input name="country" type="text" placeholder="NP" maxlength="2"></label>
+    <label class="span-2">Description<textarea name="description" rows="2">Semantic SEO specialist in Kathmandu, Nepal.</textarea></label>
+    <label class="span-2">Profiles for sameAs, one URL per line<textarea name="sameAs" rows="3">https://www.linkedin.com/in/dil-bahadur-b-k-3927642ab/
+https://github.com/Dilbdrbk</textarea></label>
+  </form>
+  <div class="tool-output">
+    <div class="tool-output-head"><span>JSON-LD</span><button class="tool-copy js-only" type="button" data-copy>Copy code</button></div>
+    <pre><code data-schema-out>&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://dilbdrbk.com.np/#person",
+  "name": "Dil Bahadur B.K.",
+  "url": "https://dilbdrbk.com.np/",
+  "jobTitle": "Semantic SEO Specialist",
+  "image": "https://dilbdrbk.com.np/assets/img/dil-bahadur-bk.jpg",
+  "description": "Semantic SEO specialist in Kathmandu, Nepal.",
+  "sameAs": [
+    "https://www.linkedin.com/in/dil-bahadur-b-k-3927642ab/",
+    "https://github.com/Dilbdrbk"
+  ]
+}
+&lt;/script&gt;</code></pre>
+  </div>
+  <p class="tool-hint">Paste the code into the head of the entity home, such as the homepage or the About page, then test the page in the Rich Results Test.</p>
+</div>
