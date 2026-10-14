@@ -48,4 +48,4 @@ Lines in double brackets insert blocks:
 | `[[chart:name]]`, `[[tool:name]]` | `blocks/chart-name.html`, `blocks/tool-name.html` |
 | `[[cta:inline]]`, `[[cta:services]]` | A call-to-action box, or the Hire Me and Expertise buttons |
 
-Every post gets the byline, reading time, cover image, author box and further-reading links from `build.py`. Sources are named in the text without links (for example, "According to Google Search Central, ..."), with no separate Sources section. List their URLs in the header as `citations`; they go into the schema only.
+Every post gets the byline, reading time, share row, cover image, author box and further-reading links from `build.py`. A post whose header lists `takeaways` (3 to 5 short sentences) opens with a Key takeaways box. On wide screens an "On this page" sidebar lists every h2 and h3 and marks the section in view; phones keep the `[[toc]]` block. Sources are named in the text without links (for example, "According to Google Search Central, ..."), with no separate Sources section. List their URLs in the header as `citations`; they go into the schema only.

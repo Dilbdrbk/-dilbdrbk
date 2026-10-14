@@ -319,6 +319,59 @@
     window.addEventListener('hashchange', fromHash);
   });
 
+  // Blog post: the "On this page" sidebar marks the section in view and keeps
+  // that link visible inside the panel. Without JS the links still jump.
+  var toc = document.querySelector('[data-post-toc]');
+  if (toc) {
+    var tocLinks = Array.prototype.slice.call(toc.querySelectorAll('a[href^="#"]'));
+    var tocHeads = tocLinks.map(function (a) { return document.getElementById(decodeURIComponent(a.hash.slice(1))); });
+    var tocList = toc.querySelector('.post-side-list');
+    var tocActive = -1;
+    var tocTick = false;
+    var tocUpdate = function () {
+      tocTick = false;
+      var idx = -1;
+      for (var i = 0; i < tocHeads.length; i++) {
+        if (!tocHeads[i]) continue;
+        if (tocHeads[i].getBoundingClientRect().top <= 120) idx = i; else break;
+      }
+      if (idx === tocActive) return;
+      if (tocActive >= 0) tocLinks[tocActive].removeAttribute('aria-current');
+      tocActive = idx;
+      if (idx < 0) return;
+      var a = tocLinks[idx];
+      a.setAttribute('aria-current', 'location');
+      var top = a.offsetTop;
+      var bottom = top + a.offsetHeight;
+      if (top < tocList.scrollTop + 8) tocList.scrollTop = top - 8;
+      else if (bottom > tocList.scrollTop + tocList.clientHeight - 8) tocList.scrollTop = bottom - tocList.clientHeight + 8;
+    };
+    // A short timer keeps this to a few updates a second while the page scrolls.
+    window.addEventListener('scroll', function () {
+      if (!tocTick) { tocTick = true; setTimeout(tocUpdate, 60); }
+    }, { passive: true });
+    tocUpdate();
+  }
+
+  // Blog post: Copy link in the share row (hidden without JS).
+  Array.prototype.forEach.call(document.querySelectorAll('[data-copy]'), function (btn) {
+    var label = btn.querySelector('span');
+    btn.addEventListener('click', function () {
+      var show = function (text) {
+        label.textContent = text;
+        setTimeout(function () { label.textContent = 'Copy link'; }, 2000);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(btn.getAttribute('data-copy')).then(
+          function () { show('Link copied'); },
+          function () { show('Copy failed'); }
+        );
+      } else {
+        show('Copy failed');
+      }
+    });
+  });
+
   // Blog tools. Each one starts from a static example in the HTML, so the page
   // still reads correctly without JavaScript.
   var escapeXml = function (s) {

@@ -6,6 +6,13 @@
   "section": "Entity SEO",
   "tags": ["Entity SEO", "Knowledge Graph", "Structured data"],
   "keywords": ["entity SEO", "what is entity SEO", "entity-based SEO", "knowledge graph", "entity schema", "semantic SEO"],
+  "takeaways": [
+      "Entity SEO optimizes a website so search engines identify its entities, such as people, places, products and concepts, understand their attributes and connect the site to them.",
+      "Entity SEO, keyword SEO and semantic SEO optimize different units, and all 3 lead to the same practice: name entities clearly, state their facts and connect related pages.",
+      "The 6-step method runs from mapping the central entity to planning a topical map, writing for entity clarity, linking entities, adding structured data and keeping one entity identity across the web.",
+      "Six free checks show whether Google and Wikidata recognize an entity, and repeating them every quarter tracks progress.",
+      "AI Overviews and AI Mode may run several related searches for one answer, so entity-clear pages get more chances to appear."
+  ],
   "about": [
     {"name": "Entity SEO"},
     {"name": "Search engine optimization", "sameAs": "https://www.wikidata.org/wiki/Q180711"}

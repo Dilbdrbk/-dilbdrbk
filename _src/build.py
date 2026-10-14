@@ -22,6 +22,7 @@ import json
 import pathlib
 import re
 import sys
+import urllib.parse
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "_src"
@@ -344,13 +345,27 @@ def lead_dialog() -> str:
 </dialog>"""
 
 
-# Footer contact icons: simple 24px line drawings, stroked in CSS.
-FOOTER_ICONS = {
+# Line icons (24px, stroked in CSS) for the footer, the post byline, share row and sidebar.
+ICONS = {
     "email": '<rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="m4 7.5 8 6 8-6"/>',
     "phone": '<rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>',
     "message": '<path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3.5 20.5l1.4-4.9A8.5 8.5 0 1 1 21 11.5Z"/>',
     "location": '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/>',
+    "clock": '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    "check": '<circle cx="12" cy="12" r="8.5"/><path d="m8.5 12.2 2.3 2.3 4.7-4.9"/>',
+    "list": '<path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01"/>',
+    "x": '<path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/>',
+    "linkedin": '<rect x="3.5" y="3.5" width="17" height="17" rx="3"/><path d="M8 10.5V16M8 7.8v.01M11.5 16v-5.5M11.5 13a2.5 2.5 0 0 1 5 0v3"/>',
+    "facebook": '<path d="M14.5 3.5H13a3.5 3.5 0 0 0-3.5 3.5v13.5M6.5 10.5h7"/>',
+    "whatsapp": '<path d="M20.5 12a8.5 8.5 0 0 1-12.4 7.6L3.5 20.5l1.1-4.3A8.5 8.5 0 1 1 20.5 12Z"/><path d="M9.2 8.6c-.4 2.6 3 6.1 5.7 5.9l.9-1.2-1.8-1-.8.7c-.9-.4-1.7-1.2-2.1-2.1l.7-.8-1-1.8Z"/>',
+    "copy": '<path d="M10.5 13.5a3.5 3.5 0 0 0 5 0l3-3a3.5 3.5 0 0 0-5-5l-1 1"/><path d="M13.5 10.5a3.5 3.5 0 0 0-5 0l-3 3a3.5 3.5 0 0 0 5 5l1-1"/>',
 }
+
+
+def icon(name: str) -> str:
+    return f'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">{ICONS[name]}</svg>'
+
+
 FOOTER_BIO = "Dil plans websites around entities and topical maps, so brands earn rankings in Google and a place in AI answers."
 
 
@@ -362,8 +377,8 @@ def footer() -> str:
         for p in SITE["profiles"][:4]
     ) + '\n        <li><a class="footer-chip-all" href="/profiles/">All profiles</a></li>'
 
-    def row(icon: str, key: str, value: str) -> str:
-        return (f'        <li><span class="footer-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">{FOOTER_ICONS[icon]}</svg></span>'
+    def row(name: str, key: str, value: str) -> str:
+        return (f'        <li><span class="footer-ico">{icon(name)}</span>'
                 f'<span><span class="footer-k">{key}</span>{value}</span></li>')
 
     rows = "\n".join([
@@ -626,6 +641,7 @@ def load_posts() -> list[dict]:
             doc = mdpost.convert(raw, post_block)
             meta = dict(doc["meta"], title=doc["title"], description=doc["description"])
             body_html, words, links = doc["html"], doc["words"], doc["links"]
+            headings = [(level, mdpost.inline(text), hid) for level, text, hid in doc["headings"]]
         else:
             m = POST_META.match(raw)
             if not m:
@@ -634,6 +650,8 @@ def load_posts() -> list[dict]:
             body_html = raw[m.end():].strip()
             words = len(re.sub(r"<[^>]+>", " ", body_html).split())
             links = list(dict.fromkeys(re.findall(r'href="(https?://[^"]+)"', html.unescape(body_html))))
+            headings = [(int(lvl), esc(html.unescape(re.sub(r"<[^>]+>", "", inner)).strip()), hid)
+                        for lvl, hid, inner in re.findall(r'<h([23]) id="([^"]+)"[^>]*>(.*?)</h\1>', body_html, re.S)]
         post = dict(
             meta,
             slug=f.stem,
@@ -643,6 +661,7 @@ def load_posts() -> list[dict]:
             updated=meta.get("updated", meta["date"]),
             title_tag=f'{meta["title"]} | {SITE["name"]}',
             body_html=body_html,
+            headings=headings,
             words=words,
             links=links,
             minutes=max(1, round(words / 230)),
@@ -711,7 +730,7 @@ def byline(post: dict) -> str:
     return f"""<div class="byline">
       <img class="byline-photo" src="{photo}" width="48" height="48" alt="">
       <p class="byline-who"><a href="/about/" rel="author">{esc(SITE["name"])}</a><span>{esc(SITE["jobTitle"])}</span></p>
-      <p class="byline-meta"><span>Published <time datetime="{post["date"]}">{human_date(post["date"])}</time></span>{updated}<span>{post["minutes"]} min read</span></p>
+      <p class="byline-meta"><span>Published <time datetime="{post["date"]}">{human_date(post["date"])}</time></span>{updated}<span class="byline-read">{icon("clock")}{post["minutes"]} min read</span></p>
     </div>"""
 
 
@@ -742,6 +761,68 @@ def related_links() -> str:
     </nav>"""
 
 
+def share_html(post: dict) -> str:
+    """Share row: plain share links, plus a Copy link button that only shows with JavaScript."""
+    url = absolute(post["path"])
+    u, t = urllib.parse.quote(url, safe=""), urllib.parse.quote(post["title"], safe="")
+    links = [
+        ("x", "X", f"https://x.com/intent/tweet?url={u}&text={t}"),
+        ("linkedin", "LinkedIn", f"https://www.linkedin.com/sharing/share-offsite/?url={u}"),
+        ("facebook", "Facebook", f"https://www.facebook.com/sharer/sharer.php?u={u}"),
+        ("whatsapp", "WhatsApp", f"https://wa.me/?text={t}%20{u}"),
+    ]
+    items = [f'<li><a href="{esc(href)}" target="_blank" rel="noopener">{icon(name)}<span>{label}</span></a></li>'
+             for name, label, href in links]
+    items.append(f'<li><a href="{esc(f"mailto:?subject={t}&body={u}")}">{icon("email")}<span>Email</span></a></li>')
+    items.append(f'<li class="share-copy"><button type="button" data-copy="{esc(url)}">{icon("copy")}<span aria-live="polite">Copy link</span></button></li>')
+    joined = "\n      ".join(items)
+    return f"""<nav class="post-share" aria-label="Share this guide">
+      <p class="post-share-label">Share</p>
+      <ul>
+      {joined}
+      </ul>
+    </nav>"""
+
+
+def takeaways_html(post: dict) -> str:
+    """Key takeaways box at the top of the article, from the post header's `takeaways`."""
+    if not post.get("takeaways"):
+        return ""
+    items = "\n".join(f'        <li>{icon("check")}<span>{mdpost.inline(t)}</span></li>' for t in post["takeaways"])
+    return f"""<aside class="post-takeaways" aria-labelledby="takeaways-title">
+      <p class="post-takeaways-title" id="takeaways-title">Key takeaways</p>
+      <ul>
+{items}
+      </ul>
+    </aside>"""
+
+
+def side_toc_html(post: dict) -> str:
+    """'On this page' sidebar with every h2 and its h3s. The links work without
+    JavaScript; site.js marks the section in view."""
+    groups: list[tuple[str, list[str]]] = []
+    for level, label, hid in post.get("headings", []):
+        link = f'<a href="#{hid}">{label}</a>'
+        if level == 3 and groups:
+            groups[-1][1].append(link)
+        elif level in (2, 3):
+            groups.append((link, []))
+    if not groups:
+        return ""
+    rows = "\n".join(
+        f'        <li>{link}' + (f'<ol>{"".join(f"<li>{s}</li>" for s in subs)}</ol>' if subs else "") + "</li>"
+        for link, subs in groups
+    )
+    return f"""<nav class="post-side" aria-label="On this page">
+      <div class="post-side-inner" data-post-toc>
+        <p class="post-side-title">{icon("list")}On this page</p>
+        <ol class="post-side-list">
+{rows}
+        </ol>
+      </div>
+    </nav>"""
+
+
 def post_body(post: dict) -> str:
     source = ""
     if post.get("linkedin"):
@@ -769,16 +850,21 @@ def post_body(post: dict) -> str:
     <h1 class="page-title">{esc(post["title"])}</h1>
     <p class="lede">{esc(post["description"])}</p>
     {byline(post)}
+    {share_html(post)}
   </div>
 </section>{cover}
 <section class="frame post-main">
-  <div class="body">
+  <div class="body post-layout">
+    <div class="post-content">
+    {takeaways_html(post)}
     <div class="prose post-body">
 {post["body_html"]}
 {source}
     </div>
     {author_box()}
     {related_links()}
+    </div>
+    {side_toc_html(post)}
   </div>
 </section>
 </article>"""
