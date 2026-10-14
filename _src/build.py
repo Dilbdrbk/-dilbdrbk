@@ -535,7 +535,7 @@ def load_posts() -> list[dict]:
         if f.suffix == ".md":
             doc = mdpost.convert(raw, post_block)
             meta = dict(doc["meta"], title=doc["title"], description=doc["description"])
-            body_html, words = doc["html"], doc["words"]
+            body_html, words, links = doc["html"], doc["words"], doc["links"]
         else:
             m = POST_META.match(raw)
             if not m:
@@ -543,6 +543,7 @@ def load_posts() -> list[dict]:
             meta = json.loads(m.group(1))
             body_html = raw[m.end():].strip()
             words = len(re.sub(r"<[^>]+>", " ", body_html).split())
+            links = list(dict.fromkeys(re.findall(r'href="(https?://[^"]+)"', html.unescape(body_html))))
         post = dict(
             meta,
             slug=f.stem,
@@ -553,6 +554,7 @@ def load_posts() -> list[dict]:
             title_tag=f'{meta["title"]} | {SITE["name"]}',
             body_html=body_html,
             words=words,
+            links=links,
             minutes=max(1, round(words / 230)),
         )
         if meta.get("image"):
@@ -718,10 +720,9 @@ def post_node(post: dict) -> dict:
     for key in ("about", "mentions"):
         if post.get(key):
             node[key] = [dict({"@type": "Thing"}, **thing) for thing in post[key]]
-    # Every link in the Sources section is a citation.
-    sources = post["body_html"].split('id="sources"', 1)
-    if len(sources) == 2:
-        node["citation"] = list(dict.fromkeys(re.findall(r'href="(https?://[^"]+)"', html.unescape(sources[1]))))
+    # Sources are linked inline in the text; each one is a citation.
+    if post.get("links"):
+        node["citation"] = post["links"]
     if post.get("linkedin"):
         node["isBasedOn"] = post["linkedin"]
     return node

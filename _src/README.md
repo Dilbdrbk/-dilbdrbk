@@ -42,4 +42,4 @@ Lines in double brackets insert blocks:
 | `[[chart:name]]`, `[[tool:name]]` | `blocks/chart-name.html`, `blocks/tool-name.html` |
 | `[[cta:inline]]`, `[[cta:services]]` | A call-to-action box, or the Hire Me and Expertise buttons |
 
-Every post gets the byline, reading time, cover image, author box and further-reading links from `build.py`. Every link in a `## Sources` section becomes a schema `citation`.
+Every post gets the byline, reading time, cover image, author box and further-reading links from `build.py`. Sources are linked inline in the text, with no separate Sources section; every external link in the article becomes a schema `citation`.

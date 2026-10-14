@@ -1604,12 +1604,6 @@ html:not(.js) .js-only { display: none !important; }
 .post-cta .actions { justify-content: center; margin-top: 20px; }
 .post-body > .post-actions { justify-content: center; margin-top: 1.6em; }
 
-/* Sources: smaller, quieter type at the end of the post. */
-.post-body > h2#sources { counter-increment: none; font-size: clamp(1.4rem, 1rem + 1vw, 1.9rem); }
-.post-body > h2#sources::before { content: none; }
-.post-body > h2#sources ~ p { color: var(--muted); font-size: 0.9375rem; }
-.post-body > h2#sources ~ ul { gap: 7px; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
-.post-body > h2#sources ~ ul a:not(.btn) { color: var(--ink-2); }
 
 /* Written-by box and further reading under the post. */
 .author-box { display: grid; grid-template-columns: 112px minmax(0, 1fr); align-items: start; gap: 24px; max-width: 760px; margin: clamp(48px, 6vw, 72px) auto 0; padding: clamp(20px, 3vw, 28px); border: 1px solid var(--line-strong); border-radius: 20px; background: var(--bg-raise); }

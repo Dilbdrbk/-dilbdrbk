@@ -65,8 +65,7 @@ def clean(raw: str) -> str:
 
 
 def words(raw: str) -> int:
-    """Reading length: the article without its Sources list."""
-    text = LINK.sub(r"\1", clean(raw).split("\n## Sources", 1)[0])
+    text = LINK.sub(r"\1", clean(raw))
     text = re.sub(r"[#*|`>-]", " ", text)
     return len(text.split())
 
@@ -106,7 +105,8 @@ def table(rows: list[str]) -> str:
 def convert(raw: str, block) -> dict:
     """Render a post. `block(name, args)` returns the HTML for a [[name:args]] line.
 
-    Returns title, description, html, headings [(level, text, id)] and words.
+    Returns title, description, html, headings [(level, text, id)], words and
+    links (the external links in the article text, in order, without duplicates).
     """
     meta, body = split(raw)
     lines = body.splitlines()
@@ -196,7 +196,10 @@ def convert(raw: str, block) -> dict:
         '<details class="post-toc" open>\n<summary>In this guide</summary>\n'
         f'<nav aria-label="Table of contents"><ol>\n{toc_items}\n</ol></nav>\n</details>'
     )
+    text = "\n".join(ln for ln in lines if not BLOCK.match(ln.strip()))
+    links = list(dict.fromkeys(href for _, href in LINK.findall(text) if href.startswith("http")))
     return dict(
+        links=links,
         title=title,
         description=description,
         html="\n".join(parts).replace("\x00TOC\x00", toc),
