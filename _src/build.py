@@ -54,14 +54,18 @@ NAV = [
 
 # Every page: where it lives, its body file and its search snippet.
 # `updated` feeds sitemap lastmod; bump it when a page's content changes.
+# The header, footer and Person schema sit on every page. Bump this when they change so the
+# sitemap lastmod stays accurate for pages whose own content did not change.
+LAYOUT_UPDATED = "2026-10-16"
+
 PAGES = [
-    dict(path="/", body="home.html", crumb="Home", updated="2026-10-10", kind="home",
+    dict(path="/", body="home.html", crumb="Home", updated="2026-10-15", kind="home",
          title="Semantic SEO Specialist in Nepal | Dil Bahadur B.K.",
          description="Dil Bahadur B.K., a semantic SEO specialist in Nepal, drives organic traffic and leads with topical authority and entity-based, technical and local SEO."),
-    dict(path="/about/", body="about.html", crumb="About", updated="2026-10-10", kind="profile",
+    dict(path="/about/", body="about.html", crumb="About", updated="2026-10-16", kind="profile",
          title="About Dil Bahadur B.K. | Semantic SEO Specialist From Nepal",
          description="Who Dil Bahadur B.K. is: a semantic SEO specialist from Kathmandu who grew from link building into entity-based SEO, topical authority and AI search."),
-    dict(path="/expertise/", body="expertise.html", crumb="Expertise", updated="2026-10-10", kind="page",
+    dict(path="/expertise/", body="expertise.html", crumb="Expertise", updated="2026-10-16", kind="page",
          title="SEO Expertise: Semantic, Technical, Local & AI Search | Dil B.K.",
          description="Twelve areas of SEO expertise: semantic and entity SEO, topical maps, technical, on-page, local and off-page SEO, programmatic SEO, GEO, AEO and Reddit SEO."),
     dict(path="/how-search-works/", body="how-search-works.html", crumb="How Search Works", updated="2026-10-10", kind="guide",
@@ -69,7 +73,7 @@ PAGES = [
          description="How a page is crawled, understood and ranked, how AI search composes an answer, how an entity becomes a topical map, and how I test SEO ideas."),
     # Employer names appear only in the body of the Resume page, never in its
     # title, description, schema or llms.txt summary.
-    dict(path="/resume/", body="resume.html", crumb="Resume", updated="2026-10-14", kind="page",
+    dict(path="/resume/", body="resume.html", crumb="Resume", updated="2026-10-16", kind="page",
          title="Resume: Dil Bahadur B.K., Semantic SEO Specialist in Nepal",
          description="Resume of Dil Bahadur B.K., semantic SEO specialist in Nepal: six roles since 2023, skills, tools, 25+ industries and education. Download the PDF.",
          summary="Resume: SEO career since December 2023, from link building to semantic SEO specialist; skills, tools, industries and education, with a PDF to download."),
@@ -138,14 +142,6 @@ def person_node() -> dict:
         },
         "alumniOf": [{"@type": e.get("type", "EducationalOrganization"), "name": e["name"]} for e in SITE["education"]],
         "hasCredential": [
-            {
-                "@type": "EducationalOccupationalCredential",
-                "name": c["name"],
-                "credentialCategory": "certificate",
-                "recognizedBy": {"@type": "Person", "name": c["issuer"]},
-            }
-            for c in SITE["certifications"]
-        ] + [
             {
                 "@type": "EducationalOccupationalCredential",
                 "name": e["credential"],
@@ -535,7 +531,7 @@ def resume_tokens() -> dict:
         + "".join(f"<li>{esc(i)}</li>" for i in g["items"]) + "</ul></div>"
         for g in RESUME[key]
     )
-    credentials = [("Certification", c["name"], c["issuer"]) for c in SITE["certifications"]] + [
+    credentials = [("Methodology", m["name"], f'Learned from {m["by"]}') for m in SITE["methodologies"]] + [
         ("Diploma" if "Diploma" in e["credential"] else "Training",
          e["credential"].replace("Diploma in ", "").replace(" Training", ""), e["name"])
         for e in SITE["education"]
@@ -737,14 +733,14 @@ def byline(post: dict) -> str:
 def author_box() -> str:
     """Written-by box under every post: who wrote it, why they know the topic, where to find them."""
     photo = asset("/assets/img/dil-bahadur-bk.webp")
-    cert = SITE["certifications"][0]
+    method = SITE["methodologies"][0]
     return f"""<aside class="author-box" aria-labelledby="author-name">
       <img class="author-photo" src="{photo}" width="112" height="112" alt="Portrait of {esc(SITE["name"])}" loading="lazy">
       <div>
         <p class="author-kicker">Written by</p>
         <p class="author-name" id="author-name"><a href="/about/" rel="author">{esc(SITE["name"])}</a></p>
         <p class="author-role">{esc(SITE["jobTitle"])}, {SITE["countryName"]}</p>
-        <p class="author-bio">I'm {esc(SITE["name"])}, a semantic SEO specialist from Nepal. I plan websites around entities and topical maps, then strengthen them with technical, local, on-page and off-page SEO. My SEO career started in December 2023, and I hold the {esc(cert["name"])} certification from {esc(cert["issuer"])}.</p>
+        <p class="author-bio">I'm {esc(SITE["name"])}, a semantic SEO specialist from Nepal. I plan websites around entities and topical maps, then strengthen them with technical, local, on-page and off-page SEO. My SEO career started in December 2023, and my method follows the {esc(method["name"])} methodology I learned from {esc(method["by"])}.</p>
         <p class="author-links"><a href="/about/">About me</a><a href="{esc(SITE["linkedin"])}" rel="me noopener" target="_blank">LinkedIn</a><a href="/profiles/">All profiles</a><a href="/contact/" data-open-form>Hire Me</a></p>
       </div>
     </aside>"""
@@ -942,13 +938,13 @@ def build() -> None:
         noindex = page["kind"] == "blog" and not posts
         write(page["path"], head(page, schema_blocks(page, body), noindex) + "\n" + header(page["path"]) + "\n" + body + "\n" + footer())
         if not noindex:
-            indexed.append((page["path"], page["updated"]))
+            indexed.append((page["path"], max(page["updated"], LAYOUT_UPDATED)))
 
     for post in posts:
         page = dict(post, title=post["title_tag"])
         trail = [("Blog", "/blog/"), (post["title"], post["path"])]
         write(post["path"], head(page, schema_blocks(page, graph=[post_node(post), breadcrumb_node(page, trail)])) + "\n" + header("/blog/") + "\n" + post_body(post) + "\n" + footer())
-        indexed.append((post["path"], post["updated"]))
+        indexed.append((post["path"], max(post["updated"], LAYOUT_UPDATED)))
 
     not_found = dict(path="/404", kind="page", updated="2026-10-10",
                      title=f'Page Not Found | {SITE["name"]}',

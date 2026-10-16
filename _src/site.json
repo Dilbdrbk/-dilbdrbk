@@ -141,10 +141,10 @@
       "type": "EducationalOrganization"
     }
   ],
-  "certifications": [
+  "methodologies": [
     {
       "name": "Topical Authority",
-      "issuer": "Koray Tugberk Gubur"
+      "by": "Koray Tugberk Gubur"
     }
   ],
   "areaServed": [

@@ -1,6 +1,7 @@
 <!--
 {
   "date": "2026-10-14",
+  "updated": "2026-10-15",
   "image": "what-is-entity-seo",
   "imageAlt": "What is entity SEO? Optimizing a website so search engines identify its entities, their attributes and their relations.",
   "section": "Entity SEO",
