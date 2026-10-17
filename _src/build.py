@@ -56,7 +56,7 @@ NAV = [
 # `updated` feeds sitemap lastmod; bump it when a page's content changes.
 # The header, footer and Person schema sit on every page. Bump this when they change so the
 # sitemap lastmod stays accurate for pages whose own content did not change.
-LAYOUT_UPDATED = "2026-10-16"
+LAYOUT_UPDATED = "2026-10-17"
 
 PAGES = [
     dict(path="/", body="home.html", crumb="Home", updated="2026-10-17", kind="home",
@@ -362,7 +362,7 @@ def icon(name: str) -> str:
     return f'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">{ICONS[name]}</svg>'
 
 
-FOOTER_BIO = "Dil plans websites around entities and topical maps, so brands earn rankings in Google and a place in AI answers."
+FOOTER_BIO = "I plan websites around entities and topical maps, so brands earn rankings in Google and a place in AI answers."
 
 
 def footer() -> str:
