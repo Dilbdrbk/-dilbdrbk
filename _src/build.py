@@ -362,7 +362,8 @@ def icon(name: str) -> str:
     return f'<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">{ICONS[name]}</svg>'
 
 
-FOOTER_BIO = "I plan websites around entities and topical maps, so brands earn rankings in Google and a place in AI answers."
+FOOTER_BIO = ("I'm an entity-first semantic SEO specialist in Nepal. I design clear topical maps and strong technical "
+              "foundations, so brands win lasting rankings in Google and a trusted place in AI answers.")
 
 
 def footer() -> str:
