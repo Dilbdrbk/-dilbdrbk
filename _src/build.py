@@ -59,7 +59,7 @@ NAV = [
 LAYOUT_UPDATED = "2026-10-17"
 
 PAGES = [
-    dict(path="/", body="home.html", crumb="Home", updated="2026-10-17", kind="home",
+    dict(path="/", body="home.html", crumb="Home", updated="2026-10-18", kind="home",
          title="Semantic SEO Specialist in Nepal | Dil Bahadur B.K.",
          description="Dil Bahadur B.K., a semantic SEO specialist in Nepal, drives organic traffic and leads with topical authority and entity-based, technical and local SEO."),
     dict(path="/about/", body="about.html", crumb="About", updated="2026-10-16", kind="profile",
