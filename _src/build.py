@@ -327,6 +327,7 @@ def lead_dialog() -> str:
     <p class="lead-sub">Share where your site is now and what you want from search. I read every message and reply myself.</p>
     <form class="lead-form" data-endpoint="{endpoint}" data-email="{SITE["email"]}">{key_input}
       <input class="lead-hp" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <input type="hidden" name="subject" value="Website review request">
       <div class="lead-row">
         <label>Name <span aria-hidden="true">*</span><input name="name" type="text" autocomplete="name" required placeholder="Your name"></label>
         <label>Email <span aria-hidden="true">*</span><input name="email" type="email" autocomplete="email" required placeholder="you@company.com"></label>

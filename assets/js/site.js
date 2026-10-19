@@ -140,11 +140,17 @@
   if (dialog && typeof dialog.showModal === 'function') {
     var form = dialog.querySelector('form');
     var status = dialog.querySelector('.lead-status');
+    var title = dialog.querySelector('.lead-title');
+    var sub = dialog.querySelector('.lead-sub');
+    var defaults = { title: title.textContent, sub: sub.textContent, subject: form.elements.subject.value };
     document.querySelectorAll('[data-open-form]').forEach(function (link) {
       link.addEventListener('click', function (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
         e.preventDefault();
         status.textContent = '';
+        title.textContent = link.getAttribute('data-form-title') || defaults.title;
+        sub.textContent = link.getAttribute('data-form-sub') || defaults.sub;
+        form.elements.subject.value = link.getAttribute('data-form-subject') || defaults.subject;
         dialog.showModal();
         form.querySelector('[name="name"]').focus();
       });
@@ -169,7 +175,7 @@
         return;
       }
       var body = ['Name: ' + data.get('name'), 'Email: ' + data.get('email'), 'Website: ' + (data.get('website') || '-'), '', data.get('message')].join('\n');
-      location.href = 'mailto:' + to + '?subject=' + encodeURIComponent('Website review request from ' + data.get('name')) +
+      location.href = 'mailto:' + to + '?subject=' + encodeURIComponent((data.get('subject') || 'Website review request') + ' from ' + data.get('name')) +
         '&body=' + encodeURIComponent(body);
       status.textContent = 'Your email app should open with your request ready to send.';
     });

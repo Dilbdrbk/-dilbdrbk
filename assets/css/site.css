@@ -1850,5 +1850,8 @@ html:not(.js) .share-copy { display: none; }
 /* ------------------------------------------------------------ home: industry notes, process, cost questions, profiles note */
 .niche-note { max-width: 36ch; margin: -6px auto 14px; color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
 .flow + .section-note { margin: 26px auto 0; }
+.audit-cta { display: flex; justify-content: center; margin: 24px 0 0; }
+.btn.btn-audit { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
+.btn.btn-audit:hover { border-color: #d8f884; background: #d8f884; color: var(--accent-ink); }
 .cards + .section-note { margin-top: 30px; }
 .web-strip-title + .web-strip-note { margin: -10px 0 24px; }
