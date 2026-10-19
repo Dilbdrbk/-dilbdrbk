@@ -310,10 +310,9 @@ def record(d, box, qid, name, lines, lime):
         y += px(28)
 
 
-def steps_list(d, x, top, labels):
+def steps_list(d, x, top, labels, step=76):
     f = bahn(26, "SemiBold SemiCondensed")
     nf = bahn(17, "Bold Condensed")
-    step = 76
     d.line([(px(x), px(top)), (px(x), px(top + step * (len(labels) - 1)))], fill=LINE_STRONG, width=R)
     for k, label in enumerate(labels):
         y = top + k * step
@@ -324,6 +323,51 @@ def steps_list(d, x, top, labels):
             d.ellipse(box, fill=BG, outline=LINE_STRONG, width=R)
         d.text((px(x), px(y)), f"{k + 1:02d}", font=nf, fill=INK_DARK if k == 0 else INK, anchor="mm")
         d.text((px(x + 40), px(y)), label, font=f, fill=INK, anchor="lm")
+
+
+def dashed(d, a, b, fill, width, dash=9, gap=7):
+    """A dashed straight line from a to b (scaled coordinates)."""
+    (x0, y0), (x1, y1) = a, b
+    length = math.hypot(x1 - x0, y1 - y0)
+    ux, uy = (x1 - x0) / length, (y1 - y0) / length
+    pos = 0.0
+    while pos < length:
+        end = min(pos + px(dash), length)
+        d.line([(x0 + ux * pos, y0 + uy * pos), (x0 + ux * end, y0 + uy * end)], fill=fill, width=width)
+        pos = end + px(gap)
+
+
+def keyword_entities(d):
+    """Three searches that share the word "jaguar", linked to the two entities they can mean."""
+    f = bahn(20, "SemiBold SemiCondensed")
+    label = bahn(14, "SemiBold")
+    qx, ex, r = 830, 1085, 56
+    searches = [(200, "jaguar habitat"), (315, "jaguar top speed"), (430, "jaguar f-pace price")]
+    cat, car = (225, "Big cat", "Q35694"), (395, "Car brand", "Q21170490")
+    tracked(d, (px(qx), px(118)), "KEYWORDS", label, MUTED, px(2.5), anchor="mm")
+    tracked(d, (px(ex), px(118)), "ENTITIES", label, MUTED, px(2.5), anchor="mm")
+
+    def edge(y, target):
+        """From the right end of a search pill to the rim of an entity circle."""
+        right = px(qx) + (f.getlength(dict((s[0], s[1]) for s in searches)[y]) + px(36)) / 2
+        ang = math.atan2(px(y) - px(target), right - px(ex))
+        return (right + px(4), px(y)), (px(ex) + px(r + 6) * math.cos(ang), px(target) + px(r + 6) * math.sin(ang))
+
+    d.line(edge(200, cat[0]), fill=ACCENT, width=px(2))
+    d.line(edge(430, car[0]), fill=INK_2, width=px(2))
+    for target in (cat[0], car[0]):
+        dashed(d, *edge(315, target), fill=MUTED, width=px(2))
+    for y, text in searches:
+        pill(d, px(qx), px(y), text, f, outline=LINE_STRONG, ink=INK)
+    for (y, name, qid), lime in ((cat, True), (car, False)):
+        box = [px(ex - r), px(y - r), px(ex + r), px(y + r)]
+        if lime:
+            d.ellipse(box, fill=ACCENT)
+        else:
+            d.ellipse(box, fill=RAISE, outline=INK_2, width=px(2))
+        d.text((px(ex), px(y)), name, font=bahn(25, "Bold Condensed"), fill=INK_DARK if lime else INK, anchor="mm")
+        d.text((px(ex), px(y + r + 20)), qid, font=bahn(15, "SemiBold SemiCondensed"), fill=MUTED, anchor="mm")
+    tracked(d, (px(945), px(526)), "ONE WORD, TWO ENTITIES", label, MUTED, px(2.5), anchor="mm")
 
 
 def save_scaled(im, name, size, fmt, **opts):
@@ -358,6 +402,19 @@ def blog_images():
     steps_list(d, 712, 148, ["Map the central entity", "Plan the topical map", "Write for entity clarity",
                              "Link entities", "Add structured data", "Build the entity identity"])
     save_scaled(card, "entity-seo-steps.webp", (1200, 675), "WEBP", quality=84, method=6)
+
+    cover, d = feature_canvas(1200, 630, 690, ("Entity SEO vs", "keyword SEO?"),
+                              "Keywords are the words people search with. Entities are the things those words mean.")
+    keyword_entities(d)
+    save_scaled(cover, "entity-seo-vs-keyword-seo.jpg", (1200, 630), "JPEG", quality=88, optimize=True, progressive=True)
+    save_scaled(cover, "entity-seo-vs-keyword-seo.webp", (1600, 840), "WEBP", quality=82, method=6)
+    save_scaled(cover, "entity-seo-vs-keyword-seo-thumb.webp", (640, 336), "WEBP", quality=80, method=6)
+
+    card, d = feature_canvas(1200, 675, 640, ("Both together", "in 7 steps"),
+                             "Collect the searches, map them to entities, then write, link and measure.")
+    steps_list(d, 712, 130, ["Collect real searches", "Group them by intent", "Map to entities", "Plan the topical map",
+                             "Write answer-first", "Link and mark up", "Measure both"], step=72)
+    save_scaled(card, "entity-keyword-workflow.webp", (1200, 675), "WEBP", quality=84, method=6)
 
 
 if __name__ == "__main__":

@@ -16,6 +16,7 @@
 
 ## Blog posts
 
+- [Entity SEO vs Keyword SEO: What Changes and What Stays](https://dilbdrbk.com.np/blog/entity-seo-vs-keyword-seo/): Entity SEO vs keyword SEO: keywords show how people search, entities show what they mean. See the differences, where each works and how to combine them.
 - [What Is Entity SEO? A Practical Guide](https://dilbdrbk.com.np/blog/what-is-entity-seo/): Entity SEO helps search engines identify the people, places, products and concepts on your site. Learn how it works and how to do it in 6 steps.
 
 ## Profiles

@@ -1,0 +1,54 @@
+<div class="post-tool" data-tool="query">
+  <div class="tool-head">
+    <p class="tool-kicker">Free tool</p>
+    <p class="tool-title">Keyword to entity breakdown</p>
+    <p class="tool-note">Pick a search. The left side lists the words keyword SEO targets, and the right side lists the entity facts entity SEO makes clear.</p>
+  </div>
+  <div class="qa-picks js-only" role="group" aria-label="Sample searches">
+    <button class="qa-pick" type="button" aria-pressed="true"
+      data-entity="The jaguar, a big cat (Wikidata Q35694), or Jaguar, the car brand (Wikidata Q21170490)"
+      data-words="jaguar|top speed|how fast|km/h and mph"
+      data-facts="Which jaguar the page covers, named in the first lines|The speed with a unit, such as km/h or mph|The source of the figure|For the car: the model and year the figure applies to"
+      data-intent="Know Simple"
+      data-note="The words fit both entities, so the facts decide which one the page answers.">jaguar top speed</button>
+    <button class="qa-pick" type="button" aria-pressed="false"
+      data-entity="Root canal treatment (Wikidata Q905815)"
+      data-words="root canal cost|how much|root canal price|cost of a root canal"
+      data-facts="A price range with a currency and a location|What changes the price, such as the tooth treated|What the price includes, such as a crown or follow-up visits|The date the prices were checked"
+      data-intent="Know, before a booking"
+      data-note="Prices change by place and time, so the entity facts need a location and a date.">how much does a root canal cost</button>
+    <button class="qa-pick" type="button" aria-pressed="false"
+      data-entity="Mount Everest (Wikidata Q513)"
+      data-words="mount everest height|how tall is everest|everest elevation|sagarmatha"
+      data-facts="The elevation in metres and feet|The survey behind the figure|The location on the border of Nepal and China|Other names, such as Sagarmatha and Qomolangma"
+      data-intent="Know Simple"
+      data-note="Many strings point to one entity, so one page with clear facts answers all of them.">mount everest height</button>
+    <button class="qa-pick" type="button" aria-pressed="false"
+      data-entity="iPhone 17 (Wikidata Q136193312)"
+      data-words="iphone 17 battery life|battery|hours|battery test"
+      data-facts="The exact model, kept apart from the iPhone 17 Pro and the iPhone Air|Apple's rated hours, with the source|A named battery test and its method|A comparison with the previous model"
+      data-intent="Know, during a purchase decision"
+      data-note="Model names sit close together, so the page must name the exact entity.">iphone 17 battery life</button>
+    <button class="qa-pick" type="button" aria-pressed="false"
+      data-entity="Dentist (Wikidata Q27349) as a business type, and the clinic itself as a local business"
+      data-words="dentist|near me|open now|the area name"
+      data-facts="The clinic's name, address and phone number, the same on every profile|Opening hours, including holidays|Services offered, such as root canal treatment|A Google Business Profile that matches the website"
+      data-intent="Visit-in-person"
+      data-note="The search asks for a place and a time, so the clinic's facts must stay current.">dentist near me open now</button>
+  </div>
+  <div class="qa-view" aria-live="polite">
+    <p class="qa-search"><span>Search</span><strong data-f="search">jaguar top speed</strong></p>
+    <div class="qa-cols">
+      <div class="qa-col">
+        <p class="qa-col-title">Keyword SEO: words to use</p>
+        <ul class="qa-list" data-f="words"><li>jaguar</li><li>top speed</li><li>how fast</li><li>km/h and mph</li></ul>
+      </div>
+      <div class="qa-col qa-col-entity">
+        <p class="qa-col-title">Entity SEO: facts to make clear</p>
+        <p class="qa-entity" data-f="entity">The jaguar, a big cat (Wikidata Q35694), or Jaguar, the car brand (Wikidata Q21170490)</p>
+        <ul class="qa-list" data-f="facts"><li>Which jaguar the page covers, named in the first lines</li><li>The speed with a unit, such as km/h or mph</li><li>The source of the figure</li><li>For the car: the model and year the figure applies to</li></ul>
+      </div>
+    </div>
+    <p class="qa-note"><span data-f="intent">Intent: Know Simple.</span> <span data-f="note">The words fit both entities, so the facts decide which one the page answers.</span></p>
+  </div>
+</div>

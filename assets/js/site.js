@@ -512,4 +512,29 @@
     form.addEventListener('submit', function (e) { e.preventDefault(); });
     update();
   });
+
+  // Keyword to entity breakdown: each sample search swaps the words and the entity facts.
+  document.querySelectorAll('[data-tool="query"]').forEach(function (tool) {
+    var picks = tool.querySelectorAll('.qa-pick');
+    var out = function (name) { return tool.querySelector('[data-f="' + name + '"]'); };
+    var fill = function (list, items) {
+      list.textContent = '';
+      items.split('|').forEach(function (text) {
+        var li = document.createElement('li');
+        li.textContent = text;
+        list.appendChild(li);
+      });
+    };
+    Array.prototype.forEach.call(picks, function (btn) {
+      btn.addEventListener('click', function () {
+        Array.prototype.forEach.call(picks, function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+        out('search').textContent = btn.textContent;
+        out('entity').textContent = btn.getAttribute('data-entity');
+        out('intent').textContent = 'Intent: ' + btn.getAttribute('data-intent') + '.';
+        out('note').textContent = btn.getAttribute('data-note');
+        fill(out('words'), btn.getAttribute('data-words'));
+        fill(out('facts'), btn.getAttribute('data-facts'));
+      });
+    });
+  });
 })();

@@ -1,7 +1,7 @@
 <!--
 {
   "date": "2026-10-14",
-  "updated": "2026-10-15",
+  "updated": "2026-10-19",
   "image": "what-is-entity-seo",
   "imageAlt": "What is entity SEO? Optimizing a website so search engines identify its entities, their attributes and their relations.",
   "section": "Entity SEO",
@@ -179,7 +179,7 @@ Entity SEO, keyword SEO and semantic SEO overlap, but each approach optimizes a 
 | Typical output | One page per keyword group | Pages and markup that define entities | A connected set of pages around a topic |
 | The query [ada] | One string to match | Three separate entities to tell apart | Context that shows which meaning a page serves |
 
-Holistic SEO treats entities as one layer of semantic SEO, next to context, topical maps and query networks. Ahrefs argues that entity SEO is simply good SEO. Both views lead to the same practice: name entities clearly, state their facts and connect related pages.
+Holistic SEO treats entities as one layer of semantic SEO, next to context, topical maps and query networks. Ahrefs argues that entity SEO is simply good SEO. Both views lead to the same practice: name entities clearly, state their facts and connect related pages. The guide to [entity SEO vs keyword SEO](/blog/entity-seo-vs-keyword-seo/) compares the first 2 approaches in depth, with Google's documentation and research on both.
 
 ## Core Concepts Behind Entity SEO
 
