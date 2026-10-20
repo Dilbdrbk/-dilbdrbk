@@ -83,7 +83,7 @@ PAGES = [
     dict(path="/blog/", body="blog.html", crumb="Blog", updated="2026-10-14", kind="blog",
          title="SEO Blog | Dil Bahadur B.K.",
          description="Notes on semantic SEO, topical authority, local SEO and AI search by Dil Bahadur B.K., semantic SEO specialist from Kathmandu, Nepal."),
-    dict(path="/profiles/", body="profiles.html", crumb="Profiles", updated="2026-10-10", kind="page",
+    dict(path="/profiles/", body="profiles.html", crumb="Profiles", updated="2026-10-20", kind="page",
          title="Dil Bahadur B.K. Online: LinkedIn, GitHub & Other Profiles",
          description="Every official profile of Dil Bahadur B.K., semantic SEO specialist from Kathmandu, Nepal, in one place: LinkedIn, GitHub and more."),
     dict(path="/contact/", body="contact.html", crumb="Contact", updated="2026-10-10", kind="contact",
@@ -151,7 +151,7 @@ def person_node() -> dict:
             for e in SITE["education"]
         ],
         "knowsAbout": SITE["knowsAbout"],
-        "sameAs": [p["url"] for p in SITE["profiles"] if not p.get("listing")],
+        "sameAs": [p["url"] for p in SITE["profiles"] if not p.get("listing") and p.get("sameAs", True)],
     }
     return node
 
