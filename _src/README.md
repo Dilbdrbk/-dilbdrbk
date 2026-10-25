@@ -49,3 +49,16 @@ Lines in double brackets insert blocks:
 | `[[cta:inline]]`, `[[cta:services]]` | A call-to-action box, or the Hire Me and Expertise buttons |
 
 Every post gets the byline, reading time, share row, cover image, author box and further-reading links from `build.py`. A post whose header lists `takeaways` (3 to 5 short sentences) opens with a Key takeaways box. On wide screens an "On this page" sidebar lists every h2 and h3 and marks the section in view; phones keep the `[[toc]]` block. Sources are named in the text without links (for example, "According to Google Search Central, ..."), with no separate Sources section. List their URLs in the header as `citations`; they go into the schema only.
+
+## Photo and icon credits
+
+Photos in `assets/img/photos/` come from Pexels under the Pexels License (free to use, no attribution required):
+
+| File | Photographer | Source |
+| --- | --- | --- |
+| google-search-trends-on-smartphone.webp | Click Jeth | https://www.pexels.com/photo/google-in-smartphone-18530501/ |
+| plumber-installing-pipe-fittings.webp | Anıl Karakaya | https://www.pexels.com/photo/plumber-installs-pipe-fittings-6419128/ |
+| parcels-with-shipping-labels.webp | Polina Tankilevitch | https://www.pexels.com/photo/stacks-of-boxes-ready-for-delivery-4440800/ |
+| laptop-analytics-dashboard.webp | Lukas Blazek | https://www.pexels.com/photo/close-up-photo-of-gray-laptop-577210/ |
+
+Tool icons on the home page: Simple Icons 16.30.0 (CC0) for Google Search Console, Google Analytics, Looker, Google Tag Manager, Google Colab, Semrush, WordPress and Shopify; Ahrefs' own pinned-tab SVG; AccuRanker's favicon (`assets/img/tools/accuranker.png`). The logos are trademarks of their owners and are shown only to name the tools.

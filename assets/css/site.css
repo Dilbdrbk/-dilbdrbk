@@ -247,6 +247,9 @@ h3, .ch-title {
 .marquee-track { display: flex; flex-shrink: 0; gap: 14px; padding-right: 14px; list-style: none; }
 .tool { display: inline-flex; align-items: center; gap: 10px; padding: 11px 18px 11px 11px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--bg-raise); font-size: 0.9375rem; font-weight: 500; white-space: nowrap; }
 .tool-mark { display: inline-grid; place-items: center; min-width: 32px; height: 30px; padding: 0 6px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--accent); font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.02em; }
+.tool-mark svg, .tool-mark img { display: block; width: 18px; height: 18px; }
+.tool-mark svg { fill: currentColor; }
+.tool-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 @media (prefers-reduced-motion: no-preference) {
   .marquee-track { animation: marquee 48s linear infinite; }
   .marquee:hover .marquee-track { animation-play-state: paused; }
@@ -650,6 +653,12 @@ html:has(.lead[open]) { overflow: hidden; }
 /* ------------------------------------------------------------ industries */
 
 .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(24px, 4vw, 56px); }
+.split.split-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .split.split-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 860px) { .split.split-3 { grid-template-columns: minmax(0, 1fr); } }
+.section-photo { max-width: 960px; margin: 0 auto 30px; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: var(--bg-raise); }
+.section-photo img { display: block; width: 100%; height: auto; aspect-ratio: 5 / 2; object-fit: cover; }
+.niche-photo { display: block; width: 100%; max-width: 380px; height: auto; aspect-ratio: 3 / 2; margin: 0 auto 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--bg-raise); object-fit: cover; }
 .list-title { font-size: 1rem; letter-spacing: -0.01em; margin-bottom: 14px; color: var(--muted); font-weight: 500; }
 .tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .tags li {
