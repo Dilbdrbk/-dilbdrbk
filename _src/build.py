@@ -698,7 +698,7 @@ def posts_list_html(posts: list[dict]) -> str:
 
 
 def featured_posts_html(posts: list[dict], limit: int = 3) -> str:
-    """Home page Resources tab: the newest post as a wide card, the next ones as smaller cards."""
+    """Home page Resources tab: every post as the same wide card (image left, text right)."""
     if not posts:
         return '<p class="section-note">The first guides are on their way.</p>'
     cards = []
