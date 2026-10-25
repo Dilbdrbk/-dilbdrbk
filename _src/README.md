@@ -60,5 +60,24 @@ Photos in `assets/img/photos/` come from Pexels under the Pexels License (free t
 | plumber-installing-pipe-fittings.webp | Anıl Karakaya | https://www.pexels.com/photo/plumber-installs-pipe-fittings-6419128/ |
 | parcels-with-shipping-labels.webp | Polina Tankilevitch | https://www.pexels.com/photo/stacks-of-boxes-ready-for-delivery-4440800/ |
 | laptop-analytics-dashboard.webp | Lukas Blazek | https://www.pexels.com/photo/close-up-photo-of-gray-laptop-577210/ |
+| library-bookshelves.webp | Pixabay | https://www.pexels.com/photo/stack-of-books-in-shelf-256559/ |
+| sticky-notes-plan-on-wall.webp | Anna Shvets | https://www.pexels.com/photo/a-person-holding-blue-sticky-note-4586901/ |
+| html-code-on-monitor.webp | Pixabay | https://www.pexels.com/photo/computer-coding-270632/ |
+| hands-typing-on-laptop.webp | Kaboompics | https://www.pexels.com/photo/a-person-using-a-macbook-air-4468092/ |
+| open-sign-on-shop-door.webp | Tim Mossholder | https://www.pexels.com/photo/close-up-photo-of-hanging-sign-6432588/ |
+| black-metal-chain.webp | Suki Lee | https://www.pexels.com/photo/close-up-shot-of-a-black-chain-14151825/ |
+| magnifying-glass-on-blue.webp | Markus Winkler | https://www.pexels.com/photo/close-up-photo-of-magnifying-glass-on-blue-surface-4144768/ |
+| chatgpt-on-laptop-screen.webp | Hatice Baran | https://www.pexels.com/photo/chat-gpt-web-page-on-laptop-screen-16037280/ |
+| test-tubes-in-rack.webp | Thirdman | https://www.pexels.com/photo/test-tubes-in-a-test-tube-rack-8940348/ |
+| server-racks-data-center.webp | Brett Sayles | https://www.pexels.com/photo/server-racks-on-data-center-4508751/ |
+| ai-chat-on-smartphone.webp | Tim Witzdam | https://www.pexels.com/photo/smartphone-displaying-ai-chat-interface-32021560/ |
+| semi-truck-on-highway.webp | Omar Gerardo | https://www.pexels.com/photo/semi-truck-on-scenic-highway-with-mountains-34902065/ |
+| technician-servicing-air-conditioner.webp | Bulat843 | https://www.pexels.com/photo/technician-performing-air-conditioning-maintenance-32588555/ |
+| office-towers-blue-sky.webp | Pixabay | https://www.pexels.com/photo/photograph-of-concrete-structures-358549/ |
+| himalaya-peaks-nepal.webp | Priya | https://www.pexels.com/photo/a-snow-covered-mountain-13548311/ |
+| notes-and-charts-on-desk.webp | Alena Darmel | https://www.pexels.com/photo/a-person-writing-on-a-notebook-with-a-pencil-7710124/ |
+| laptop-phone-coffee-desk.webp | Hatice Baran | https://www.pexels.com/photo/abstract-shot-of-sunlight-and-shadow-on-a-table-with-laptop-13027385/ |
+| book-laptop-coffee.webp | Nur Nur | https://www.pexels.com/photo/cozy-study-setup-with-book-laptop-and-coffee-30457088/ |
+| budget-calculator-charts.webp | Kindel Media | https://www.pexels.com/photo/monthly-budget-planning-7054399/ |
 
 Tool icons on the home page: Simple Icons 16.30.0 (CC0) for Google Search Console, Google Analytics, Looker, Google Tag Manager, Google Colab, Semrush, WordPress and Shopify; Ahrefs' own pinned-tab SVG; AccuRanker's favicon (`assets/img/tools/accuranker.png`). The logos are trademarks of their owners and are shown only to name the tools.
