@@ -245,14 +245,15 @@ def pill(d, cx, cy, text, f, fill=BG, outline=LINE_STRONG, ink=INK, h=46):
     d.text((cx, cy), text, font=f, fill=ink, anchor="mm")
 
 
-def feature_canvas(W, H, split, question, answer, note=None, label="ENTITY SEO GUIDE"):
+def feature_canvas(W, H, split, question, answer, note=None, label="ENTITY SEO GUIDE", divider=True):
     """Shared layout: logo and label on top, question and answer on the left, footer below.
     `question` is two lines; the second one is lime."""
     im = Image.new("RGB", (px(W), px(H)), BG)
     d = ImageDraw.Draw(im)
     for y in (64, H - 64):
         d.line([(0, px(y)), (px(W), px(y))], fill=LINE, width=R)
-    d.line([(px(split), px(64)), (px(split), px(H - 64))], fill=LINE, width=R)
+    if divider:
+        d.line([(px(split), px(64)), (px(split), px(H - 64))], fill=LINE, width=R)
     logo = to_height(wordmark(), px(30))
     im.paste(logo, (px(60), px(17)), logo)
     tracked(d, (px(W - 60), px(32)), label, bahn(15, "SemiBold"), MUTED, px(3), anchor="rm")
@@ -457,10 +458,9 @@ def blog_images():
                              "Write answer-first", "Link and mark up", "Measure both"], step=72)
     save_scaled(card, "entity-keyword-workflow.webp", (1200, 675), "WEBP", quality=84, method=6)
 
-    cover, d = feature_canvas(1200, 630, 690, ("Topical vs", "domain authority?"),
+    cover, d = feature_canvas(1200, 630, 870, ("Topical authority vs", "domain authority?"),
                               "Topical authority is depth on one subject. Domain authority is a tool score built from backlinks.",
-                              label="SEMANTIC SEO GUIDE")
-    authority_compare(d)
+                              label="SEMANTIC SEO GUIDE", divider=False)
     save_scaled(cover, "topical-authority-vs-domain-authority.jpg", (1200, 630), "JPEG", quality=88, optimize=True, progressive=True)
     save_scaled(cover, "topical-authority-vs-domain-authority.webp", (1600, 840), "WEBP", quality=82, method=6)
     save_scaled(cover, "topical-authority-vs-domain-authority-thumb.webp", (640, 336), "WEBP", quality=80, method=6)
