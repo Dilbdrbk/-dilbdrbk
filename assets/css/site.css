@@ -1528,12 +1528,12 @@ html:not(.js) .js-only { display: none !important; }
 
 /* Tables scroll inside their frame on small screens instead of widening the page. */
 .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
-:is(.post-body, .price-table) table { width: 100%; min-width: 540px; border-collapse: collapse; font-size: 0.9375rem; line-height: 1.45; }
-:is(.post-body, .price-table) :is(th, td) { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
-:is(.post-body, .price-table) th { background: var(--bg-raise); color: var(--muted); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
-:is(.post-body, .price-table) td { color: var(--ink-2); }
-:is(.post-body, .price-table) td:first-child { color: var(--ink); font-weight: 600; }
-:is(.post-body, .price-table) tr:last-child td { border-bottom: 0; }
+:is(.post-body, .price-table, .policy) table { width: 100%; min-width: 540px; border-collapse: collapse; font-size: 0.9375rem; line-height: 1.45; }
+:is(.post-body, .price-table, .policy) :is(th, td) { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+:is(.post-body, .price-table, .policy) th { background: var(--bg-raise); color: var(--muted); font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
+:is(.post-body, .price-table, .policy) td { color: var(--ink-2); }
+:is(.post-body, .price-table, .policy) td:first-child { color: var(--ink); font-weight: 600; }
+:is(.post-body, .price-table, .policy) tr:last-child td { border-bottom: 0; }
 
 .post-figure img { width: 100%; border: 1px solid var(--line); border-radius: 14px; }
 .post-body figcaption { margin-top: 12px; color: var(--muted); font-size: 0.8125rem; line-height: 1.45; text-align: center; }
@@ -1875,3 +1875,14 @@ html:not(.js) .share-copy { display: none; }
 .btn.btn-audit:hover { border-color: #d8f884; background: #d8f884; color: var(--accent-ink); }
 .cards + .section-note { margin-top: 30px; }
 .web-strip-title + .web-strip-note { margin: -10px 0 24px; }
+
+/* Policy pages: question headings, sub-headings, lists and the effective date. */
+.policy-date { margin-top: 14px; color: var(--muted); font-size: 0.875rem; }
+.policy h3 { margin: 1.6em 0 0.5em; color: var(--ink); font-size: 1.2rem; font-weight: 700; line-height: 1.2; }
+.policy .table-wrap { position: relative; left: 50%; width: min(880px, calc(100vw - 32px)); margin: 1.4em 0; transform: translateX(-50%); }
+.policy-list { display: grid; gap: 8px; margin: 1em 0; padding-left: 1.3em; color: var(--ink-2); font-size: 1.0625rem; line-height: 1.65; }
+ul.policy-list { list-style: disc; }
+ol.policy-list { list-style: decimal; }
+.policy-list strong { color: var(--ink); }
+.footer-legal { display: inline-flex; gap: 18px; }
+.footer-legal a { color: inherit; text-decoration: underline; }

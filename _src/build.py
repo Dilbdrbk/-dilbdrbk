@@ -56,7 +56,7 @@ NAV = [
 # `updated` feeds sitemap lastmod; bump it when a page's content changes.
 # The header, footer and Person schema sit on every page. Bump this when they change so the
 # sitemap lastmod stays accurate for pages whose own content did not change.
-LAYOUT_UPDATED = "2026-10-18"
+LAYOUT_UPDATED = "2026-10-29"
 
 PAGES = [
     dict(path="/", body="home.html", crumb="Home", updated="2026-10-25", kind="home",
@@ -89,6 +89,12 @@ PAGES = [
     dict(path="/contact/", body="contact.html", crumb="Contact", updated="2026-10-25", kind="contact",
          title="Contact Dil Bahadur B.K. | Semantic SEO Specialist, Kathmandu",
          description="Reach Dil Bahadur B.K. by email, phone or LinkedIn. Based in Kathmandu, Nepal (NPT, UTC+5:45)."),
+    dict(path="/editorial-policy/", body="editorial-policy.html", crumb="Editorial Policy", updated="2026-10-29", kind="page",
+         title="Editorial Policy: How SEO Guides Are Researched | Dil B.K.",
+         description="How Dil Bahadur B.K. researches, fact-checks and updates every SEO guide: a six-tier source hierarchy, claim-by-claim checks, AI use and corrections."),
+    dict(path="/privacy-policy/", body="privacy-policy.html", crumb="Privacy Policy", updated="2026-10-29", kind="page",
+         title="Privacy Policy: No Cookies, No Tracking | Dil Bahadur B.K.",
+         description="The privacy policy of dilbdrbk.com.np: no cookies, no analytics and no stored form data, plus what Cloudflare, GitHub Pages and Google Fonts process."),
 ]
 
 # The dbk. wordmark, made by make_images.py at 3x its 24 px display height.
@@ -337,7 +343,7 @@ def lead_dialog() -> str:
       <button class="btn btn-arrow lead-submit" type="submit">Send request</button>
       <p class="lead-status" role="status" aria-live="polite"></p>
     </form>
-    <p class="lead-alt">Prefer email? <a href="mailto:{SITE["email"]}">{SITE["email"]}</a><br>I only use your details to reply.</p>
+    <p class="lead-alt">Prefer email? <a href="mailto:{SITE["email"]}">{SITE["email"]}</a><br>I only use your details to reply. <a href="/privacy-policy/">Privacy policy</a></p>
   </div>
 </dialog>"""
 
@@ -413,6 +419,7 @@ def footer() -> str:
   </div>
   <div class="footer-base">
     <span>&copy; <span data-year>2026</span> {esc(SITE["name"])}</span>
+    <span class="footer-legal"><a href="/editorial-policy/">Editorial Policy</a><a href="/privacy-policy/">Privacy Policy</a></span>
     <span>{SITE["countryName"]} <time data-clock>--:--</time> NPT</span>
   </div>
 </footer>
@@ -743,7 +750,7 @@ def author_box() -> str:
         <p class="author-name" id="author-name"><a href="/about/" rel="author">{esc(SITE["name"])}</a></p>
         <p class="author-role">{esc(SITE["jobTitle"])}, {SITE["countryName"]}</p>
         <p class="author-bio">I'm {esc(SITE["name"])}, a semantic SEO specialist from Nepal. I plan websites around entities and topical maps, then strengthen them with technical, local, on-page and off-page SEO. My SEO career started in December 2023, and my method follows the {esc(method["name"])} methodology I learned from {esc(method["by"])}.</p>
-        <p class="author-links"><a href="/about/">About me</a><a href="{esc(SITE["linkedin"])}" rel="me noopener" target="_blank">LinkedIn</a><a href="/profiles/">All profiles</a><a href="/contact/" data-open-form>Hire Me</a></p>
+        <p class="author-links"><a href="/about/">About me</a><a href="{esc(SITE["linkedin"])}" rel="me noopener" target="_blank">LinkedIn</a><a href="/profiles/">All profiles</a><a href="/editorial-policy/">How I research</a><a href="/contact/" data-open-form>Hire Me</a></p>
       </div>
     </aside>"""
 

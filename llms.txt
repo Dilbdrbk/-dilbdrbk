@@ -13,6 +13,8 @@
 - [Blog](https://dilbdrbk.com.np/blog/): Notes on semantic SEO, topical authority, local SEO and AI search by Dil Bahadur B.K., semantic SEO specialist from Kathmandu, Nepal.
 - [Profiles](https://dilbdrbk.com.np/profiles/): Every official profile of Dil Bahadur B.K., semantic SEO specialist from Kathmandu, Nepal, in one place: LinkedIn, GitHub and more.
 - [Contact](https://dilbdrbk.com.np/contact/): Reach Dil Bahadur B.K. by email, phone or LinkedIn. Based in Kathmandu, Nepal (NPT, UTC+5:45).
+- [Editorial Policy](https://dilbdrbk.com.np/editorial-policy/): How Dil Bahadur B.K. researches, fact-checks and updates every SEO guide: a six-tier source hierarchy, claim-by-claim checks, AI use and corrections.
+- [Privacy Policy](https://dilbdrbk.com.np/privacy-policy/): The privacy policy of dilbdrbk.com.np: no cookies, no analytics and no stored form data, plus what Cloudflare, GitHub Pages and Google Fonts process.
 
 ## Blog posts
 
