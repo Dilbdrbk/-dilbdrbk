@@ -1,6 +1,7 @@
 <!--
 {
   "date": "2026-10-19",
+  "updated": "2026-10-28",
   "image": "entity-seo-vs-keyword-seo",
   "imageAlt": "Entity SEO vs keyword SEO: three searches that use the word jaguar connect to two different entities, the big cat and the car brand.",
   "section": "Entity SEO",
@@ -237,7 +238,7 @@ The 2 methods answer different planning questions. A dental clinic's entity map 
 
 Topical authority describes a site that covers a topic in depth and connects its pages around that topic. Holistic SEO defines it as a semantic SEO method for ranking higher by covering connected topics and the queries they imply with accurate, unique and expert information. The [topical authority](/expertise/#term-topical-authority) entry in the glossary summarizes the concept.
 
-Google's documentation uses the term for one specific system. According to a May 2023 Google Search Central post, Google's topic authority system helps determine which expert sources are helpful for news searches in specialized topic areas, such as health, politics or finance. Google has not described a general topical authority score for all websites, so the wider concept remains an SEO framework.
+Google's documentation uses the term for one specific system. According to a May 2023 Google Search Central post, Google's topic authority system helps determine which expert sources are helpful for news searches in specialized topic areas, such as health, politics or finance. Google has not described a general topical authority score for all websites, so the wider concept remains an SEO framework. The guide to [topical authority vs domain authority](/blog/topical-authority-vs-domain-authority/) compares the concept with link-based authority scores.
 
 ### Internal Links: Keyword Anchors vs Entity Relations
 

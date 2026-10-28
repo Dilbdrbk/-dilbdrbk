@@ -1,0 +1,51 @@
+<div class="post-tool" data-tool="coverage">
+  <div class="tool-head">
+    <p class="tool-kicker">Free tool</p>
+    <p class="tool-title">Topical coverage checker</p>
+    <p class="tool-note">Pick a sample topic and tick each subtopic your site already answers on a page or in a section. The checker counts the core and the outer section of the topical map and lists the gaps. It counts coverage only; it is not a Google score.</p>
+  </div>
+  <div class="qa-picks js-only" role="group" aria-label="Sample topics">
+    <button class="qa-pick" type="button" aria-pressed="true"
+      data-core="Trek packages and prices|Total trek cost|Permits and fees|Itinerary day by day|Best season|Guides and porters"
+      data-outer="Altitude sickness|Difficulty and fitness|Lukla flights|Packing list|Teahouse accommodation|Travel insurance">Everest Base Camp Trek</button>
+    <button class="qa-pick" type="button" aria-pressed="false"
+      data-core="Root canal cost|Booking a root canal|Root canal vs extraction|Crown after a root canal|Signs you need a root canal|Payment and insurance"
+      data-outer="Root canal steps|Pain during and after|Recovery time|Aftercare|Success rate|Risks and complications">Root canal treatment</button>
+    <button class="qa-pick" type="button" aria-pressed="false"
+      data-core="Best running shoes by use|Prices and models|Neutral vs stability shoes|Trail running shoes|Shoes for flat feet|Size and fit guide"
+      data-outer="Heel-to-toe drop|Cushioning types|Carbon plate shoes|Shoe lifespan in km and miles|When to replace shoes|How to clean running shoes">Running shoes</button>
+  </div>
+  <div class="cov-view">
+    <p class="qa-search"><span>Central entity</span><strong data-f="topic">Everest Base Camp Trek</strong></p>
+    <div class="qa-cols">
+      <fieldset class="qa-col qa-col-entity cov-group">
+        <legend class="qa-col-title">Core section: close to what the site sells</legend>
+        <ul class="cov-list" data-f="core">
+          <li><label><input type="checkbox"> Trek packages and prices</label></li>
+          <li><label><input type="checkbox"> Total trek cost</label></li>
+          <li><label><input type="checkbox"> Permits and fees</label></li>
+          <li><label><input type="checkbox"> Itinerary day by day</label></li>
+          <li><label><input type="checkbox"> Best season</label></li>
+          <li><label><input type="checkbox"> Guides and porters</label></li>
+        </ul>
+      </fieldset>
+      <fieldset class="qa-col cov-group">
+        <legend class="qa-col-title">Outer section: the wider topic</legend>
+        <ul class="cov-list" data-f="outer">
+          <li><label><input type="checkbox"> Altitude sickness</label></li>
+          <li><label><input type="checkbox"> Difficulty and fitness</label></li>
+          <li><label><input type="checkbox"> Lukla flights</label></li>
+          <li><label><input type="checkbox"> Packing list</label></li>
+          <li><label><input type="checkbox"> Teahouse accommodation</label></li>
+          <li><label><input type="checkbox"> Travel insurance</label></li>
+        </ul>
+      </fieldset>
+    </div>
+    <div class="cov-result js-only" aria-live="polite">
+      <div class="cov-bar"><span data-f="bar" style="width:0%"></span></div>
+      <p class="cov-score"><strong data-f="score">0 of 12 subtopics covered (0%)</strong> <span data-f="split">Core 0 of 6, outer 0 of 6.</span></p>
+      <p class="qa-note" data-f="advice">Start with the core section: those pages sit closest to what the site sells.</p>
+    </div>
+    <p class="qa-note">Each list is a sample built from common searches about the entity. A real topical map takes its subtopics from the site's own query network.</p>
+  </div>
+</div>

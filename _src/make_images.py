@@ -245,7 +245,7 @@ def pill(d, cx, cy, text, f, fill=BG, outline=LINE_STRONG, ink=INK, h=46):
     d.text((cx, cy), text, font=f, fill=ink, anchor="mm")
 
 
-def feature_canvas(W, H, split, question, answer, note=None):
+def feature_canvas(W, H, split, question, answer, note=None, label="ENTITY SEO GUIDE"):
     """Shared layout: logo and label on top, question and answer on the left, footer below.
     `question` is two lines; the second one is lime."""
     im = Image.new("RGB", (px(W), px(H)), BG)
@@ -255,11 +255,14 @@ def feature_canvas(W, H, split, question, answer, note=None):
     d.line([(px(split), px(64)), (px(split), px(H - 64))], fill=LINE, width=R)
     logo = to_height(wordmark(), px(30))
     im.paste(logo, (px(60), px(17)), logo)
-    tracked(d, (px(W - 60), px(32)), "ENTITY SEO GUIDE", bahn(15, "SemiBold"), MUTED, px(3), anchor="rm")
+    tracked(d, (px(W - 60), px(32)), label, bahn(15, "SemiBold"), MUTED, px(3), anchor="rm")
 
-    qf = bahn(100, "Bold Condensed")
+    size = 100                      # shrink long questions until both lines fit the left column
+    while max(bahn(size, "Bold Condensed").getlength(q) for q in question) > px(split - 110) and size > 60:
+        size -= 2
+    qf = bahn(size, "Bold Condensed")
     d.text((px(60), px(100)), question[0], font=qf, fill=INK, anchor="la")
-    d.text((px(60), px(196)), question[1], font=qf, fill=ACCENT, anchor="la")
+    d.text((px(60), px(100 + size * 0.96)), question[1], font=qf, fill=ACCENT, anchor="la")
     y = px(346)
     d.line([(px(60), y), (px(106), y)], fill=ACCENT, width=px(3))
     y += px(24)
@@ -370,6 +373,44 @@ def keyword_entities(d):
     tracked(d, (px(945), px(526)), "ONE WORD, TWO ENTITIES", label, MUTED, px(2.5), anchor="mm")
 
 
+def authority_compare(d):
+    """Top: a topic with its connected subtopic pages. Bottom: a 1 to 100 score bar fed by links."""
+    label = bahn(14, "SemiBold")
+    small = bahn(17, "SemiBold SemiCondensed")
+    cx, cy = 945, 190
+    tracked(d, (px(cx), px(92)), "TOPICAL AUTHORITY", label, MUTED, px(2.5), anchor="mm")
+    subs = ["Cost", "Permits", "Season", "Route", "Risks", "Gear"]
+    rx, ry = 150, 68
+    pts = []
+    for k, s in enumerate(subs):
+        a = math.radians(-90 + 30 + k * 60)
+        pts.append((cx + rx * math.cos(a), cy + ry * math.sin(a), s))
+    for k, (x, y, _) in enumerate(pts):                      # ring of internal links between neighbours
+        x2, y2, _ = pts[(k + 1) % len(pts)]
+        dashed(d, (px(x), px(y)), (px(x2), px(y2)), fill=LINE_STRONG, width=R)
+    for x, y, _ in pts:
+        d.line([(px(cx), px(cy)), (px(x), px(y))], fill=ACCENT, width=px(2))
+    for x, y, s in pts:
+        pill(d, px(x), px(y), s, small, ink=INK, h=36)
+    d.ellipse([px(cx - 44), px(cy - 44), px(cx + 44), px(cy + 44)], fill=ACCENT)
+    d.text((px(cx), px(cy)), "Topic", font=bahn(26, "Bold Condensed"), fill=INK_DARK, anchor="mm")
+    d.text((px(cx), px(cy + 112)), "Depth on one subject", font=small, fill=INK_2, anchor="mm")
+
+    d.line([(px(720), px(338)), (px(1170), px(338))], fill=LINE, width=R)
+    tracked(d, (px(cx), px(370)), "DOMAIN AUTHORITY", label, MUTED, px(2.5), anchor="mm")
+    x0, x1, y = 760, 1130, 448
+    d.rounded_rectangle([px(x0), px(y - 12), px(x1), px(y + 12)], radius=px(12), fill=RAISE, outline=LINE_STRONG, width=R)
+    fill_to = x0 + (x1 - x0) * 0.62
+    d.rounded_rectangle([px(x0), px(y - 12), px(fill_to), px(y + 12)], radius=px(12), fill=INK_2)
+    for v, x in ((1, x0), (100, x1)):
+        d.text((px(x), px(y + 34)), str(v), font=small, fill=MUTED, anchor="mm")
+    d.text((px(fill_to), px(y - 34)), "62", font=bahn(30, "Bold Condensed"), fill=INK, anchor="mm")
+    for k in range(5):                                      # backlinks arriving from the left
+        ly = y - 40 + k * 20
+        d.line([(px(722), px(ly)), (px(752), px(y))], fill=LINE_STRONG, width=R)
+    d.text((px(cx), px(520)), "A tool score built from backlinks", font=small, fill=INK_2, anchor="mm")
+
+
 def save_scaled(im, name, size, fmt, **opts):
     out = im.resize(size, Image.LANCZOS)
     out = grain(out)
@@ -415,6 +456,21 @@ def blog_images():
     steps_list(d, 712, 130, ["Collect real searches", "Group them by intent", "Map to entities", "Plan the topical map",
                              "Write answer-first", "Link and mark up", "Measure both"], step=72)
     save_scaled(card, "entity-keyword-workflow.webp", (1200, 675), "WEBP", quality=84, method=6)
+
+    cover, d = feature_canvas(1200, 630, 690, ("Topical vs", "domain authority?"),
+                              "Topical authority is depth on one subject. Domain authority is a tool score built from backlinks.",
+                              label="SEMANTIC SEO GUIDE")
+    authority_compare(d)
+    save_scaled(cover, "topical-authority-vs-domain-authority.jpg", (1200, 630), "JPEG", quality=88, optimize=True, progressive=True)
+    save_scaled(cover, "topical-authority-vs-domain-authority.webp", (1600, 840), "WEBP", quality=82, method=6)
+    save_scaled(cover, "topical-authority-vs-domain-authority-thumb.webp", (640, 336), "WEBP", quality=80, method=6)
+
+    card, d = feature_canvas(1200, 675, 640, ("Topical authority", "in 7 steps"),
+                             "Map the topic, cover it answer-first, link the pages, then earn links from relevant sites.",
+                             label="SEMANTIC SEO GUIDE")
+    steps_list(d, 712, 130, ["Define the central entity", "Map the query network", "Plan the topical map",
+                             "Write answer-first", "Link the network", "Update on a schedule", "Earn relevant links"], step=72)
+    save_scaled(card, "topical-authority-steps.webp", (1200, 675), "WEBP", quality=84, method=6)
 
 
 if __name__ == "__main__":

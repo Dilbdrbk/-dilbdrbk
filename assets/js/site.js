@@ -543,4 +543,57 @@
       });
     });
   });
+
+  // Topical coverage checker: ticked subtopics give a core, outer and total count, plus the open gaps.
+  document.querySelectorAll('[data-tool="coverage"]').forEach(function (tool) {
+    var picks = tool.querySelectorAll('.qa-pick');
+    var out = function (name) { return tool.querySelector('[data-f="' + name + '"]'); };
+    var boxes = function (name) { return out(name).querySelectorAll('input'); };
+    var count = function (name) {
+      return Array.prototype.filter.call(boxes(name), function (b) { return b.checked; }).length;
+    };
+    var gaps = function (name) {
+      return Array.prototype.filter.call(boxes(name), function (b) { return !b.checked; })
+        .map(function (b) { return b.parentNode.textContent.trim(); });
+    };
+    var update = function () {
+      var core = count('core'), outer = count('outer');
+      var nCore = boxes('core').length, nOuter = boxes('outer').length;
+      var total = nCore + nOuter, done = core + outer;
+      var pct = total ? Math.round(done * 100 / total) : 0;
+      out('bar').style.width = pct + '%';
+      out('score').textContent = done + ' of ' + total + ' subtopics covered (' + pct + '%)';
+      out('split').textContent = 'Core ' + core + ' of ' + nCore + ', outer ' + outer + ' of ' + nOuter + '.';
+      var coreGaps = gaps('core'), outerGaps = gaps('outer');
+      out('advice').textContent = coreGaps.length
+        ? 'Next core gaps: ' + coreGaps.slice(0, 3).join(', ') + '. Core pages sit closest to what the site sells.'
+        : outerGaps.length
+          ? 'The core is covered. Next outer gaps: ' + outerGaps.slice(0, 3).join(', ') + '.'
+          : 'Every sample subtopic is covered. Check Search Console queries for questions this list misses.';
+    };
+    var fill = function (list, items) {
+      list.textContent = '';
+      items.split('|').forEach(function (text) {
+        var li = document.createElement('li');
+        var label = document.createElement('label');
+        var box = document.createElement('input');
+        box.type = 'checkbox';
+        label.appendChild(box);
+        label.appendChild(document.createTextNode(' ' + text));
+        li.appendChild(label);
+        list.appendChild(li);
+      });
+    };
+    Array.prototype.forEach.call(picks, function (btn) {
+      btn.addEventListener('click', function () {
+        Array.prototype.forEach.call(picks, function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+        out('topic').textContent = btn.textContent;
+        fill(out('core'), btn.getAttribute('data-core'));
+        fill(out('outer'), btn.getAttribute('data-outer'));
+        update();
+      });
+    });
+    tool.addEventListener('change', update);
+    update();
+  });
 })();
