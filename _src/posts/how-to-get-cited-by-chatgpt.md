@@ -127,7 +127,7 @@ Perplexity states that PerplexityBot surfaces and links websites in Perplexity s
 
 Anthropic runs Claude-SearchBot for search quality, Claude-User for fetches that users start, and ClaudeBot for training. Anthropic's subprocessor list added Brave Search for web search on 19 March 2025, and Simon Willison found that the citations in one Claude search matched the Brave results for the same query.
 
-Microsoft states that Copilot experiences are powered by Bing's search index and handle billions of queries each month. Google's Gemini API documentation states that grounding with Google Search returns the search queries the model ran, the web results and the citations, so Gemini answers draw on the same index as Google Search.
+Microsoft states that Copilot experiences are powered by Bing's search index and handle billions of queries each month. Google's Gemini API documentation states that grounding with Google Search returns the search queries the model ran and citations that link each part of the answer to a source URL, so Gemini answers draw on Google Search results.
 
 ## What Is Query Fan-Out in AI Search?
 
