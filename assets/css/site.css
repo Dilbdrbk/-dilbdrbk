@@ -1886,3 +1886,48 @@ ol.policy-list { list-style: decimal; }
 .policy-list strong { color: var(--ink); }
 .footer-legal { display: inline-flex; gap: 18px; }
 .footer-legal a { color: inherit; text-decoration: underline; }
+
+/* Home process: five numbered circles joined by a dashed wave; a vertical dashed line on phones. */
+.wave { position: relative; margin-top: 36px; }
+.wave-line { position: absolute; top: 6px; left: 0; width: 100%; height: 40px; overflow: visible; pointer-events: none; }
+.wave-line path { fill: none; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 7 7; vector-effect: non-scaling-stroke; opacity: 0.75; }
+@media (prefers-reduced-motion: no-preference) {
+  .wave-line path { animation: wave-dash 1.6s linear infinite; }
+  @keyframes wave-dash { to { stroke-dashoffset: -14; } }
+}
+.wave-steps { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 18px; list-style: none; }
+.wave-step { display: flex; flex-direction: column; align-items: center; gap: 10px; padding-inline: 4px; text-align: center; }
+.wave-num { display: grid; place-items: center; width: 52px; height: 52px; margin-bottom: 8px; border: 2px solid var(--accent); border-radius: 50%; background: var(--bg); color: var(--ink); font-size: 1.25rem; font-weight: 700; }
+.wave-step h3 { font-size: 1.125rem; letter-spacing: -0.015em; }
+.wave-step p { color: var(--muted); font-size: 0.875rem; line-height: 1.55; }
+@media (max-width: 860px) {
+  .wave-line { display: none; }
+  .wave-steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .wave-steps::before { content: ""; position: absolute; top: 26px; bottom: 26px; left: 25px; border-left: 2px dashed var(--accent); opacity: 0.6; }
+  .wave-step { display: grid; grid-template-columns: 52px minmax(0, 1fr); column-gap: 16px; align-items: start; text-align: left; }
+  .wave-num { grid-row: span 2; margin: 0; }
+  .wave-step h3 { padding-top: 13px; }
+}
+
+/* Home "how to choose": a scroll-snap carousel of cards with checklists; arrows need JavaScript. */
+.edge { margin-top: 32px; }
+.edge-track { display: flex; gap: 16px; padding: 2px 2px 6px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-width: none; list-style: none; }
+.edge-track::-webkit-scrollbar { display: none; }
+.edge-track:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.edge-card { display: flex; flex: 0 0 min(400px, 86%); flex-direction: column; gap: 12px; padding: 24px 22px 26px; scroll-snap-align: start;
+  border: 1px solid rgba(201, 242, 93, 0.22); border-radius: 14px;
+  background: linear-gradient(155deg, rgba(201, 242, 93, 0.12), rgba(201, 242, 93, 0) 58%), var(--bg-raise);
+  transition: border-color 0.25s ease; }
+.edge-card:hover { border-color: rgba(201, 242, 93, 0.6); }
+.edge-card .idx { color: var(--muted); font-size: 0.75rem; }
+.edge-card h3 { font-size: 1.25rem; letter-spacing: -0.015em; }
+.edge-card > p { color: var(--muted); font-size: 0.9375rem; line-height: 1.55; }
+.edge-checks { display: grid; gap: 9px; margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); list-style: none; }
+.edge-checks li { position: relative; padding-left: 26px; color: var(--ink-2); font-size: 0.875rem; line-height: 1.45; }
+.edge-checks li::before { content: "\2713"; position: absolute; top: 1px; left: 0; display: grid; place-items: center; width: 17px; height: 17px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font-size: 0.6875rem; font-weight: 800; }
+.edge-nav { display: flex; justify-content: center; gap: 12px; margin-top: 22px; }
+.edge-btn { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid var(--line-strong); border-radius: 50%; background: transparent; color: var(--ink); cursor: pointer; transition: border-color 0.2s, color 0.2s, opacity 0.2s; }
+.edge-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.edge-btn:hover:not(:disabled), .edge-btn:focus-visible { border-color: var(--accent); color: var(--accent); }
+.edge-btn:disabled { opacity: 0.35; cursor: default; }
+.wave + .section-note { margin-top: 40px; }

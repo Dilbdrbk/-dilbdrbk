@@ -545,6 +545,30 @@
   });
 
   // Topical coverage checker: ticked subtopics give a core, outer and total count, plus the open gaps.
+  // Card carousel: arrows scroll one card at a time and disable at either end.
+  document.querySelectorAll('[data-carousel]').forEach(function (box) {
+    var track = box.querySelector('.edge-track');
+    var btns = box.querySelectorAll('.edge-btn');
+    var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var step = function () {
+      var card = track.querySelector('.edge-card');
+      return card ? card.getBoundingClientRect().width + 16 : track.clientWidth;
+    };
+    var sync = function () {
+      var max = track.scrollWidth - track.clientWidth - 2;
+      btns[0].disabled = track.scrollLeft <= 2;
+      btns[1].disabled = track.scrollLeft >= max;
+    };
+    Array.prototype.forEach.call(btns, function (btn) {
+      btn.addEventListener('click', function () {
+        track.scrollBy({ left: Number(btn.getAttribute('data-dir')) * step(), behavior: still ? 'auto' : 'smooth' });
+      });
+    });
+    track.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  });
+
   // Coverage checker and fan-out checker share one handler; a tool's data-* attributes
   // rename the two groups and the advice text.
   document.querySelectorAll('[data-tool="coverage"], [data-tool="fanout"]').forEach(function (tool) {
