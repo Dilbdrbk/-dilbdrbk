@@ -83,7 +83,7 @@
 # Entity SEO vs Keyword SEO: What Changes and What Stays
 
 Meta Title: Entity SEO vs Keyword SEO: What Changes and What Stays
-Meta Description: Entity SEO vs keyword SEO: keywords show how people search, entities show what they mean. See the differences, where each works and how to combine them.
+Meta Description: Keyword SEO optimizes a page for the words people search, and entity SEO optimizes it for the things those words mean, so a current SEO strategy uses both.
 
 [[answer]]
 Keyword SEO optimizes a page for the words people type into a search box, and entity SEO optimizes it for the things those words refer to, such as people, places, products and concepts. Keyword SEO decides which questions a page answers. Entity SEO makes sure search engines understand the answer, so a current SEO strategy uses both.

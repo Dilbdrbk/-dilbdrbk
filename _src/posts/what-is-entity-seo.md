@@ -70,7 +70,7 @@
 # What Is Entity SEO? A Practical Guide
 
 Meta Title: What Is Entity SEO? A Practical Guide
-Meta Description: Entity SEO helps search engines identify the people, places, products and concepts on your site. Learn how it works and how to do it in 6 steps.
+Meta Description: Entity SEO optimizes a website so search engines identify its entities, such as people, places and products, and connect their attributes and relations.
 
 [[answer]]
 Entity SEO is the practice of optimizing a website so search engines identify the entities on it, understand their attributes and relations, and connect the website to those entities. An entity is a single, identifiable thing, such as a person, a place, an organization, a product or a concept like the color blue.

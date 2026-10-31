@@ -59,7 +59,7 @@
 # Topical Authority vs Domain Authority: What Google Uses
 
 Meta Title: Topical Authority vs Domain Authority: What Google Uses
-Meta Description: Topical authority vs domain authority: one is how deeply a site covers a subject, the other an SEO tool score built from backlinks. See what Google uses.
+Meta Description: Topical authority is how deeply a site covers one subject, and domain authority is an SEO tool score built from backlinks that Google does not use.
 
 [[answer]]
 Topical authority is the depth and accuracy with which a website covers one subject, and domain authority is a score from 1 to 100 that SEO tools, such as Moz, calculate mainly from a site's backlinks. Google does not use Moz's Domain Authority or any other third-party score. Google does use links through PageRank and says that site-wide signals contribute to how it understands pages, so a site that ranks well needs both topical depth and relevant links.

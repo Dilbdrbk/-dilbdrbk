@@ -51,7 +51,7 @@
 # How to Get Cited by ChatGPT, AI Overviews and AI Mode
 
 Meta Title: How to Get Cited by ChatGPT, AI Overviews and AI Mode
-Meta Description: How to get cited by ChatGPT, AI Overviews, AI Mode, Perplexity, Claude and Copilot: which index each one searches, how query fan-out works and 9 steps.
+Meta Description: To get cited by ChatGPT, allow OAI-SearchBot, get indexed in Bing and Google, and answer each fan-out sub-question with sourced facts and clear entities.
 
 [[answer]]
 To get cited by ChatGPT, a page has to be reachable by OpenAI's search crawler, OAI-SearchBot, and indexed by the search providers ChatGPT queries, and then it has to answer one of the specific searches ChatGPT runs for a prompt. Google AI Overviews and AI Mode work the same way on Google's index: they can split a question into many related searches through query fan-out and cite pages that answer those searches. The pages that earn citations answer each sub-question directly, back it with facts and sources, and keep their entity facts consistent across the web.
