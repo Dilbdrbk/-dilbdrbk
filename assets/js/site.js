@@ -545,8 +545,18 @@
   });
 
   // Topical coverage checker: ticked subtopics give a core, outer and total count, plus the open gaps.
-  document.querySelectorAll('[data-tool="coverage"]').forEach(function (tool) {
+  // Coverage checker and fan-out checker share one handler; a tool's data-* attributes
+  // rename the two groups and the advice text.
+  document.querySelectorAll('[data-tool="coverage"], [data-tool="fanout"]').forEach(function (tool) {
     var picks = tool.querySelectorAll('.qa-pick');
+    var cfg = {
+      unit: tool.getAttribute('data-unit') || 'subtopics',
+      a: tool.getAttribute('data-a') || 'core',
+      b: tool.getAttribute('data-b') || 'outer',
+      why: tool.getAttribute('data-why') || ' Core pages sit closest to what the site sells.',
+      done: tool.getAttribute('data-done') || 'Every sample subtopic is covered. Check Search Console queries for questions this list misses.'
+    };
+    var cap = function (s) { return s.charAt(0).toUpperCase() + s.slice(1); };
     var out = function (name) { return tool.querySelector('[data-f="' + name + '"]'); };
     var boxes = function (name) { return out(name).querySelectorAll('input'); };
     var count = function (name) {
@@ -562,14 +572,14 @@
       var total = nCore + nOuter, done = core + outer;
       var pct = total ? Math.round(done * 100 / total) : 0;
       out('bar').style.width = pct + '%';
-      out('score').textContent = done + ' of ' + total + ' subtopics covered (' + pct + '%)';
-      out('split').textContent = 'Core ' + core + ' of ' + nCore + ', outer ' + outer + ' of ' + nOuter + '.';
+      out('score').textContent = done + ' of ' + total + ' ' + cfg.unit + ' covered (' + pct + '%)';
+      out('split').textContent = cap(cfg.a) + ' ' + core + ' of ' + nCore + ', ' + cfg.b + ' ' + outer + ' of ' + nOuter + '.';
       var coreGaps = gaps('core'), outerGaps = gaps('outer');
       out('advice').textContent = coreGaps.length
-        ? 'Next core gaps: ' + coreGaps.slice(0, 3).join(', ') + '. Core pages sit closest to what the site sells.'
+        ? 'Next ' + cfg.a + ' gaps: ' + coreGaps.slice(0, 3).join(', ') + '.' + cfg.why
         : outerGaps.length
-          ? 'The core is covered. Next outer gaps: ' + outerGaps.slice(0, 3).join(', ') + '.'
-          : 'Every sample subtopic is covered. Check Search Console queries for questions this list misses.';
+          ? 'The ' + cfg.a + ' set is covered. Next ' + cfg.b + ' gaps: ' + outerGaps.slice(0, 3).join(', ') + '.'
+          : cfg.done;
     };
     var fill = function (list, items) {
       list.textContent = '';

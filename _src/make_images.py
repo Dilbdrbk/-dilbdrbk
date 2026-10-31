@@ -472,6 +472,21 @@ def blog_images():
                              "Write answer-first", "Link the network", "Update on a schedule", "Earn relevant links"], step=72)
     save_scaled(card, "topical-authority-steps.webp", (1200, 675), "WEBP", quality=84, method=6)
 
+    cover, d = feature_canvas(1200, 630, 870, ("How to get cited", "by ChatGPT?"),
+                              "Get indexed, allow the AI search crawlers and answer every fan-out sub-question with sourced facts.",
+                              label="AI SEARCH GUIDE", divider=False)
+    save_scaled(cover, "how-to-get-cited-by-chatgpt.jpg", (1200, 630), "JPEG", quality=88, optimize=True, progressive=True)
+    save_scaled(cover, "how-to-get-cited-by-chatgpt.webp", (1600, 840), "WEBP", quality=82, method=6)
+    save_scaled(cover, "how-to-get-cited-by-chatgpt-thumb.webp", (640, 336), "WEBP", quality=80, method=6)
+
+    card, d = feature_canvas(1200, 675, 600, ("Get cited by AI", "in 9 steps"),
+                             "Open access, get indexed, answer every sub-question with facts, then track the citations.",
+                             label="AI SEARCH GUIDE")
+    steps_list(d, 672, 112, ["Allow AI search crawlers", "Get indexed in Google and Bing", "Map the fan-out queries",
+                             "Answer each sub-question", "Add facts and sources", "Keep entity facts consistent",
+                             "Use HTML text", "Keep content fresh", "Track AI referrals"], step=56)
+    save_scaled(card, "ai-citation-steps.webp", (1200, 675), "WEBP", quality=84, method=6)
+
 
 if __name__ == "__main__":
     IMG.mkdir(parents=True, exist_ok=True)

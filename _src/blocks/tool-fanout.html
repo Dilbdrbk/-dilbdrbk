@@ -1,0 +1,53 @@
+<div class="post-tool" data-tool="fanout" data-unit="sub-queries" data-a="direct" data-b="related"
+  data-why=" An AI answer needs these to match the prompt itself."
+  data-done="Every sample sub-query is answered. Test the prompt in ChatGPT and AI Mode to see which pages get cited.">
+  <div class="tool-head">
+    <p class="tool-kicker">Free tool</p>
+    <p class="tool-title">Query fan-out checker</p>
+    <p class="tool-note">Pick a prompt and tick each sub-query your site already answers in a page or a section. The checker counts the direct and the related sub-queries and lists the gaps an AI engine could not match on your site. The sub-queries are typical patterns, not the exact searches Google or OpenAI run.</p>
+  </div>
+  <div class="qa-picks js-only" role="group" aria-label="Sample prompts">
+    <button class="qa-pick" type="button" aria-pressed="true"
+      data-core="What a ChatGPT citation is|Where ChatGPT search gets sources|What OAI-SearchBot does|How to allow AI crawlers in robots.txt|How to write answer-first sections|How to track ChatGPT referrals"
+      data-outer="ChatGPT vs Perplexity citations|How AI Overviews choose sources|What query fan-out is|Whether citations need schema|Whether GPTBot affects search|How long a first citation takes">how to get cited by ChatGPT</button>
+    <button class="qa-pick" type="button" aria-pressed="false"
+      data-core="Total trek cost in USD|Permit fees for the trek|Guide and porter rates|Lukla flight prices|Teahouse costs per night|Cost by season"
+      data-outer="Trek difficulty and fitness|Best time to trek|Altitude sickness risks|Packing list|Travel insurance cover|Trek vs helicopter tour price">Everest Base Camp trek cost</button>
+    <button class="qa-pick" type="button" aria-pressed="false"
+      data-core="Top shoe models for flat feet|Stability vs neutral shoes|Arch support explained|Prices of top models|Shoes for overpronation|Size and fit tips"
+      data-outer="Insoles for flat feet|Running injuries linked to flat feet|Trail shoes for flat feet|Shoe lifespan in km and miles|When to replace running shoes|Walking vs running shoes">best running shoes for flat feet</button>
+  </div>
+  <div class="cov-view">
+    <p class="qa-search"><span>Prompt</span><strong data-f="topic">how to get cited by ChatGPT</strong></p>
+    <div class="qa-cols">
+      <fieldset class="qa-col qa-col-entity cov-group">
+        <legend class="qa-col-title">Direct sub-queries: the facts the prompt asks for</legend>
+        <ul class="cov-list" data-f="core">
+          <li><label><input type="checkbox"> What a ChatGPT citation is</label></li>
+          <li><label><input type="checkbox"> Where ChatGPT search gets sources</label></li>
+          <li><label><input type="checkbox"> What OAI-SearchBot does</label></li>
+          <li><label><input type="checkbox"> How to allow AI crawlers in robots.txt</label></li>
+          <li><label><input type="checkbox"> How to write answer-first sections</label></li>
+          <li><label><input type="checkbox"> How to track ChatGPT referrals</label></li>
+        </ul>
+      </fieldset>
+      <fieldset class="qa-col cov-group">
+        <legend class="qa-col-title">Related sub-queries: the wider topic</legend>
+        <ul class="cov-list" data-f="outer">
+          <li><label><input type="checkbox"> ChatGPT vs Perplexity citations</label></li>
+          <li><label><input type="checkbox"> How AI Overviews choose sources</label></li>
+          <li><label><input type="checkbox"> What query fan-out is</label></li>
+          <li><label><input type="checkbox"> Whether citations need schema</label></li>
+          <li><label><input type="checkbox"> Whether GPTBot affects search</label></li>
+          <li><label><input type="checkbox"> How long a first citation takes</label></li>
+        </ul>
+      </fieldset>
+    </div>
+    <div class="cov-result js-only" aria-live="polite">
+      <div class="cov-bar"><span data-f="bar" style="width:0%"></span></div>
+      <p class="cov-score"><strong data-f="score">0 of 12 sub-queries covered (0%)</strong> <span data-f="split">Direct 0 of 6, related 0 of 6.</span></p>
+      <p class="qa-note" data-f="advice">Start with the direct sub-queries: an AI answer needs them to match the prompt itself.</p>
+    </div>
+    <p class="qa-note">Each list is a sample built from common searches about the prompt. Your own fan-out map comes from autocomplete, People Also Ask and Search Console queries for your topic.</p>
+  </div>
+</div>
