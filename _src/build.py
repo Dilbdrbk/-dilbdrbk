@@ -50,13 +50,14 @@ NAV = [
     ("/industries/", "Industries"),
     ("/about/", "About"),
     ("/blog/", "Blog"),
+    ("/seo-audit-checklist/", "SEO Checklist"),
 ]
 
 # Every page: where it lives, its body file and its search snippet.
 # `updated` feeds sitemap lastmod; bump it when a page's content changes.
 # The header, footer and Person schema sit on every page. Bump this when they change so the
 # sitemap lastmod stays accurate for pages whose own content did not change.
-LAYOUT_UPDATED = "2026-10-29"
+LAYOUT_UPDATED = "2026-10-31"
 
 PAGES = [
     dict(path="/", body="home.html", crumb="Home", updated="2026-10-29", kind="home",
@@ -89,6 +90,9 @@ PAGES = [
     dict(path="/contact/", body="contact.html", crumb="Contact", updated="2026-10-25", kind="contact",
          title="Contact Dil Bahadur B.K. | Semantic SEO Specialist, Kathmandu",
          description="Reach Dil Bahadur B.K. by email, phone or LinkedIn. Based in Kathmandu, Nepal (NPT, UTC+5:45)."),
+    dict(path="/seo-audit-checklist/", body="seo-audit-checklist.html", crumb="SEO Audit Checklist", updated="2026-10-31", kind="page",
+         title="SEO Audit Checklist: 56 Checks for Any Website | Dil B.K.",
+         description="An SEO audit checklist of 56 checks covers technical SEO, on-page, content, local, off-page and AI search, so you find and fix what blocks rankings."),
     dict(path="/editorial-policy/", body="editorial-policy.html", crumb="Editorial Policy", updated="2026-10-29", kind="page",
          title="Editorial Policy: How SEO Guides Are Researched | Dil B.K.",
          description="How Dil Bahadur B.K. researches, fact-checks and updates every SEO guide: a six-tier source hierarchy, claim-by-claim checks, AI use and corrections."),

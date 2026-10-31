@@ -545,6 +545,42 @@
   });
 
   // Topical coverage checker: ticked subtopics give a core, outer and total count, plus the open gaps.
+  // SEO audit checklist: running score per group and overall, ticks saved in this browser.
+  document.querySelectorAll('[data-checklist]').forEach(function (tool) {
+    var KEY = 'dbk-seo-audit-checklist';
+    var boxes = tool.querySelectorAll('input[data-chk]');
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { saved = {}; }
+    Array.prototype.forEach.call(boxes, function (b) { b.checked = !!saved[b.getAttribute('data-chk')]; });
+    var update = function () {
+      var done = 0;
+      tool.querySelectorAll('.chk-group').forEach(function (g) {
+        var all = g.querySelectorAll('input[data-chk]');
+        var on = g.querySelectorAll('input[data-chk]:checked').length;
+        done += on;
+        var count = g.querySelector('[data-chk-count]');
+        count.textContent = on + ' of ' + all.length + ' passed';
+        count.classList.toggle('is-done', on === all.length);
+      });
+      var pct = boxes.length ? Math.round(done * 100 / boxes.length) : 0;
+      tool.querySelector('[data-chk-bar]').style.width = pct + '%';
+      tool.querySelector('[data-chk-total]').textContent = done + ' of ' + boxes.length + ' checks passed (' + pct + '%)';
+    };
+    var store = function () {
+      var state = {};
+      Array.prototype.forEach.call(boxes, function (b) { if (b.checked) state[b.getAttribute('data-chk')] = 1; });
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* storage off: ticks last for this visit */ }
+    };
+    tool.addEventListener('change', function () { store(); update(); });
+    tool.querySelector('[data-chk-print]').addEventListener('click', function () { window.print(); });
+    tool.querySelector('[data-chk-reset]').addEventListener('click', function () {
+      Array.prototype.forEach.call(boxes, function (b) { b.checked = false; });
+      store();
+      update();
+    });
+    update();
+  });
+
   // Card carousel: arrows scroll one card at a time and disable at either end.
   document.querySelectorAll('[data-carousel]').forEach(function (box) {
     var track = box.querySelector('.edge-track');
