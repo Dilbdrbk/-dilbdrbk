@@ -89,5 +89,6 @@ Profile logos in `assets/img/logos/` (hero "Find me on" row, shown as white silh
 | linkedin.svg | https://commons.wikimedia.org/wiki/File:LinkedIn_Logo.svg |
 | crunchbase.svg | https://commons.wikimedia.org/wiki/File:Crunchbase_wordmark_white.svg |
 | github.svg | https://commons.wikimedia.org/wiki/File:GitHub_logo_2013.svg |
+| upwork.svg | https://commons.wikimedia.org/wiki/File:Upwork_logo_(2026).svg |
 | himalayas.svg | https://cdn-images.himalayas.app/himalayas.svg (Himalayas site header) |
 | truelancer.png | https://static.truelancer.com/truelancer-logo-dark-background_small.png (Truelancer site header) |
