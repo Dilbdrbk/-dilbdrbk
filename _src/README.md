@@ -90,5 +90,6 @@ Profile logos in `assets/img/logos/` (hero "Find me on" row, shown as white silh
 | crunchbase.svg | https://commons.wikimedia.org/wiki/File:Crunchbase_wordmark_white.svg |
 | github.svg | https://commons.wikimedia.org/wiki/File:GitHub_logo_2013.svg |
 | upwork.svg | https://commons.wikimedia.org/wiki/File:Upwork_logo_(2026).svg |
+| techbehemoths.svg | Header logo of https://techbehemoths.com/ (Wayback Machine snapshot 2026-10-14; the live site blocks scripted fetches) |
 | himalayas.svg | https://cdn-images.himalayas.app/himalayas.svg (Himalayas site header) |
 | truelancer.png | https://static.truelancer.com/truelancer-logo-dark-background_small.png (Truelancer site header) |
