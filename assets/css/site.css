@@ -2004,3 +2004,5 @@ ol.policy-list { list-style: decimal; }
 .qdp-serp select { max-width: 260px; padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 10px; background: var(--bg); color: var(--ink); font: inherit; }
 .qdp-result { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
 .post-body .qdp-verdict { color: var(--accent); font-size: 1.4rem; font-weight: 800; line-height: 1.2; }
+.hero-badges img[src$="contra.svg"] { height: 19px; }
+.hero-badges img[src$="wellfound.svg"] { height: 18px; }

@@ -93,3 +93,5 @@ Profile logos in `assets/img/logos/` (hero "Find me on" row, shown as white silh
 | techbehemoths.svg | Header logo of https://techbehemoths.com/ (Wayback Machine snapshot 2026-10-14; the live site blocks scripted fetches) |
 | himalayas.svg | https://cdn-images.himalayas.app/himalayas.svg (Himalayas site header) |
 | truelancer.png | https://static.truelancer.com/truelancer-logo-dark-background_small.png (Truelancer site header) |
+| contra.svg | Header logo of https://contra.com/ |
+| wellfound.svg | https://wellfound.com/assets/logo/rebrand/ (Wellfound site header) |
