@@ -545,6 +545,42 @@
   });
 
   // Topical coverage checker: ticked subtopics give a core, outer and total count, plus the open gaps.
+  // Page or section checker: 4 page rules plus the top-3 search results give a topical map decision.
+  document.querySelectorAll('[data-tool="qdp"]').forEach(function (tool) {
+    var rule = function (name) { return tool.querySelector('[data-rule="' + name + '"]').checked; };
+    var serp = tool.querySelector('[data-qdp-serp]');
+    var out = function (name) { return tool.querySelector('[data-f="' + name + '"]'); };
+    var update = function () {
+      var e = rule('entity'), o = rule('overlap');
+      var score = [e, o, rule('pattern'), rule('demand')].filter(Boolean).length;
+      var top = serp.value;
+      var verdict, why;
+      if (score === 0) {
+        verdict = 'Tick the rules';
+        why = 'Tick each rule your topic passes against its parent topic to see the decision.';
+      } else if (!e && !o) {
+        verdict = 'Keyword variant';
+        why = 'The topic restates its parent in other words, so it belongs on the parent page as a variant phrasing, not as its own heading.';
+      } else if (score < 2) {
+        verdict = 'Drop or hold';
+        why = score + ' of 4 rules pass. Record the topic and test it again when new query data arrives.';
+      } else if (top === '') {
+        verdict = score >= 3 ? 'Own page' : 'Heading on the parent page';
+        why = score + ' of 4 rules pass. Check the top 3 search results to confirm the decision.';
+      } else if (Number(top) >= 2) {
+        verdict = 'Own page';
+        why = top + ' of the top 3 results are pages dedicated to the topic, so searchers expect a page of its own. ' + score + ' of 4 rules pass.';
+      } else {
+        verdict = 'Heading on the parent page';
+        why = 'Only ' + top + ' of the top 3 results are dedicated pages, so broader pages win this search and a heading on the parent page fits. ' + score + ' of 4 rules pass.';
+      }
+      out('verdict').textContent = verdict;
+      out('why').textContent = why;
+    };
+    tool.addEventListener('change', update);
+    update();
+  });
+
   // SEO audit checklist: running score per group and overall, ticks saved in this browser.
   document.querySelectorAll('[data-checklist]').forEach(function (tool) {
     var KEY = 'dbk-seo-audit-checklist';

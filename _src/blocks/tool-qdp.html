@@ -1,0 +1,27 @@
+<div class="post-tool" data-tool="qdp">
+  <div class="tool-head">
+    <p class="tool-kicker">Free tool</p>
+    <p class="tool-title">Page or section checker</p>
+    <p class="tool-note">Tick each rule your topic passes against its parent topic, then add how many of the top 3 search results are pages dedicated to the topic. The checker returns the decision a topical map records: own page, heading, keyword variant or drop.</p>
+  </div>
+  <ul class="chk-list qdp-rules" role="list">
+      <li><label><input type="checkbox" data-rule="entity"><span><strong>Different entity.</strong> The topic is its own entity, not the parent topic said another way.</span></label></li>
+      <li><label><input type="checkbox" data-rule="overlap"><span><strong>Low overlap with the parent.</strong> The topic shares no head term with its parent and is not a subset of it.</span></label></li>
+      <li><label><input type="checkbox" data-rule="pattern"><span><strong>Repeatable query pattern.</strong> A query template from real searches backs the topic, such as “how much does {value} cost”.</span></label></li>
+      <li><label><input type="checkbox" data-rule="demand"><span><strong>Real search demand.</strong> Search volume or Search Console impressions show people search for the topic.</span></label></li>
+  </ul>
+  <label class="qdp-serp">Pages dedicated to the topic in the top 3 results
+    <select data-qdp-serp>
+      <option value="">Not checked yet</option>
+      <option value="3">3 of 3</option>
+      <option value="2">2 of 3</option>
+      <option value="1">1 of 3</option>
+      <option value="0">0 of 3</option>
+    </select>
+  </label>
+  <div class="qdp-result js-only" aria-live="polite">
+    <p class="qdp-verdict" data-f="verdict">Tick the rules</p>
+    <p class="qa-note" data-f="why">Tick the rules your topic passes to see the decision.</p>
+  </div>
+  <p class="qa-note">The rule of thumb: 3 or 4 rules mean an own page, 2 rules mean a heading on the parent page, a topic that fails both the entity and the overlap rule is a keyword variant, and fewer than 2 rules mean drop or hold. Two or three dedicated pages in the top 3 results confirm an own page.</p>
+</div>

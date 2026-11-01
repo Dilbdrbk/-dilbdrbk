@@ -493,6 +493,21 @@ def blog_images():
     steps_list(d, 712, 132, ["Technical SEO: 15", "On-page SEO: 10", "Content: 8", "Local SEO: 8", "Off-page SEO: 7", "AI search: 8"], step=72)
     save_scaled(cover, "seo-audit-checklist.webp", (1600, 840), "WEBP", quality=82, method=6)
 
+    cover, d = feature_canvas(1200, 630, 870, ("How to create a", "topical map?"),
+                              "Define the central entity, map its attributes, gather real queries and test which ones deserve a page.",
+                              label="SEMANTIC SEO GUIDE", divider=False)
+    save_scaled(cover, "how-to-create-a-topical-map.jpg", (1200, 630), "JPEG", quality=88, optimize=True, progressive=True)
+    save_scaled(cover, "how-to-create-a-topical-map.webp", (1600, 840), "WEBP", quality=82, method=6)
+    save_scaled(cover, "how-to-create-a-topical-map-thumb.webp", (640, 336), "WEBP", quality=80, method=6)
+
+    card, d = feature_canvas(1200, 675, 600, ("Topical map", "in 9 steps"),
+                             "From the central entity to real queries, page decisions and internal links.",
+                             label="SEMANTIC SEO GUIDE")
+    steps_list(d, 672, 112, ["Define entity and context", "Map attributes into buckets", "Score relevance",
+                             "Collect real queries", "Classify intent", "Derive query templates",
+                             "Test page or section", "Split core and outer", "Plan internal links"], step=56)
+    save_scaled(card, "topical-map-steps.webp", (1200, 675), "WEBP", quality=84, method=6)
+
 
 if __name__ == "__main__":
     IMG.mkdir(parents=True, exist_ok=True)
