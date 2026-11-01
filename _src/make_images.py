@@ -487,6 +487,12 @@ def blog_images():
                              "Use HTML text", "Keep content fresh", "Track AI referrals"], step=56)
     save_scaled(card, "ai-citation-steps.webp", (1200, 675), "WEBP", quality=84, method=6)
 
+    cover, d = feature_canvas(1200, 630, 640, ("SEO audit", "checklist"),
+                              "56 checks to find what blocks rankings, with a running score.",
+                              label="FREE CHECKLIST")
+    steps_list(d, 712, 132, ["Technical SEO: 15", "On-page SEO: 10", "Content: 8", "Local SEO: 8", "Off-page SEO: 7", "AI search: 8"], step=72)
+    save_scaled(cover, "seo-audit-checklist.webp", (1600, 840), "WEBP", quality=82, method=6)
+
 
 if __name__ == "__main__":
     IMG.mkdir(parents=True, exist_ok=True)

@@ -50,7 +50,7 @@ NAV = [
     ("/industries/", "Industries"),
     ("/about/", "About"),
     ("/blog/", "Blog"),
-    ("/seo-audit-checklist/", "SEO Checklist"),
+    ("/checklists/", "Checklists"),
 ]
 
 # Every page: where it lives, its body file and its search snippet.
@@ -90,6 +90,9 @@ PAGES = [
     dict(path="/contact/", body="contact.html", crumb="Contact", updated="2026-10-25", kind="contact",
          title="Contact Dil Bahadur B.K. | Semantic SEO Specialist, Kathmandu",
          description="Reach Dil Bahadur B.K. by email, phone or LinkedIn. Based in Kathmandu, Nepal (NPT, UTC+5:45)."),
+    dict(path="/checklists/", body="checklists.html", crumb="Checklists", updated="2026-11-01", kind="page",
+         title="Free SEO Checklists | Dil Bahadur B.K.",
+         description="Free SEO checklists turn audits into tickable steps, starting with a 56-point SEO audit checklist for technical, on-page, local and AI search."),
     dict(path="/seo-audit-checklist/", body="seo-audit-checklist.html", crumb="SEO Audit Checklist", updated="2026-10-31", kind="page",
          title="SEO Audit Checklist: 56 Checks for Any Website | Dil B.K.",
          description="An SEO audit checklist of 56 checks covers technical SEO, on-page, content, local, off-page and AI search, so you find and fix what blocks rankings."),
@@ -708,6 +711,36 @@ def posts_list_html(posts: list[dict]) -> str:
     return '<ul class="post-list">' + "\n".join(items) + "</ul>"
 
 
+# Free checklists, newest first. Each one is a page in PAGES; its cover comes from make_images.py.
+CHECKLISTS = [
+    dict(path="/seo-audit-checklist/", image="seo-audit-checklist", date="2026-10-31", checks=56,
+         title="SEO Audit Checklist: 56 Checks for Any Website",
+         description="A 56-point SEO audit checklist covers technical SEO, on-page, content, local, off-page and AI search, with a running score and a printable PDF."),
+]
+
+
+def checklist_cards_html(wide: bool = False) -> str:
+    """Checklist cards: the hub page uses a grid, the home Resources tab the wide blog-card layout."""
+    cards = []
+    for c in CHECKLISTS:
+        src = asset(f'{BLOG_IMG}/{c["image"]}.webp')
+        img = f'<img src="{src}" width="1600" height="840" alt="" loading="lazy" decoding="async">'
+        meta = (f'<span class="feature-meta"><span>{esc(SITE["name"])}</span>'
+                f'<time datetime="{c["date"]}">{human_date(c["date"])}</time><span>{c["checks"]} checks</span></span>')
+        if wide:
+            cards.append(f'<li class="feature-card"><a href="{c["path"]}">{img}<span class="feature-text">'
+                         f'<span class="feature-tags"><span>Checklist</span></span>{meta}'
+                         f'<span class="feature-title">{esc(c["title"])}</span>'
+                         f'<span class="feature-desc">{esc(c["description"])}</span>'
+                         f'<span class="feature-more">Open the checklist</span></span></a></li>')
+        else:
+            cards.append(f'<li class="chk-card"><a href="{c["path"]}">{img}<span class="chk-card-text">{meta}'
+                         f'<span class="chk-card-title">{esc(c["title"])} <span aria-hidden="true">&#8599;</span></span>'
+                         f'<span class="chk-card-desc">{esc(c["description"])}</span></span></a></li>')
+    cls = "feature-posts" if wide else "chk-cards"
+    return f'<ul class="{cls}" role="list">\n' + "\n".join(cards) + "\n</ul>"
+
+
 def featured_posts_html(posts: list[dict], limit: int = 3) -> str:
     """Home page Resources tab: every post as the same wide card (image left, text right)."""
     if not posts:
@@ -936,6 +969,8 @@ def build() -> None:
         "profileTiles": profiles_html(False),
         "posts": posts_list_html(posts),
         "featuredPosts": featured_posts_html(posts),
+        "checklistCards": checklist_cards_html(),
+        "checklistFeature": checklist_cards_html(wide=True),
         "email": SITE["email"],
         "phone": SITE["phone"],
         "phoneHref": SITE["phoneHref"],

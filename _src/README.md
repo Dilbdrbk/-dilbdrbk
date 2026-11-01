@@ -81,3 +81,13 @@ Photos in `assets/img/photos/` come from Pexels under the Pexels License (free t
 | budget-calculator-charts.webp | Kindel Media | https://www.pexels.com/photo/monthly-budget-planning-7054399/ |
 
 Tool icons on the home page: Simple Icons 16.30.0 (CC0) for Google Search Console, Google Analytics, Looker, Google Tag Manager, Google Colab, Semrush, WordPress and Shopify; Ahrefs' own pinned-tab SVG; AccuRanker's favicon (`assets/img/tools/accuranker.png`). The logos are trademarks of their owners and are shown only to name the tools.
+
+Profile logos in `assets/img/logos/` (hero "Find me on" row, shown as white silhouettes):
+
+| File | Source |
+|---|---|
+| linkedin.svg | https://commons.wikimedia.org/wiki/File:LinkedIn_Logo.svg |
+| crunchbase.svg | https://commons.wikimedia.org/wiki/File:Crunchbase_wordmark_white.svg |
+| github.svg | https://commons.wikimedia.org/wiki/File:GitHub_logo_2013.svg |
+| himalayas.svg | https://cdn-images.himalayas.app/himalayas.svg (Himalayas site header) |
+| truelancer.png | https://static.truelancer.com/truelancer-logo-dark-background_small.png (Truelancer site header) |
